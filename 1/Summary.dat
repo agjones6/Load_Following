@@ -11,14 +11,14 @@
  TES Data File            TESMode0.dat            
  Initialization mode      0
   
- Step Change in Load to   90.00 %    .00 seconds into the simulation
+ Step Change in Load to   90.00 %   0.00 seconds into the simulation
 
  No Upsets                               
 
- Upset Parameter 1   .0000E+00
- Upset Parameter 2   .0000E+00
- Upset Parameter 3   .0000E+00
- Upset Parameter 4   .0000E+00
+ Upset Parameter 1  0.0000E+00
+ Upset Parameter 2  0.0000E+00
+ Upset Parameter 3  0.0000E+00
+ Upset Parameter 4  0.0000E+00
 
  Control Rods in Automatic
  Simulation time    300.00 seconds
@@ -34,32 +34,32 @@
    Node    Length        Area        Volume      Pheated    GenFraction    Delta H        De    Loss Coefficient
             (ft)       (ft**2)      (ft**3)       (ft)                      (ft)         (ft)
   
-    1    .1900E+01    .9790E+01    .1860E+02    .9564E+03    .2500E+00    .1900E+01    .3363E-01    .1500E+01
-    2    .1900E+01    .9790E+01    .1860E+02    .9564E+03    .2500E+00    .1900E+01    .3363E-01    .5000E+00
-    3    .1900E+01    .9790E+01    .1860E+02    .9564E+03    .2500E+00    .1900E+01    .3363E-01    .5000E+00
-    4    .1900E+01    .9790E+01    .1860E+02    .9564E+03    .2500E+00    .1900E+01    .3363E-01    .1500E+01
-    5    .1920E+02    .2513E+02    .4825E+03    .0000E+00    .0000E+00    .1920E+02    .7300E+00    .1000E+01
-    6    .3512E+02    .6283E+01    .2207E+03    .0000E+00    .0000E+00    .3512E+02    .4000E+01    .1000E+01
-    7    .5720E+01    .3299E+02    .1887E+03    .0000E+00    .0000E+00   -.5720E+01    .6000E+01    .0000E+00
-    8    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-    9    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   10    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   11    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   12    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   13    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   14    .1340E+02    .1958E+02    .2624E+03    .0000E+00    .0000E+00   -.1340E+02    .2920E+01    .0000E+00
-   15    .1340E+02    .1958E+02    .2624E+03    .0000E+00    .0000E+00   -.1340E+02    .2920E+01    .0000E+00
-   16    .6430E+01    .3433E+02    .1040E+03    .0000E+00    .0000E+00    .0000E+00    .9040E+01    .1000E+01
-   17    .1340E+02    .1958E+02    .2624E+03    .0000E+00    .0000E+00   -.1340E+02    .2920E+01    .0000E+00
-   18    .1340E+02    .1958E+02    .2624E+03    .0000E+00    .0000E+00   -.1340E+02    .2920E+01    .0000E+00
-   19    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   20    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   21    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   22    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   23    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   24    .4400E+01    .5259E+01    .2314E+02    .0000E+00    .0000E+00   -.4400E+01    .4400E-01    .1000E+00
-   25    .5720E+01    .3299E+02    .1887E+03    .0000E+00    .0000E+00   -.5720E+01    .6000E+01    .0000E+00
-   26    .3512E+02    .6283E+01    .2207E+03    .0000E+00    .0000E+00    .3512E+02    .4000E+01    .1000E+01
+    1   0.1900E+01   0.9790E+01   0.1860E+02   0.9564E+03   0.2500E+00   0.1900E+01   0.3363E-01   0.1500E+01
+    2   0.1900E+01   0.9790E+01   0.1860E+02   0.9564E+03   0.2500E+00   0.1900E+01   0.3363E-01   0.5000E+00
+    3   0.1900E+01   0.9790E+01   0.1860E+02   0.9564E+03   0.2500E+00   0.1900E+01   0.3363E-01   0.5000E+00
+    4   0.1900E+01   0.9790E+01   0.1860E+02   0.9564E+03   0.2500E+00   0.1900E+01   0.3363E-01   0.1500E+01
+    5   0.1920E+02   0.2513E+02   0.4825E+03   0.0000E+00   0.0000E+00   0.1920E+02   0.7300E+00   0.1000E+01
+    6   0.3512E+02   0.6283E+01   0.2207E+03   0.0000E+00   0.0000E+00   0.3512E+02   0.4000E+01   0.1000E+01
+    7   0.5720E+01   0.3299E+02   0.1887E+03   0.0000E+00   0.0000E+00  -0.5720E+01   0.6000E+01   0.0000E+00
+    8   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+    9   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   10   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   11   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   12   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   13   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   14   0.1340E+02   0.1958E+02   0.2624E+03   0.0000E+00   0.0000E+00  -0.1340E+02   0.2920E+01   0.0000E+00
+   15   0.1340E+02   0.1958E+02   0.2624E+03   0.0000E+00   0.0000E+00  -0.1340E+02   0.2920E+01   0.0000E+00
+   16   0.6430E+01   0.3433E+02   0.1040E+03   0.0000E+00   0.0000E+00   0.0000E+00   0.9040E+01   0.1000E+01
+   17   0.1340E+02   0.1958E+02   0.2624E+03   0.0000E+00   0.0000E+00  -0.1340E+02   0.2920E+01   0.0000E+00
+   18   0.1340E+02   0.1958E+02   0.2624E+03   0.0000E+00   0.0000E+00  -0.1340E+02   0.2920E+01   0.0000E+00
+   19   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   20   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   21   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   22   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   23   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   24   0.4400E+01   0.5259E+01   0.2314E+02   0.0000E+00   0.0000E+00  -0.4400E+01   0.4400E-01   0.1000E+00
+   25   0.5720E+01   0.3299E+02   0.1887E+03   0.0000E+00   0.0000E+00  -0.5720E+01   0.6000E+01   0.0000E+00
+   26   0.3512E+02   0.6283E+01   0.2207E+03   0.0000E+00   0.0000E+00   0.3512E+02   0.4000E+01   0.1000E+01
   
  **********************************
  *                                *
@@ -67,63 +67,63 @@
  *                                *
  **********************************
   
- Nominal Full Power (Mwt)                  .2000E+03
- Prompt Neutron Lifetime (sec)             .1000E-03
- External Neutron Source (Mw/hr)           .0000E+00
- Moderator Temperature Coefficient (1/F)  -.4000E-03
- Fuel Temperature Coefficient (1/F)       -.1650E-04
- Soluable Boron Coefficient (1/ppm)        .0000E+00
- Reference Moderator Temperature (F)       .5780E+03
- Reference Fuel Temperature (F)            .8720E+03
- Reference Boron Concentration (ppm)       .0000E+00
+ Nominal Full Power (Mwt)                 0.2000E+03
+ Prompt Neutron Lifetime (sec)            0.1000E-03
+ External Neutron Source (Mw/hr)          0.0000E+00
+ Moderator Temperature Coefficient (1/F) -0.4000E-03
+ Fuel Temperature Coefficient (1/F)      -0.1650E-04
+ Soluable Boron Coefficient (1/ppm)       0.0000E+00
+ Reference Moderator Temperature (F)      0.5780E+03
+ Reference Fuel Temperature (F)           0.8720E+03
+ Reference Boron Concentration (ppm)      0.0000E+00
 
             Xenon 135 Data
 
- Xenon 135 Fission Yield                   .3000E-02
- Xenon 135 Decay Constant (1/sec)          .2092E-04
- Xenon 135 Absorption X-section (barns)    .2609E+07
- Macroscopic Fission X-section (1/cm)      .2090E+00
- Equilibrium Xenon Worth (pcm)            -.2653E+04
+ Xenon 135 Fission Yield                  0.3000E-02
+ Xenon 135 Decay Constant (1/sec)         0.2092E-04
+ Xenon 135 Absorption X-section (barns)   0.2609E+07
+ Macroscopic Fission X-section (1/cm)     0.2090E+00
+ Equilibrium Xenon Worth (pcm)           -0.2653E+04
 
- I 135 Fission Yield                       .6100E-01
- I-135 Decay Constant (1/sec)              .2875E-04
+ I 135 Fission Yield                      0.6100E-01
+ I-135 Decay Constant (1/sec)             0.2875E-04
 
 
             Delayed Neutron Data
 
   Group  Delayed Neutron Fraction  Decay Constant (1/sec)
 
-    1          .2150E-03                .1240E-01
-    2          .1424E-02                .3050E-01
-    3          .1274E-02                .1110E+00
-    4          .2568E-02                .3010E+00
-    5          .7480E-03                .1140E+01
-    6          .2730E-03                .3010E+01
+    1         0.2150E-03               0.1240E-01
+    2         0.1424E-02               0.3050E-01
+    3         0.1274E-02               0.1110E+00
+    4         0.2568E-02               0.3010E+00
+    5         0.7480E-03               0.1140E+01
+    6         0.2730E-03               0.3010E+01
   
- Fuel Density (lbm/ft**3)                  .6555E+03
- Heat Generated in Fuel (%)                .9700E+02
- Clad Density (lbm/ft**3)                  .4090E+03
- Clad Specific Heat (Btu/lbm-F)            .7600E-01
- Clad Thermal Conductivity (Btu/hr-ft-F)   .9600E+01
- Gap Conductance (Btu/hr-ft**2-F)          .1000E+04
+ Fuel Density (lbm/ft**3)                 0.6555E+03
+ Heat Generated in Fuel (%)               0.9700E+02
+ Clad Density (lbm/ft**3)                 0.4090E+03
+ Clad Specific Heat (Btu/lbm-F)           0.7600E-01
+ Clad Thermal Conductivity (Btu/hr-ft-F)  0.9600E+01
+ Gap Conductance (Btu/hr-ft**2-F)         0.1000E+04
  Number of Fuel Rods                         9768
- Active Fuel Height (ft)                   .7600E+01
- Outer Clad Diameter (inches)              .3740E+00
- Fuel Pellet Diameter (inches)             .3225E+00
- Pitch to Diameter Ratio                   .1326E+01
- Clad Thickness (inches)                   .2250E-01
+ Active Fuel Height (ft)                  0.7600E+01
+ Outer Clad Diameter (inches)             0.3740E+00
+ Fuel Pellet Diameter (inches)            0.3225E+00
+ Pitch to Diameter Ratio                  0.1326E+01
+ Clad Thickness (inches)                  0.2250E-01
 
- Hot Channel Extrapolation Distance (ft)   .1090E+00
- Total Power Peaking Factor                .2400E+01
- Axial Peaking Factor                      .1550E+01
+ Hot Channel Extrapolation Distance (ft)  0.1090E+00
+ Total Power Peaking Factor               0.2400E+01
+ Axial Peaking Factor                     0.1550E+01
  Number of Axial nodes for computing DNBR    91
  Critical Heat Flux Correlation             W3    
   
- Cummulative Control Bank Worth (%)        -.3440E+01
- Shut Down Bank Worth (%)                  -.3000E+01
- Control Bank Length (ft)                   .7600E+01
- Minimum Rod Speed (inches/min)             .3750E+01
- Maximum Rod Speed (inches/min)             .4500E+02
+ Cummulative Control Bank Worth (%)       -0.3440E+01
+ Shut Down Bank Worth (%)                 -0.3000E+01
+ Control Bank Length (ft)                  0.7600E+01
+ Minimum Rod Speed (inches/min)            0.3750E+01
+ Maximum Rod Speed (inches/min)            0.4500E+02
 
 
  Control Bank Parameters           
@@ -131,40 +131,40 @@
 
  Control Bank A                    
 
- Parameter 1                               -.5831E+03
- Parameter 2                               -.1505E+02
- Parameter 3                                .7072E+02
+ Parameter 1                              -0.5831E+03
+ Parameter 2                              -0.1505E+02
+ Parameter 3                               0.7072E+02
 
 
  Control Bank B                    
 
- Parameter 1                               -.1004E+04
- Parameter 2                               -.1745E+02
- Parameter 3                                .6385E+02
+ Parameter 1                              -0.1004E+04
+ Parameter 2                              -0.1745E+02
+ Parameter 3                               0.6385E+02
 
 
  Control Bank C                    
 
- Parameter 1                               -.1236E+04
- Parameter 2                               -.1870E+02
- Parameter 3                                .5984E+02
+ Parameter 1                              -0.1236E+04
+ Parameter 2                              -0.1870E+02
+ Parameter 3                               0.5984E+02
 
 
  Control Bank D                    
 
- Parameter 1                               -.9132E+03
- Parameter 2                               -.1689E+02
- Parameter 3                                .6598E+02
+ Parameter 1                              -0.9132E+03
+ Parameter 2                              -0.1689E+02
+ Parameter 3                               0.6598E+02
 
 
- Control Bank Length (Steps)                .1140E+03
- Overlap (Steps)                            .5000E+02
+ Control Bank Length (Steps)               0.1140E+03
+ Overlap (Steps)                           0.5000E+02
 
 
  Rod Control Program               
 
 
- TaveREF =   .5650E+03 +  .1300E+02 x Wturb/RefLoad
+ TaveREF =  0.5650E+03 + 0.1300E+02 x Wturb/RefLoad
   
  ***********************
  *                     *
@@ -172,19 +172,19 @@
  *                     *
  ***********************
   
- Nominal Reactor Coolant Flow (lbm/hr)       .5460E+07
- Nominal Neutron Power (Mw)                  .1836E+03
- TripDelay (sec)                             .2000E+01
+ Nominal Reactor Coolant Flow (lbm/hr)      0.5460E+07
+ Nominal Neutron Power (Mw)                 0.1836E+03
+ TripDelay (sec)                            0.2000E+01
 
 
- High Neutron Flux Trip (% Nominal)       .1180E+03 Status = Inactive
- Low Coolant Flow (% Nominal)             .8700E+02 Status = Inactive
- High Pressurizer Pressure (psia)         .2414E+04 Status = Inactive
- High Feedwater Flow (% Nominal)          .1080E+03 Status = Inactive
- Low Feedwater Flow (% Nominal)           .7500E+02 Status = Inactive
- Low Pressurizer Pressure (psia)          .2000E+04 Status = Inactive
- High Pressurizer Level (%)               .9500E+02 Status = Inactive
- Low Steam Temperature (F)                .5300E+03 Status = Inactive
+ High Neutron Flux Trip (% Nominal)      0.1180E+03 Status = Inactive
+ Low Coolant Flow (% Nominal)            0.8700E+02 Status = Inactive
+ High Pressurizer Pressure (psia)        0.2414E+04 Status = Inactive
+ High Feedwater Flow (% Nominal)         0.1080E+03 Status = Inactive
+ Low Feedwater Flow (% Nominal)          0.7500E+02 Status = Inactive
+ Low Pressurizer Pressure (psia)         0.2000E+04 Status = Inactive
+ High Pressurizer Level (%)              0.9500E+02 Status = Inactive
+ Low Steam Temperature (F)               0.5300E+03 Status = Inactive
   
  **********************************
  *                                *
@@ -192,55 +192,55 @@
  *                                *
  **********************************
   
- Radius of Surge Region (ft)             .4000E+01
- Height of Surge Region (ft)             .3000E+01
- Upper Head Radius (ft)                  .4000E+01
- Upper Head Height (ft)                  .1144E+02
+ Radius of Surge Region (ft)            0.4000E+01
+ Height of Surge Region (ft)            0.3000E+01
+ Upper Head Radius (ft)                 0.4000E+01
+ Upper Head Height (ft)                 0.1144E+02
  Number of Surge Orifices                 1
- Surge Orifice Diameter (ft)             .1000E+01
- Surge Orifice Loss Coefficient          .1000E+01
+ Surge Orifice Diameter (ft)            0.1000E+01
+ Surge Orifice Loss Coefficient         0.1000E+01
 
- Proportional Heater Capacity (kW)       .2520E+03
- Backup Heater Capacity (kW)             .2020E+03
- Heater Time Constant (sec)              .2000E+02
+ Proportional Heater Capacity (kW)      0.2520E+03
+ Backup Heater Capacity (kW)            0.2020E+03
+ Heater Time Constant (sec)             0.2000E+02
 
  Pressurizer Heater Set Points        
 
- Pressurizer Reference Pressure (psia)   .2050E+04
- Backup Heaters on (psia)                .2025E+04
- Proportional Heaters Full on (psia)     .2035E+04
- All Heaters Off (psia)                  .2065E+04
+ Pressurizer Reference Pressure (psia)  0.2050E+04
+ Backup Heaters on (psia)               0.2025E+04
+ Proportional Heaters Full on (psia)    0.2035E+04
+ All Heaters Off (psia)                 0.2065E+04
 
  Pressurizer Spray Set Points         
 
- Pressurizer Spray Full On (psia)        .2100E+04
+ Pressurizer Spray Full On (psia)       0.2100E+04
 
  Number of Pressurizer SRVs (4 max)       4
- SRV 1 Loss Coefficient                  .1000E+01
- SRV 2 Loss Coefficient                  .1000E+01
- SRV 3 Loss Coefficient                  .1000E+01
- SRV 4 Loss Coefficient                  .1000E+01
- SRV 1 Flow Area (ft**2)                 .5000E-02
- SRV 2 Flow Area (ft**2)                 .5000E-02
- SRV 3 Flow Area (ft**2)                 .5000E-02
- SRV 4 Flow Area (ft**2)                 .5000E-02
+ SRV 1 Loss Coefficient                 0.1000E+01
+ SRV 2 Loss Coefficient                 0.1000E+01
+ SRV 3 Loss Coefficient                 0.1000E+01
+ SRV 4 Loss Coefficient                 0.1000E+01
+ SRV 1 Flow Area (ft**2)                0.5000E-02
+ SRV 2 Flow Area (ft**2)                0.5000E-02
+ SRV 3 Flow Area (ft**2)                0.5000E-02
+ SRV 4 Flow Area (ft**2)                0.5000E-02
 
  Pressurizer SRV Set Points           
 
- Pressurizer SRV 1 Set Point (psia)      .2230E+04
- Pressurizer SRV 2 Set Point (psia)      .2245E+04
- Pressurizer SRV 3 Set Point (psia)      .2260E+04
- Pressurizer SRV 4 Set Point (psia)      .2275E+04
+ Pressurizer SRV 1 Set Point (psia)     0.2230E+04
+ Pressurizer SRV 2 Set Point (psia)     0.2245E+04
+ Pressurizer SRV 3 Set Point (psia)     0.2260E+04
+ Pressurizer SRV 4 Set Point (psia)     0.2275E+04
 
  Spray Line Parameters                
 
- Spray Pump Delta P (psi)                .3910E+02
- Spray Line Diameter (inches)            .2000E+01
- Bypass Line Diameter (inches)           .2500E+00
- Spray Control Valve Diameter (inches)   .2000E+01
- Spray Line Length (ft)                  .4900E+02
- Spray Line Loss Coefficient             .1500E+01
- Bypass Line Loss Coefficient            .1390E+03
+ Spray Pump Delta P (psi)               0.3910E+02
+ Spray Line Diameter (inches)           0.2000E+01
+ Bypass Line Diameter (inches)          0.2500E+00
+ Spray Control Valve Diameter (inches)  0.2000E+01
+ Spray Line Length (ft)                 0.4900E+02
+ Spray Line Loss Coefficient            0.1500E+01
+ Bypass Line Loss Coefficient           0.1390E+03
   
   
  **********************************
@@ -251,26 +251,26 @@
   
  Steam Generator Type                    Conventional OTSG       
 
- Nominal Steam Pressure (psia)             .8250E+03
- Condenser Pressure (psia)                 .7100E+00
- Nominal Steam Flow Rate (lbm/hr)          .8686E+05
- Steam Generator Flow Area (ft**2)         .1436E+01
- Reference Turbine Load (Mw)               .4500E+02
- Effective Turbine Efficiency (%)          .6631E+02
- Effective Turbine Loss Coefficient        .4360E+03
- Reference Level (ft)                      .8000E+01
- Full Scale Reference Level (ft)           .2592E+02
+ Nominal Steam Pressure (psia)            0.8250E+03
+ Condenser Pressure (psia)                0.7100E+00
+ Nominal Steam Flow Rate (lbm/hr)         0.8686E+05
+ Steam Generator Flow Area (ft**2)        0.1436E+01
+ Reference Turbine Load (Mw)              0.4500E+02
+ Effective Turbine Efficiency (%)         0.6631E+02
+ Effective Turbine Loss Coefficient       0.4360E+03
+ Reference Level (ft)                     0.8000E+01
+ Full Scale Reference Level (ft)          0.2592E+02
  Number of Steam Generator Tubes              881
- Steam Generator Tube Length (ft)          .2640E+02
- Outer Tube Radius (inches)                .3435E+00
- Inner Tube Radius (inches)                .2615E+00
- Tube Pitch (inches)                       .8240E+00
- Tube Thermal Conductivity (Btu/hr-ft-F)   .1650E+02
- Fouling Parameter (%)                     .0000E+00
+ Steam Generator Tube Length (ft)         0.2640E+02
+ Outer Tube Radius (inches)               0.3435E+00
+ Inner Tube Radius (inches)               0.2615E+00
+ Tube Pitch (inches)                      0.8240E+00
+ Tube Thermal Conductivity (Btu/hr-ft-F)  0.1650E+02
+ Fouling Parameter (%)                    0.0000E+00
 
  Feed Temperature Program               
 
- Tfeed=  .2943E+03 x (  .5545E+00 +   .6856E-02 x Prelative +  -.2402E-04 x Prelative**2)
+ Tfeed= 0.2943E+03 x ( 0.5545E+00 +  0.6856E-02 x Prelative + -0.2402E-04 x Prelative**2)
   
   
  **********************************
@@ -280,10 +280,10 @@
  **********************************
   
  Number of Reactor Coolant Pump/SG pairs     8
- Rated Volumetric Flow Rate (gpm)           .1055E+05
- Rated Head (ft)                            .0000E+00
- Rated Speed (rpm)                          .1775E+04
- Flywheel Inertia (ft-lbf)                  .1400E+04
+ Rated Volumetric Flow Rate (gpm)          0.1055E+05
+ Rated Head (ft)                           0.0000E+00
+ Rated Speed (rpm)                         0.1775E+04
+ Flywheel Inertia (ft-lbf)                 0.1400E+04
 
   
  **********************************
@@ -293,16 +293,16 @@
  **********************************
   
  Number of Feed Pumps                       2
- Rated Volumetric Flow Rate (gpm)          .4980E+04
- Rated Head (ft)                           .2045E+04
- Rated Speed (rpm)                         .5210E+04
+ Rated Volumetric Flow Rate (gpm)         0.4980E+04
+ Rated Head (ft)                          0.2045E+04
+ Rated Speed (rpm)                        0.5210E+04
 
      Coefficients in Characteristic Pump Curve   
 
- a0                                        .1392E+01
- b0                                       -.9764E-01
- c0                                       -.9983E-01
- d0                                       -.2247E+00
+ a0                                       0.1392E+01
+ b0                                      -0.9764E-01
+ c0                                      -0.9983E-01
+ d0                                      -0.2247E+00
 
   
  **********************************
@@ -312,16 +312,16 @@
  **********************************
   
  Number of Condendsate Pumps                3
- Rated Volumetric Flow Rate (gpm)          .4980E+04
- Rated Head (ft)                           .7350E+03
- Rated Speed (rpm)                         .3560E+04
+ Rated Volumetric Flow Rate (gpm)         0.4980E+04
+ Rated Head (ft)                          0.7350E+03
+ Rated Speed (rpm)                        0.3560E+04
 
      Coefficients in Characteristic Pump Curve   
 
- a0                                        .1392E+01
- b0                                       -.9764E-01
- c0                                       -.9983E-01
- d0                                       -.2247E+00
+ a0                                       0.1392E+01
+ b0                                      -0.9764E-01
+ c0                                      -0.9983E-01
+ d0                                      -0.2247E+00
 
   
  **********************************
@@ -331,16 +331,16 @@
  **********************************
   
  Number of Hotwell Pumps                    3
- Rated Volumetric Flow Rate (gpm)          .4980E+04
- Rated Head (ft)                           .4700E+03
- Rated Speed (rpm)                         .1180E+04
+ Rated Volumetric Flow Rate (gpm)         0.4980E+04
+ Rated Head (ft)                          0.4700E+03
+ Rated Speed (rpm)                        0.1180E+04
 
      Coefficients in Characteristic Pump Curve   
 
- a0                                        .1392E+01
- b0                                       -.9764E-01
- c0                                       -.9983E-01
- d0                                       -.2247E+00
+ a0                                       0.1392E+01
+ b0                                      -0.9764E-01
+ c0                                      -0.9983E-01
+ d0                                      -0.2247E+00
 
   
  **********************************
@@ -349,7 +349,7 @@
  *                                *
  **********************************
   
- Startup Feedwater Pump Delta P (psi)      .9200E+03
+ Startup Feedwater Pump Delta P (psi)     0.9200E+03
   
  *************************************
  *                                   *
@@ -357,7 +357,7 @@
  *                                   *
  *************************************
   
- Proportional Gain                        .1000E+00
+ Proportional Gain                       0.1000E+00
 
   
  **********************************
@@ -366,9 +366,9 @@
  *                                *
  **********************************
   
- Controller Offset                        .0000E+00
- Proportional Gain                        .7000E-01
- Integral Gain                            .7000E-01
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.7000E-01
+ Integral Gain                           0.7000E-01
 
   
  **********************************
@@ -379,27 +379,27 @@
   
   
  Turbine Control Valve Nunber              1
- Controller Offset                        .0000E+00
- Proportional Gain                        .2000E-02
- Integral Gain                            .2000E-02
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.2000E-02
+ Integral Gain                           0.2000E-02
 
   
  Turbine Control Valve Nunber              2
- Controller Offset                        .0000E+00
- Proportional Gain                        .2000E-02
- Integral Gain                            .2000E-02
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.2000E-02
+ Integral Gain                           0.2000E-02
 
   
  Turbine Control Valve Nunber              3
- Controller Offset                        .0000E+00
- Proportional Gain                        .2000E-02
- Integral Gain                            .2000E-02
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.2000E-02
+ Integral Gain                           0.2000E-02
 
   
  Turbine Control Valve Nunber              4
- Controller Offset                        .0000E+00
- Proportional Gain                        .2000E-02
- Integral Gain                            .2000E-02
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.2000E-02
+ Integral Gain                           0.2000E-02
 
   
  **********************************
@@ -410,27 +410,27 @@
   
   
  Turbine Bypass Valve Nunber               1
- Controller Offset                        .0000E+00
- Proportional Gain                        .1000E-03
- Integral Gain                            .0000E+00
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.1000E-03
+ Integral Gain                           0.0000E+00
 
   
  Turbine Bypass Valve Nunber               2
- Controller Offset                        .0000E+00
- Proportional Gain                        .1000E-03
- Integral Gain                            .0000E+00
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.1000E-03
+ Integral Gain                           0.0000E+00
 
   
  Turbine Bypass Valve Nunber               3
- Controller Offset                        .0000E+00
- Proportional Gain                        .1000E-03
- Integral Gain                            .0000E+00
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.1000E-03
+ Integral Gain                           0.0000E+00
 
   
  Turbine Bypass Valve Nunber               4
- Controller Offset                        .0000E+00
- Proportional Gain                        .1000E-03
- Integral Gain                            .0000E+00
+ Controller Offset                       0.0000E+00
+ Proportional Gain                       0.1000E-03
+ Integral Gain                           0.0000E+00
 
   
  **********************************
@@ -439,11 +439,11 @@
  *                                *
  **********************************
   
- Feed Controller Offset                    .0000E+00
- Feed Controller Proportional Gain         .5000E-01
- Feed Controller Integral Gain             .7000E-01
+ Feed Controller Offset                   0.0000E+00
+ Feed Controller Proportional Gain        0.5000E-01
+ Feed Controller Integral Gain            0.7000E-01
 
- Feed Shim Gain                            .4000E+02
+ Feed Shim Gain                           0.4000E+02
 
   
  **********************************
@@ -452,9 +452,9 @@
  *                                *
  **********************************
   
- Feed ByPass Offset                    .0000E+00
- Feed ByPass Proportional Gain         .1250E+00
- Feed ByPass Integral Gain             .0000E+00
+ Feed ByPass Offset                   0.0000E+00
+ Feed ByPass Proportional Gain        0.1250E+00
+ Feed ByPass Integral Gain            0.0000E+00
 
   
  **********************************************
@@ -463,9 +463,9 @@
  *                                            *
  **********************************************
   
- Startup Feedwater Offset                   .0000E+00
- Startup Feedweter Proportional Gain        .1850E+00
- Startup Feedwater Integral Gain            .0000E+00
+ Startup Feedwater Offset                  0.0000E+00
+ Startup Feedweter Proportional Gain       0.1850E+00
+ Startup Feedwater Integral Gain           0.0000E+00
 
   
  **********************************************
@@ -474,9 +474,9 @@
  *                                            *
  **********************************************
   
- Spray Control Valve Offset                -.4900E-03
- Spray Control Valve Proportional Gain      .1000E+00
- Spray Control Valve Integral Gain          .0000E+00
+ Spray Control Valve Offset               -0.4900E-03
+ Spray Control Valve Proportional Gain     0.1000E+00
+ Spray Control Valve Integral Gain         0.0000E+00
 
   
  *************************************
@@ -486,12 +486,12 @@
  *************************************
   
  Sensor Location (node)                      4
- Sensor Span                               .6240E+03
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.6240E+03
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -501,12 +501,12 @@
  *************************************
   
  Sensor Location (node)                     16
- Sensor Span                               .5560E+03
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.5560E+03
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -516,12 +516,12 @@
  *************************************
   
  Sensor Location (node)                      0
- Sensor Span                               .8620E+03
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.8620E+03
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -531,12 +531,12 @@
  *************************************
   
  Sensor Location (node)                      0
- Sensor Span                               .4920E+06
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.4920E+06
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -546,12 +546,12 @@
  *************************************
   
  Sensor Location (node)                      0
- Sensor Span                               .4920E+06
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.4920E+06
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -561,12 +561,12 @@
  *************************************
   
  Sensor Location (node)                      0
- Sensor Span                               .2250E+04
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.2250E+04
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -576,12 +576,12 @@
  *************************************
   
  Sensor Location (node)                      0
- Sensor Span                               .5900E+01
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.5900E+01
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -591,12 +591,12 @@
  *************************************
   
  Sensor Location (node)                      0
- Sensor Span                               .6190E+03
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.6190E+03
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -606,12 +606,12 @@
  *************************************
   
  Sensor Location (node)                      0
- Sensor Span                               .4350E+03
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.4350E+03
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *************************************
@@ -621,12 +621,12 @@
  *************************************
   
  Sensor Location (node)                      0
- Sensor Span                               .4000E+02
- Sensor Bias (% of Span)                   .0000E+00
- Sensor Drift Rate (% of Span per hour)    .0000E+00
- Drift Duration (hrs)                      .0000E+00
- Sensor Noise Mean (% of Span)             .0000E+00
- Sensor Noise Std. Dev. (% of Span)        .0000E+00
+ Sensor Span                              0.4000E+02
+ Sensor Bias (% of Span)                  0.0000E+00
+ Sensor Drift Rate (% of Span per hour)   0.0000E+00
+ Drift Duration (hrs)                     0.0000E+00
+ Sensor Noise Mean (% of Span)            0.0000E+00
+ Sensor Noise Std. Dev. (% of Span)       0.0000E+00
 
   
  *********************************
@@ -635,13 +635,13 @@
  *                               *
  *********************************
   
- Valve Dead Band (% of full open)       .0000E+00
- Valve Time Constant (seconds)          .7238E+00
- Valve Area (ft**2)                     .1500E-01
- Valve Full Open Loss Coefficient       .1200E+02
- Valve Constant                         .0000E+00
- Valve Closing Time (seconds)           .5000E+01
- Minimum Closed Position (% )           .0000E+00
+ Valve Dead Band (% of full open)      0.0000E+00
+ Valve Time Constant (seconds)         0.7238E+00
+ Valve Area (ft**2)                    0.1500E-01
+ Valve Full Open Loss Coefficient      0.1200E+02
+ Valve Constant                        0.0000E+00
+ Valve Closing Time (seconds)          0.5000E+01
+ Minimum Closed Position (% )          0.0000E+00
   
  *********************************
  *                               *
@@ -649,13 +649,13 @@
  *                               *
  *********************************
   
- Valve Dead Band (% of full open)       .0000E+00
- Valve Time Constant (seconds)          .7238E+00
- Valve Area (ft**2)                     .7830E-02
- Valve Full Open Loss Coefficient       .4220E+01
- Valve Constant                         .0000E+00
- Valve Closing Time (seconds)           .5000E+01
- Minimum Closed Position (% )           .0000E+00
+ Valve Dead Band (% of full open)      0.0000E+00
+ Valve Time Constant (seconds)         0.7238E+00
+ Valve Area (ft**2)                    0.7830E-02
+ Valve Full Open Loss Coefficient      0.4220E+01
+ Valve Constant                        0.0000E+00
+ Valve Closing Time (seconds)          0.5000E+01
+ Minimum Closed Position (% )          0.0000E+00
   
  *********************************
  *                               *
@@ -663,13 +663,13 @@
  *                               *
  *********************************
   
- Valve Dead Band (% of full open)       .0000E+00
- Valve Time Constant (seconds)          .7238E+00
- Valve Area (ft**2)                     .8730E-01
- Valve Full Open Loss Coefficient       .4485E+02
- Valve Constant                         .0000E+00
- Valve Closing Time (seconds)           .1500E+02
- Minimum Closed Position (% )           .0000E+00
+ Valve Dead Band (% of full open)      0.0000E+00
+ Valve Time Constant (seconds)         0.7238E+00
+ Valve Area (ft**2)                    0.8730E-01
+ Valve Full Open Loss Coefficient      0.4485E+02
+ Valve Constant                        0.0000E+00
+ Valve Closing Time (seconds)          0.1500E+02
+ Minimum Closed Position (% )          0.0000E+00
   
  *********************************
  *                               *
@@ -677,13 +677,13 @@
  *                               *
  *********************************
   
- Valve Dead Band (% of full open)       .0000E+00
- Valve Time Constant (seconds)          .7238E-01
- Valve Area (ft**2)                     .1000E+00
- Valve Full Open Loss Coefficient       .4000E+01
- Valve Constant                         .1000E+01
- Valve Closing Time (seconds)           .5000E+01
- Minimum Closed Position (% )           .0000E+00
+ Valve Dead Band (% of full open)      0.0000E+00
+ Valve Time Constant (seconds)         0.7238E-01
+ Valve Area (ft**2)                    0.1000E+00
+ Valve Full Open Loss Coefficient      0.4000E+01
+ Valve Constant                        0.1000E+01
+ Valve Closing Time (seconds)          0.5000E+01
+ Minimum Closed Position (% )          0.0000E+00
   
  ***************************************************
  *                                                 *
@@ -691,13 +691,13 @@
  *                                                 *
  ***************************************************
   
- Valve Dead Band (% of full open)       .0000E+00
- Valve Time Constant (seconds)          .7238E+00
- Valve Area (ft**2)                     .7830E-02
- Valve Full Open Loss Coefficient       .4950E+01
- Valve Constant                         .0000E+00
- Valve Closing Time (seconds)           .5000E+01
- Minimum Closed Position (% )           .0000E+00
+ Valve Dead Band (% of full open)      0.0000E+00
+ Valve Time Constant (seconds)         0.7238E+00
+ Valve Area (ft**2)                    0.7830E-02
+ Valve Full Open Loss Coefficient      0.4950E+01
+ Valve Constant                        0.0000E+00
+ Valve Closing Time (seconds)          0.5000E+01
+ Minimum Closed Position (% )          0.0000E+00
   
  *******************************
  *                             *
@@ -705,13 +705,13 @@
  *                             *
  *******************************
   
- Valve Dead Band (% of full open)       .0000E+00
- Valve Time Constant (seconds)          .7238E+00
- Valve Area (ft**2)                     .2182E-01
- Valve Full Open Loss Coefficient       .1000E+02
- Valve Constant                         .0000E+00
- Valve Closing Time (seconds)           .5000E+01
- Minimum Closed Position (% )           .0000E+00
+ Valve Dead Band (% of full open)      0.0000E+00
+ Valve Time Constant (seconds)         0.7238E+00
+ Valve Area (ft**2)                    0.2182E-01
+ Valve Full Open Loss Coefficient      0.1000E+02
+ Valve Constant                        0.0000E+00
+ Valve Closing Time (seconds)          0.5000E+01
+ Minimum Closed Position (% )          0.0000E+00
   
  *************************
  *                       *
@@ -719,13 +719,13 @@
  *                       *
  *************************
   
- Valve Dead Band (% of full open)       .0000E+00
- Valve Time Constant (seconds)          .7238E+00
- Valve Area (ft**2)                     .3940E+00
- Valve Full Open Loss Coefficient       .4800E+01
- Valve Constant                         .0000E+00
- Valve Closing Time (seconds)           .5000E+01
- Minimum Closed Position (% )           .0000E+00
+ Valve Dead Band (% of full open)      0.0000E+00
+ Valve Time Constant (seconds)         0.7238E+00
+ Valve Area (ft**2)                    0.3940E+00
+ Valve Full Open Loss Coefficient      0.4800E+01
+ Valve Constant                        0.0000E+00
+ Valve Closing Time (seconds)          0.5000E+01
+ Minimum Closed Position (% )          0.0000E+00
   
  ***********************
  *                     *
@@ -734,24 +734,24 @@
  ***********************
   
  Number of Main Steam Lines                  2
- Main Steam Line Flow Area (ft**2)          .1775E+01
- Steam Line to Turbine Flow Area (ft**2)    .8870E+00
+ Main Steam Line Flow Area (ft**2)         0.1775E+01
+ Steam Line to Turbine Flow Area (ft**2)   0.8870E+00
 
- Hotwell Pump Line Flow Area (ft**2)        .4740E+00
- Connecting Line 1 Flow Area (ft**2)        .8420E+00
- Condensate Pump Line Flow Area (ft**2)     .5610E+00
- Connecting Line 2 Flow Area (ft**2)        .1261E+01
- Feed Pump Line Flow Area (ft**2)           .2980E+00
- FCV Line Flow Area (ft**2)                 .2398E+00
- Feed Line Flow Area (ft**2)                .2398E+00
+ Hotwell Pump Line Flow Area (ft**2)       0.4740E+00
+ Connecting Line 1 Flow Area (ft**2)       0.8420E+00
+ Condensate Pump Line Flow Area (ft**2)    0.5610E+00
+ Connecting Line 2 Flow Area (ft**2)       0.1261E+01
+ Feed Pump Line Flow Area (ft**2)          0.2980E+00
+ FCV Line Flow Area (ft**2)                0.2398E+00
+ Feed Line Flow Area (ft**2)               0.2398E+00
 
- Hotwell Pump Line Loss Coefficient         .3276E+01
- Connecting Line 1 Loss Coefficient         .1310E+02
- Condensate Pump Line Loss Coefficient      .2472E+01
- Connecting Line 2 Loss Coefficient         .9887E+01
- Feed Pump Line Loss Coefficient            .2273E+02
- FCV Line Loss Coefficient                  .7238E+02
- Feed Line Loss Coefficient                 .7238E+02
+ Hotwell Pump Line Loss Coefficient        0.3276E+01
+ Connecting Line 1 Loss Coefficient        0.1310E+02
+ Condensate Pump Line Loss Coefficient     0.2472E+01
+ Connecting Line 2 Loss Coefficient        0.9887E+01
+ Feed Pump Line Loss Coefficient           0.2273E+02
+ FCV Line Loss Coefficient                 0.7238E+02
+ Feed Line Loss Coefficient                0.7238E+02
   
  **************
  *            *
@@ -759,17 +759,17 @@
  *            *
  **************
   
- TES Mode                                       0
- Number of TES ByPass Valves                    4
- Reference TES Flow                     450000.000000
- TES Turbine Exhaust Loss Coefficient       23.000000
- TES Shim Gain                              50.000000
+ TES Mode                                        0
+ Number of TES ByPass Valves                     4
+ Reference TES Flow                      450000.000    
+ TES Turbine Exhaust Loss Coefficient    23.0000000    
+ TES Shim Gain                           50.0000000    
   
- TESSetPoint(1)                          0.000000E+00
- TESSetPoint(2)                          1.875000E-01
- TESSetPoint(3)                          4.375000E-01
- TESSetPoint(4)                          6.875000E-01
+ TESSetPoint(1)                          0.00000000    
+ TESSetPoint(2)                         0.187500000    
+ TESSetPoint(3)                         0.437500000    
+ TESSetPoint(4)                         0.687500000    
   
- TES_TBVGain(1)                          0.000000E+00
- TES_TBVGain(2)                          1.000000E-02
- TES_TBVGain(3)                          1.000000E-02
+ TES_TBVGain(1)                          0.00000000    
+ TES_TBVGain(2)                          9.99999978E-03
+ TES_TBVGain(3)                          9.99999978E-03
