@@ -66,4 +66,3 @@ rawData = get_df(filename)
 # %%
 basic_plot(rawData,"Qsteam" ,
            keep_fig=True)
-plt.show()
