@@ -1,0 +1,81 @@
+----------------------- PRE-INPUT FILE FOR RUNNING CODE -----------------------
+
+>> INPUT FILES
+	GEOMETRY_FILE               NuScaleGeometry01.dat
+	REACTOR_DATA_FILE           NuScaleCore01.dat
+	COMPONENT_FILE              NuScaleComponent01.dat
+	CONTROLLER_GAINS_FILE       NuScaleGains01.dat
+	SENSOR_DATA_FILE            NuScaleSensors.dat
+	VALVE_DATA_FILE             NuScaleValves01.dat
+	BOP_GEOMETRY_FILE           NuScaleBOPGeometry00.dat
+	TRIP_SET_POINTS_FILE        NuScaleTripsSTPTS.dat
+	INITIAL_CONDITIONS_FILE     NuScaleInit100.dat
+	TES_PARAMETER_FILES         TESMode0.dat
+
+>> RUN OPTIONS
+	INIT_MODE 					0  # Initial Conditions File 
+
+	START_TIME 					0
+	IDEMAND						0 	# Step Change in Load
+	DEMAND_PARAMETER 			90	# Final Turbine Load
+
+	UPSET_CONDITIONS 			0,0.,0.,0.,0.
+
+	CONTROL_ROD_MODE 			1 	# Automatic
+
+	SIMULATION_TIME				300
+	WRITE_OUT_INTERVAL  		1
+	WRITE_RESTART_INTERVAL 		100000
+
+
+
+
+0
+0,0.
+90.
+0,0.,0.,0.,0.
+1
+300.,1,100000
+
+
+>> Annotation
+
+Line 11:	Initialization Mode	InitMode
+
+	InitMode = 0 =>	Initial Conditions from Initial Conditions File
+	InitMode = 1 => 	Equilibrium Initial Conditions for Delayed Neutrons, Decay Heat and Xenon
+
+Line 12:	Demand Program	IDEMAND, Start Time
+
+		IDEMAND = 0 => Step change in load
+		IDEMAND = 1 => Ramp change in load
+		IDEMAND = 2 => Load from hourly load file (% Nominal)
+
+ 	Start Time  = Time in seconds  into the simulation at which load program is initiated
+Line 13:	Demand Parameters
+
+	If IDEMAND = 0 	Final turbine load in percent of nominal full power
+	If IDEMAND = 1 	Ramp rate (+ -) in percent per minute, duration of 	ramp (minutes)
+
+		For example –5.,2.  => minus 5 % per minute for 2 minutes
+
+	If IDEMAND=2	Name of hourly load file
+
+Line 14:	Upset Conditions	Upset Code, Upset parametersi, i=1,…,4 (0. if NA)
+
+		For example 213,25., 0., 0., 0. => RCP Overspeed of 25%
+
+Line 15:	Control Rod Mode:	Sets control rod mode to automatic or manual
+
+		0 => Manual Control
+		1 => Automatic Control
+
+Line 16:	Simulation and output Control
+
+	Simulation time (seconds), Output File Write Intervala (seconds),
+		Restart File Write Intervalb (seconds)
+
+
+Notes: 	a)  Output File Write Interval = 0  => Write to the output file every time step
+
+	b)  A Restart File is written at the end of the simulation regardless of the Restart File Write Interval
