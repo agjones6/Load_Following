@@ -44,7 +44,7 @@ def basic_plot(df, ystring , **kwargs):
 
     # Plotting the desired data
     dum_fig = plt.figure()
-    plt.plot(df[xstr],df[ystr])
+    plt.plot(df[xstring],df[ystring])
     plt.xlabel(xstring)
     plt.ylabel(ystring)
 
@@ -58,7 +58,7 @@ def basic_plot(df, ystring , **kwargs):
         plt.close(dum_fig)
 
 # Defining the file name
-filename = "./1/System.dat"
+filename = "./Results/tst_file.dat"
 
 # Putting the data into a data
 rawData = get_df(filename)
@@ -66,3 +66,4 @@ rawData = get_df(filename)
 # %%
 basic_plot(rawData,"Qsteam" ,
            keep_fig=True)
+plt.show()

@@ -8,7 +8,7 @@ def find_val(raw_text,kw):
     # regex = re.escape(kw) + r' +([A-Z]*\.?[A-Z]*[a-z]) '
     regex = re.escape(kw) + r'[ \t]+([^ \t\n]*)[ \n\t]'
 
-    found_text = re.search(regex, raw_text)
+    found_text = re.search(regex, raw_text,flags=re.IGNORECASE)
 
     try:
         found_val = found_text.group(1)
@@ -18,8 +18,22 @@ def find_val(raw_text,kw):
 
     return found_val
 
-def write_file(dest_file, raw_text):
+def find_auto(src_dir, kw, **kwargs):
+    exclude = kwargs.get('exclude', "")
+
+# This function is meant to find the file names associated with standards for the input
+    for file_name in os.listdir(src_dir):
+        if ( (kw.lower() in file_name.lower()) and
+           (exclude.lower() not in file_name.lower() or exclude == "") ):
+            desired_file = file_name
+            break
+
+    return os.path.join(src_dir,desired_file)
+
+def write_file(dest_file, raw_text, **kwargs):
 # This function is made to write a file to be used as an input for the code
+
+    abs_path = kwargs.get('abs_path', False)
 
     # Redefining the function to only need the key word
     def fv(kw):
@@ -28,17 +42,48 @@ def write_file(dest_file, raw_text):
     # Opening the file
     f = open(dest_file, "w")
 
-    # Writing the files portions
-    f.write(fv("GEOMETRY_FILE") + "\n")
-    f.write(fv("REACTOR_DATA_FILE") + "\n")
-    f.write(fv("COMPONENT_FILE") + "\n")
-    f.write(fv("CONTROLLER_GAINS_FILE") + "\n")
-    f.write(fv("SENSOR_DATA_FILE") + "\n")
-    f.write(fv("VALVE_DATA_FILE") + "\n")
-    f.write(fv("BOP_GEOMETRY_FILE") + "\n")
-    f.write(fv("TRIP_SET_POINTS_FILE") + "\n")
-    f.write(fv("INITIAL_CONDITIONS_FILE") + "\n")
-    f.write(fv("TES_PARAMETER_FILES") + "\n")
+    # Getting the source Folder for the input files
+    src_folder = fv("SOURCE_FOLDER")
+
+    # Checking to ensure the input is a directory
+    if os.path.isdir(src_folder):
+        if abs_path:
+            src_folder = os.path.abspath(src_folder)
+        else:
+            src_folder = src_folder
+    else:
+        src_folder = ""
+
+    # Getting the Variable to auto-populate the files
+    auto_files = fv("AUTO_CHOOSE_FILES")
+    if auto_files.lower() == "true":
+        auto_files = True
+    else:
+        auto_files = False
+
+    # --> Writing the files portions
+    if auto_files and (src_folder != ""):
+        f.write(find_auto(src_folder, "Geometry",exclude="BOP") + "\n")
+        f.write(find_auto(src_folder, "Core") + "\n")
+        f.write(find_auto(src_folder, "Component") + "\n")
+        f.write(find_auto(src_folder, "Gains") + "\n")
+        f.write(find_auto(src_folder, "Sensors") + "\n")
+        f.write(find_auto(src_folder, "Valves") + "\n")
+        f.write(find_auto(src_folder, "BOPGeometry") + "\n")
+        f.write(find_auto(src_folder, "Trips") + "\n")
+        f.write(find_auto(src_folder, "Init") + "\n")
+        f.write(find_auto(src_folder, "TESMode") + "\n")
+    else:
+        f.write(os.path.join(src_folder, fv("GEOMETRY_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("REACTOR_DATA_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("COMPONENT_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("CONTROLLER_GAINS_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("SENSOR_DATA_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("VALVE_DATA_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("BOP_GEOMETRY_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("TRIP_SET_POINTS_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("INITIAL_CONDITIONS_FILE")) + "\n")
+        f.write(os.path.join(src_folder, fv("TES_PARAMETER_FILES")) + "\n")
 
     # Writing the number portions
     f.write(fv("INIT_MODE") + "\n")
@@ -50,23 +95,27 @@ def write_file(dest_file, raw_text):
 
 def replace_text(raw_text,kw, new_value):
 
-    # Defining the regular expresssion to be used
-    regex = r'(' + re.escape(kw) + r'[ \t]+)([^ \t\n]*)([ \n\t])'
+    # Only replacing stuff if the new value is different
+    if new_value != "":
+        # Defining the regular expresssion to be used
+        regex = r'(' + re.escape(kw) + r'[ \t]+)([^ \t\n]*)([ \n\t])'
 
-    # Replacing the old value + (str(new_value))
-    my_str_val = str(new_value)
-    try:
-        new_text = re.sub(regex,  r"\1 " + my_str_val + r"\3", raw_text, flags=re.IGNORECASE)
-    except:
-        print("WARNING WARNING: The substitution messed up")
+        # Replacing the old value
+        my_str_val = str(new_value)
+        try:
+            new_text = re.sub(regex,  r"\1 " + my_str_val + r"\3", raw_text, flags=re.IGNORECASE)
+        except:
+            print("WARNING WARNING: The substitution messed up")
+            new_text = raw_text
+    else:
         new_text = raw_text
 
     return new_text
 
 
-my_filetxt = open("./Nice Input/Base_input.txt").read()
+my_filetxt = open("./Nice Input/short_input.txt").read()
 
-# tst_new = replace_text(my_filetxt, "INITIAL_CONDITIONS_FILE", "yOyO.DAT")
+my_filetxt = replace_text(my_filetxt, "SOURCE_FOLDER", "")
 
 
-write_file("tst_file.txt", tst_new)
+write_file("./runFiles/tst_file.txt", my_filetxt)
