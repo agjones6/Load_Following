@@ -1,17 +1,17 @@
 ----------------------- PRE-INPUT FILE FOR RUNNING CODE -----------------------
 
 >> INPUT FILES
-	SOURCE_FOLDER  							./NuScale
+	SOURCE_FOLDER  							 ./MPower
 	AUTO_CHOOSE_FILES						True 			# This makes all of the files get pulled from the folder above
 	RUN_NAME								default
-	DESTINATION_FOLDER 						./Results
+	DESTINATION_FOLDER 						 ./Results/newTst2
 
 >> RUN OPTIONS
 	INIT_MODE 									0  # Initial Conditions File
 
 	START_TIME 									0
 	IDEMAND											0 	# Step Change in Load
-	DEMAND_PARAMETER 						90	# Final Turbine Load
+	DEMAND_PARAMETER 						 85	# Final Turbine Load
 
 	UPSET_CONDITIONS 						0,0.,0.,0.,0.
 
