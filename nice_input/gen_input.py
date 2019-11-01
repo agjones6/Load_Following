@@ -2,6 +2,8 @@
 import re
 import os
 import shutil
+import subprocess
+
 
 def find_val(raw_text,kw):
     # This function is designed to pull the very next space deliminated value
@@ -29,7 +31,7 @@ def find_auto(src_dir, kw, **kwargs):
             desired_file = file_name
             break
 
-    return os.path.join(src_dir,desired_file)
+    return os.path.join(src_dir,desired_file).replace("\\","/")
 
 def write_file(dest_file, raw_text, **kwargs):
 # This function is made to write a file to be used as an input for the code
@@ -64,27 +66,27 @@ def write_file(dest_file, raw_text, **kwargs):
 
     # --> Writing the files portions
     if auto_files and (src_folder != ""):
-        f.write(find_auto(src_folder, "Geometry",exclude="BOP") + "\n")
-        f.write(find_auto(src_folder, "Core") + "\n")
-        f.write(find_auto(src_folder, "Component") + "\n")
-        f.write(find_auto(src_folder, "Gains") + "\n")
-        f.write(find_auto(src_folder, "Sensors") + "\n")
-        f.write(find_auto(src_folder, "Valves") + "\n")
-        f.write(find_auto(src_folder, "BOPGeometry") + "\n")
-        f.write(find_auto(src_folder, "Trips") + "\n")
-        f.write(find_auto(src_folder, "Init") + "\n")
-        f.write(find_auto(src_folder, "TESMode") + "\n")
+        f.write('"' + find_auto(src_folder, "Geometry",exclude="BOP") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "Core") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "Component") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "Gains") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "Sensors") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "Valves") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "BOPGeometry") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "Trips") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "Init") + '"' + "\n")
+        f.write('"' + find_auto(src_folder, "TESMode") + '"' + "\n")
     else:
-        f.write(os.path.join(src_folder, fv("GEOMETRY_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("REACTOR_DATA_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("COMPONENT_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("CONTROLLER_GAINS_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("SENSOR_DATA_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("VALVE_DATA_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("BOP_GEOMETRY_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("TRIP_SET_POINTS_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("INITIAL_CONDITIONS_FILE")) + "\n")
-        f.write(os.path.join(src_folder, fv("TES_PARAMETER_FILES")) + "\n")
+        f.write('"' + os.path.join(src_folder, fv("GEOMETRY_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("REACTOR_DATA_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("COMPONENT_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("CONTROLLER_GAINS_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("SENSOR_DATA_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("VALVE_DATA_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("BOP_GEOMETRY_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("TRIP_SET_POINTS_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("INITIAL_CONDITIONS_FILE")).replace("\\","/") + '"' + "\n")
+        f.write('"' + os.path.join(src_folder, fv("TES_PARAMETER_FILES")).replace("\\","/") + '"' + "\n")
 
     # Writing the number portions
     f.write(fv("INIT_MODE") + "\n")
@@ -116,7 +118,7 @@ def replace_text(raw_text,kw, new_value):
 def read_my_input(myFile_name):
     # myFile = open(myFile_name).read()
 
-    base_file_txt = open("./Nice Input/short_input.txt").read()
+    base_file_txt = open("./nice_input/short_input.txt").read()
 
     for line in open(myFile_name).readlines():
         # Each of the options are split up by semi colons
@@ -265,34 +267,48 @@ def copy_input_deck(dest_dir,filename,special_name):
     # Copying the desired file
     shutil.copy(filename,os.path.join(dest_dir,deck_fold_name,special_name))
 
+def copy_fin_files(dest_dir, source_file, new_file_name):
+    # This copies the results from the code into a desired location
+    if not os.path.isdir(dest_dir):
+        os.mkdir(dest_dir)
+
+    # Adding the .dat file extention to the name of the file
+    new_file_name = new_file_name + ".dat"
+
+    # Copying the file
+    shutil.copy(source_file,os.path.join(dest_dir,new_file_name))
 
 def running_code(runFile_name, inputFile_txt):
 
     # Taking my input file and making Dr. Doster's
+    #   NOTEL This overwrites the file in the run-file location
     write_file(runFile_name, inputFile_txt)
 
-    os.system("./Code/*.exe << " + runFile_name)
+    cmd = 'echo ' + "'" + runFile_name.replace("/","\\") + "'" +  ' | .\\Code\\base_exec.exe'
+    subprocess.call(cmd,shell=True)
     exit()
 
-
-
-
-
+# def conv_backslash(my_text):
+#     my_text =
 
 # new_file = open("./runFiles/test2.txt","w")
 # new_file.write(my_filetxt)
 
 # This reads my base input file to make all of the combinations of options
 myFile_name = "my_input.txt"
-read_my_input(myFile_name)
+read_my_input(myFile_name) # Actually makes the files
 
-# This moves files and runs the code
+
+# This moves files and runs the code from the runfiles in the run folders
 run_location = "./runFiles"
 for file in os.listdir(run_location):
-    path_to_source = os.path.join(run_location,file)
+    path_to_source = os.path.join(run_location,file) #.replace("\\","/")
 
     # Reading in the input file
     input_deck = open(path_to_source).read()
+    # input_deck = input_deck.replace("/","\\")
+    # print(input_deck)
+    # exit()
 
     # Getting the file name from the input file and the output folder
     my_file_name = get_default_name(input_deck)
@@ -302,7 +318,13 @@ for file in os.listdir(run_location):
     copy_input_deck(dest_dir,path_to_source,my_file_name)
 
     # Running the code
-    running_code(path_to_source, input_deck)
+    # running_code(path_to_source, input_deck)
+
+    # Copying the files
+    copy_fin_files(dest_dir,"Summary.dat",my_file_name)
+
+    # Removing the run files from the 'runFile' directory
+    os.remove(os.path.join(run_location,file))
 
     # Moving the code output
     # curr_file = open(os.path.join(dest_dir,my_file_name),"w")
