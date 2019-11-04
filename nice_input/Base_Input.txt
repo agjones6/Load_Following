@@ -1,7 +1,7 @@
 ----------------------- PRE-INPUT FILE FOR RUNNING CODE -----------------------
 
 >> INPUT FILES
-	SOURCE_FOLDER								./NuScale
+	SOURCE_FOLDER								.\NuScale
 	AUTO_CHOOSE_FILES						False
 
 	GEOMETRY_FILE               NuScaleGeometry01.dat

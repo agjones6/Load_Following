@@ -57,14 +57,77 @@ def basic_plot(df, ystring , **kwargs):
     if not keep_fig:
         plt.close(dum_fig)
 
-# Defining the file name
-filename = "System.dat"
+def comp_plot(df_list, ystring , **kwargs):
+    # Handling the optional inputs
+    xstring = kwargs.get('xstring', "Time")
+    title = kwargs.get('title', "")
+    dest_folder = kwargs.get('dest_folder',"")
+    keep_fig = kwargs.get('keep_fig',True)
+    case_names = kwargs.get('case_names',"")
+    normalized = kwargs.get('normalized',False)
 
-# Putting the data into a data
-rawData = get_df(filename)
+    # Plotting the desired data
+    dum_fig = plt.figure()
+    for df in df_list:
+        xvals = df[xstring]
 
-# %%
-basic_plot(rawData,"Qsteam" ,
-           keep_fig=True)
+        if normalized:
+            yvals = df[ystring]/df[ystring][0]
+        else:
+            yvals = df[ystring]
+
+        plt.plot(xvals,yvals)
+        plt.xlabel(xstring)
+        plt.ylabel(ystring)
+
+    if case_names != "" and len(case_names) == len(df_list):
+        plt.legend(case_names)
+
+    # --> Future functionality for saving output directly
+    # if file_name != "":
+    #     plt.savefig(os.path.join(case_dest,
+    #                 str(burnup[case_count][i]) + "_" + file_name))
+
+    # Closing the figure if it is not desired to keep it
+    if not keep_fig:
+        plt.close(dum_fig)
+
+#  ============================================================================
+
+# Defining a source folder
+src_dir = "./Results/myCase2"
+
+rawData = []
+runNames = []
+for file in os.listdir(src_dir):
+    # Getting the file extenion
+    ext = file.split(".")[-1]
+
+    # If the file is a .dat file, pull the data
+    if ext == "dat":
+        rawData.append(get_df(os.path.join(src_dir,file)))
+        runNames.append(file.split(".")[0])
+
+
+
+comp_plot(rawData,"Demand" ,
+           keep_fig=True,
+           case_names=runNames,
+           normalized=True)
+
 
 plt.show()
+# %%
+
+# ['Time', 'Qrx', 'Qth', 'Qtrans', 'Flowv', 'Pp', 'Px', 'PxIND', 'PRZLVL',
+#'PRZLVLIND', 'VelSRG', 'QHTRP', 'QHTRB', 'SCV Position', 'Spray GPM', 'THL',
+#'THL Ind', 'TCL', 'TCL Ind', 'TaveREF', 'Tave', 'Tave Ind', 'Tmod', 'Flow SFWS',
+#'Flow FD', 'Flow FD Ind', 'Demand', 'Steam Flow', 'Steam Flow Ind', 'Wload',
+# 'Wturb', 'Omega FP', 'Texit SG 1', 'Texit SG IND', 'SG Exit Void', 'Dryout 1',
+#'SGLVL Ind', 'Trx', 'TCL Hot', 'MDNBR', 'Tfeed', 'TfeedIND', 'Qsteam', 'PSG',
+#'PSG Ind', 'Pimp', 'DeltaP SG', 'DeltaP SG IND', 'DP elev SG', 'Deltat', 'rho',
+#'rhoX', 'FCV', 'FBV', 'SFWV', 'TCV 1', 'TCV 2', 'TCV 3', 'TCV 4', 'TBV 1',
+#'TBV 2', 'TBV 3', 'TBV 4', 'BANK A', 'BANK B', 'BANK C', 'BANK D', 'RhoCBA',
+#'RhoCBB', 'RhoCBC', 'RhoCBD', 'TESLoad', 'TESFlowDemand', 'FlowAUX1', 'FlowAUX2',
+# 'FlowAUX3', 'PTAP', 'Tsat Tap', 'PTES', 'TES_TBV(1)', 'TES_TBV(2)', 'TES_TBV(3)',
+#'TES_TBV(4)']

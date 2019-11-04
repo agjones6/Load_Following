@@ -23,7 +23,6 @@ def find_val(raw_text,kw):
 
 def find_auto(src_dir, kw, **kwargs):
     exclude = kwargs.get('exclude', "")
-
 # This function is meant to find the file names associated with standards for the input
     for file_name in os.listdir(src_dir):
         if ( (kw.lower() in file_name.lower()) and
@@ -282,11 +281,13 @@ def running_code(runFile_name, inputFile_txt):
 
     # Taking my input file and making Dr. Doster's
     #   NOTEL This overwrites the file in the run-file location
+    runFile_name = runFile_name.replace("\\","/")
+
     write_file(runFile_name, inputFile_txt)
 
-    cmd = 'echo ' + "'" + runFile_name.replace("/","\\") + "'" +  ' | .\\Code\\base_exec.exe'
+    cmd = 'echo ' + "'" + runFile_name.replace("/","\\") + "'" +  ' | .\\Code\\base_exec2.exe'
     subprocess.call(cmd,shell=True)
-    exit()
+
 
 # def conv_backslash(my_text):
 #     my_text =
@@ -318,10 +319,10 @@ for file in os.listdir(run_location):
     copy_input_deck(dest_dir,path_to_source,my_file_name)
 
     # Running the code
-    # running_code(path_to_source, input_deck)
+    running_code(path_to_source, input_deck)
 
     # Copying the files
-    copy_fin_files(dest_dir,"Summary.dat",my_file_name)
+    copy_fin_files(dest_dir,"System.dat",my_file_name)
 
     # Removing the run files from the 'runFile' directory
     os.remove(os.path.join(run_location,file))
