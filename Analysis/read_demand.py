@@ -19,9 +19,6 @@ import statistics as stats
 import re
 import requests
 
-test = requests.get("http://api.eia.gov/category/?api_key=d1dc5bf9effa0cab55bca470266b6339&category_id=2123635")
-print(test.json())
-
 def get_demand_data(filename):
 # This function is made to get the data from a file and put it into a pandas dataframe
 
@@ -199,15 +196,14 @@ median = [np.nanmedian(i) for i in hr_bins]
 # Getting a list of plotting lines
 plt_lines = [avg,
              np.subtract(avg,np.multiply(2,sigma)),
-             np.add(avg,np.multiply(2,sigma)),
-             median ]
+             np.add(avg,np.multiply(2,sigma)) ]
 
 plt.figure()
-# plot_data_lists(ydata,line_type="k.",xdata_list=xdata)
+plot_data_lists(ydata,line_type="k.",xdata_list=xdata)
 plot_data_lists(plt_lines,
                 line_type="--",
                 my_linewidth=3,
-                legend=["mean","-2 sigma","+2 sigma", "median"])
+                legend=["mean","-2 sigma","+2 sigma"])
 
 plt.show()
 
