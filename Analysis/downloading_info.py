@@ -60,9 +60,10 @@ dest_folder = "./Grid_Information"
 
 
 # Setting a list of things to actually pull
-# Options: "Net generation by energy source", "Demand", "Day-ahead demand forecast"
+# Options: "Net generation by energy source", "Demand", "Day-ahead demand forecast",
 #          "Total interchange"
-pull_list = ["Demand"]#,
+pull_list = ["Net generation by energy source", "Demand", "Day-ahead demand forecast",
+"Total interchange"]#,
              # "Demand"]
 
 # Defining an overarching key
@@ -91,7 +92,7 @@ for data_set in Elec_Sys_json["category"]["childcategories"]:
 
         # Using the location category json to get a series json
         df = pd.DataFrame()
-        for i in range(0,len(loc_cat_json["category"]["childseries"]),2):
+        for i in range(1,len(loc_cat_json["category"]["childseries"]),2):
             series_obj = loc_cat_json["category"]["childseries"][i]
             loc_series_id = series_obj["series_id"]
             loc_series_json = get_json(series_API(loc_series_id))

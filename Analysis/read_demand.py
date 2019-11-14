@@ -27,24 +27,33 @@ def get_demand_data(filename):
         return ""
 
     # Importing the data as a dataframe
-    rawData = pd.read_csv(filename)#, skiprows=1, header=None, delim_whitespace=True)
+    rawData = pd.read_csv(filename, index_col=0)#, skiprows=1, header=None, delim_whitespace=True)
 
-    # Removing the timezone information if it is there
-    dum_list = []
-    regex = r'(\d{1,2}\/\d{1,2}\/\d{1,4} \d{1,4} \D.\D.) '
-    for i in range(len(rawData["Timestamp (Hour Ending)"])):
-        try:
-            match_val = re.search(regex,rawData["Timestamp (Hour Ending)"][i]).group(1)
-            dum_list.append(pd.Timestamp(match_val))
-        except Exception as e:
-            dum_list.append(rawData["Timestamp (Hour Ending)"][i])
-            pass
-
-    rawData["Timestamp (Hour Ending)"] = dum_list
+    # # Removing the timezone information if it is there
+    # dum_list = []
+    # regex = r'(\d{1,2}\/\d{1,2}\/\d{1,4} \d{1,4} \D.\D.) '
+    # for i in range(len(rawData["Timestamp (Hour Ending)"])):
+    #     try:
+    #         match_val = re.search(regex,rawData["Timestamp (Hour Ending)"][i]).group(1)
+    #         dum_list.append(pd.Timestamp(match_val))
+    #     except Exception as e:
+    #         dum_list.append(rawData["Timestamp (Hour Ending)"][i])
+    #         pass
+    #
+    # rawData["Timestamp (Hour Ending)"] = dum_list
     # rawData["Timestamp (Hour Ending)"] = [pd.Timestamp(" ".join(i.split(" ")[0:-1])) for i in rawData["Timestamp (Hour Ending)"]]
     return rawData
 
 def get_data_lists(df, **kwargs):
+
+    # Getting the time data
+    time_data = df.index.to_numpy()
+    value_data = df.to_numpy()
+    column_names = list(df.columns)
+
+    return time_data, value_data, column_names
+
+def slice_up_data():
 # This function is made to plot multiple lines from the demand dataframe at a given interval
 
     # Handling optional inputs
@@ -81,7 +90,7 @@ def get_data_lists(df, **kwargs):
         ydata_list.append(np.array(all_ydata[st:fin][:]))
         xdata_list.append(base_xdata[0:(fin - st)])
 
-    return [xdata_list, ydata_list]
+    return xdata_list, ydata_list
 
 
 def get_hour_bins(ydata_list):
@@ -169,19 +178,22 @@ def combine_sources(source_folder):
 
 # Defining source directory
 src_folder = "./Grid_Information/Demand/"
-summary_file_name = "summary.csv"
+summary_file_name = "DUK.csv"
 
 # Grabbing all of the data from the specified folder and consolidating sources
 # combine_sources(src_folder)
 
-# Grabbing the consolodated data
+# The data as a dataframe
 df = get_demand_data(os.path.join(src_folder,summary_file_name))
 
 
-# Getting both the x and y data from a function
-dum_list = get_data_lists(df, ystring="Demand (MWh)",interval=24)
-xdata = dum_list[0]
-ydata = dum_list[1]
+# Geeting the time (ydata), values (xdata), and column info (info)
+xdata, ydata, info = get_data_lists(df)
+test = [pd.Timestamp(i) for i in xdata]
+test[0].ctime(), xdata[0]
+test[3] > test[1]
+pd.Timestamp("20190113T01:01:01-05").ctime()
+np.datetime64(pd.Timestamp(xdata[0]))
 
 
 # Getting the hourly data in an hourly basis
