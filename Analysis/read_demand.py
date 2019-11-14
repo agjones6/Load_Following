@@ -153,7 +153,7 @@ def combine_sources(source_folder):
             df = df.append(dum,sort=False)
 
         # Removing the file
-        os.remove(file)
+        # os.remove(file)
 
 
         # Adding to the counter variable
@@ -210,3 +210,6 @@ plt.show()
 # %%
 # plt.plot(df["Demand (MWh)"])
 # vd.basic_plot(df, "Demand (MWh)", xstring=0)
+test = pd.read_csv("./Grid_Information/Demand/DUK.csv",index_col=0)
+test.index.to_numpy()
+pd.Timestamp(test["time"][4])
