@@ -29,19 +29,6 @@ def get_demand_data(filename):
     # Importing the data as a dataframe
     rawData = pd.read_csv(filename, index_col=0)#, skiprows=1, header=None, delim_whitespace=True)
 
-    # # Removing the timezone information if it is there
-    # dum_list = []
-    # regex = r'(\d{1,2}\/\d{1,2}\/\d{1,4} \d{1,4} \D.\D.) '
-    # for i in range(len(rawData["Timestamp (Hour Ending)"])):
-    #     try:
-    #         match_val = re.search(regex,rawData["Timestamp (Hour Ending)"][i]).group(1)
-    #         dum_list.append(pd.Timestamp(match_val))
-    #     except Exception as e:
-    #         dum_list.append(rawData["Timestamp (Hour Ending)"][i])
-    #         pass
-    #
-    # rawData["Timestamp (Hour Ending)"] = dum_list
-    # rawData["Timestamp (Hour Ending)"] = [pd.Timestamp(" ".join(i.split(" ")[0:-1])) for i in rawData["Timestamp (Hour Ending)"]]
     return rawData
 
 def get_data_lists(df, **kwargs):
@@ -52,45 +39,6 @@ def get_data_lists(df, **kwargs):
     column_names = list(df.columns)
 
     return time_data, value_data, column_names
-
-def slice_up_data():
-# This function is made to plot multiple lines from the demand dataframe at a given interval
-
-    # Handling optional inputs
-    xstring = kwargs.get("xstring", "")
-    ystring = kwargs.get("ystring", "Demand (MWh)")
-    interval = kwargs.get("interval",24)
-
-    # Getting the data from the strings
-    if xstring != "":
-        base_xdata = df[xstring]
-    else:
-        base_xdata = np.arange(interval)
-
-    # Getting the y data
-    all_ydata = df[ystring]
-
-    # Building the plotting value lists
-    count = 0
-    ydata_list = []
-    xdata_list = []
-
-    for i in range(len(all_ydata)//interval + 1):
-        # Starting index
-        st = (i*interval)
-        if st == len(all_ydata):
-            break
-
-        # Ending Index
-        fin = st + interval
-        if fin > len(all_ydata):
-            fin = len(all_ydata)
-
-        # List of x and y data
-        ydata_list.append(np.array(all_ydata[st:fin][:]))
-        xdata_list.append(base_xdata[0:(fin - st)])
-
-    return xdata_list, ydata_list
 
 
 def get_hour_bins(ydata_list):
@@ -111,117 +59,219 @@ def get_hour_bins(ydata_list):
 
     return my_bins
 
-
 def plot_data_lists(ydata_list, **kwargs):
+# This plots SINGLED VALUED data lists. It was made for plotting demand curves
+
     # Handling optional input arguments
     line_type = kwargs.get("line_type", "*--")
     my_linewidth = kwargs.get("my_linewidth", 2)
     legend = kwargs.get("legend", "")
     xdata_list = kwargs.get("xdata_list", "")
+    title = kwargs.get("title","")
 
     dum_plot = [[]]*len(ydata_list)
-
-    # _, ax = plt.subplots()
     for i in range(len(ydata_list)):
         ydata = ydata_list[i]
-
-        if xdata_list != "":
+        if not "" in xdata_list:
             xdata = xdata_list[i]
             dum_plot[i], = plt.plot(xdata, ydata,line_type,linewidth=my_linewidth)
         else:
             dum_plot[i], = plt.plot(ydata,line_type,linewidth=my_linewidth)
         # ax.plot(xdata,ydata,line_type,linewidth=my_linewidth)
 
-    # if len(legend) > i:
-    #     ax.legend(legend)
+    plt.title(title)
+
     if legend != "":
         plt.legend(dum_plot,legend)
 
-def combine_sources(source_folder):
-# This is designed to get a pandas dataframe from all of the files in a folder
+def slice_up_data(time_data, y_values, date_range, **kwargs):
+# This function is made to slice up the x values and y values into groups.
+#   This works for single valued variables and multiple value variables.
+#
+    # Handling optional inputs
+    interval = kwargs.get("interval",24)
 
-    # Checking to make sure the entered folder exists
-    if not os.path.isdir(source_folder):
-        return
+    # Getting the start and end index
+    start_index = find_date_index(time_data, date_range[0])
+    end_index = find_date_index(time_data, date_range[1])
+    # end_index = find_date_index(time_data, time_data[end_index].date())
 
-    # Going through every file and adding to a dataframe
-    count = 0
-    for file in os.listdir(source_folder):
-        # Going to the next file if it is not a csv
-        if file.split(".")[-1] != "csv":
-            continue
+    interval_start = find_date_index(time_data, time_data[start_index].date())
 
-        # Getting the total file path
-        file = os.path.join(source_folder,file)
+    # interval_end = find_date_index(time_data, time_data[end_index].date())
 
-        # Creating the dataframe if it is the first time in the loop
-        if count == 0:
-            df = get_demand_data(file)
+    # Note the dates are in REVERSE ORDER (end is old) and this loop pulls them
+    #   so that they are in normal order
+    i = interval_start
+    desired_dates = []
+    final_data = []
+
+    while i >= end_index:
+        dum_list = []
+        dum_dlist = []
+
+        st = i
+        en = i
+        c = 0
+        for i2 in range(0,-interval,-1):
+            # print(i+i2)
+            if ((i+i2) <= start_index):
+                # print(i2)
+                if c == 0:
+                    st = (i+i2+1)
+                c += 1
+                en = (i+i2)
+                dum_list.append(time_data[i+i2].ctime())
+                # dum_dlist.append(y_values[i+i2,:].item())
+
+        desired_dates.append(dum_list)
+        final_data.append(np.flip(y_values[en:st,:],axis=0))
+        # final_data.append(np.array(dum_dlist))
+        i -= interval
+
+    return desired_dates, final_data
+
+def find_date_index(time_data,date):
+
+    # Getting the date entry as a Timestamp
+    pd_date = pd.Timestamp(date,tzinfo=time_data[0].tz)
+    # print("comparing ", pd_date.ctime())
+    c = 0
+    for i in time_data:
+        # print(i.ctime())
+        if i < pd_date:
+            # print("here",i.ctime())
+            break
+
+        c += 1
+    return c
+
+def get_data(general_folder, data_name, region_name, interval, normalized, **kwargs):
+
+    # Defining source directory
+    src_folder = os.path.join(general_folder,data_name)
+
+    # The data as a dataframe
+    df = get_demand_data(os.path.join(src_folder,region_name + ".csv"))
+
+    # Geeting the time (ydata), values (xdata), and column info (info)
+    #   Note: This are in reverse cronological order
+    xdata, ydata, info = get_data_lists(df)
+    time_data = [pd.Timestamp(i) for i in xdata]
+
+    # This slices up the data lists into intervals of a given length (24 hours) and
+    #   puts the data in cronological order
+    sliced_time, sliced_ydata = slice_up_data(time_data, ydata, date_range, interval=interval)
+
+    # Normalizing the data if the input is given
+    if normalized:
+        sliced_ydata = np.divide(sliced_ydata,np.nanmax(sliced_ydata))
+
+    return sliced_time, sliced_ydata, info
+
+def get_gen_source(info, data_list, source_list):
+
+    my_indices = []
+    # print(source_list)
+    # print(info)
+    # Going through every desired source to find the columns where it matches the info
+    for source in source_list:
+        for i in range(len(info)):
+            if source in info[i]:
+                my_indices.append(i)
+    # print(my_indices)
+    # sub_load = np.zeros([1,len(data)])
+    sub_load_list = []
+    for data in data_list:
+        for i in range(len(my_indices)):
+            if i == 0:
+                sub_load = data[:, my_indices[i]]
+            else:
+                sub_load = np.add(sub_load, data[:,my_indices[i]])
+
+        if my_indices:
+            sub_load_list.append(sub_load)
         else:
-            dum = get_demand_data(file)
-            df = df.append(dum,sort=False)
+            sub_load_list.append(np.zeros(len(data)))
 
-        # Removing the file
-        # os.remove(file)
+    return sub_load_list
+
+def do_everything(date_range,data_name,region_name,**kwargs):
+
+    # Handling optional inputs
+    interval = kwargs.get("interval",24)
+    general_folder = kwargs.get("general_folder","./Grid_Information/")
+    normalized = kwargs.get("normalized",False)
+    title = kwargs.get("title","")
+    xlabel = kwargs.get("xlabel","")
+    sub_source_list = kwargs.get("sub_source_list",[""])
+    sub_source_loc = kwargs.get("sub_source_loc","Net generation by energy source")
+
+    sliced_time, sliced_ydata, info = get_data(general_folder, data_name,
+                                            region_name, interval, normalized)
+
+    if not "" in sub_source_list:
+        if data_name != "Net generation by energy source":
+            _, sliced_sub_data, sub_info = get_data(general_folder, sub_source_loc,
+                                                    region_name, interval, normalized)
+
+            sliced_ydata = [np.squeeze(i) for i in sliced_ydata]
+            sub_load = get_gen_source(sub_info, sliced_sub_data, sub_source_list)
+
+            try:
+                if not sub_load:
+                    print("No source in ", region_name)
+                else:
+                    sliced_ydata = np.subtract(sliced_ydata,sub_load)
+            except Exception as e:
+                print("there was a problem subtracting sub-demands")
+                pass
+        else:
+            sliced_ydata = get_gen_source(info, sliced_ydata, sub_source_list)
+
+    # Getting the hourly data in an hourly basis
+    hr_bins = get_hour_bins(sliced_ydata)
+
+    # Getting statistic parameters about the demand curves
+    sigma = [np.nanstd(i) for i in hr_bins]
+    avg = [np.nanmean(i) for i in hr_bins]
+    median = [np.nanmedian(i) for i in hr_bins]
 
 
-        # Adding to the counter variable
-        count += 1
+    # Getting a list of plotting lines
+    plt_lines = [avg,
+                 np.subtract(avg,np.multiply(2,sigma)),
+                 np.add(avg,np.multiply(2,sigma)) ]
 
-    # Erasing the duplicate rows from the dataframe
-    df = df.drop_duplicates(keep=False)
+    plot_data_lists(sliced_ydata,line_type="k.")#,xdata_list=xdata)
+    plot_data_lists(plt_lines,
+                    line_type="--",
+                    my_linewidth=3,
+                    legend=["mean","-2 sigma","+2 sigma"])
 
-    # Saving the data to a new file. This is done to consilate information
-    df.to_csv(os.path.join(source_folder,"summary.csv"),index=False)
+    plt.title(title)
+    plt.xlabel(xlabel)
 
+# ==============================================================================
 
+date_range = ["6-01-2019","10-20-2019"]
+data_type = "Net generation by energy source" #"Demand"
+region_name = ["DUK","CISO", "SWPP"]
+sub_source_list = ["solar","wind"]
+max_subplot_wide = 2
 
-# Defining source directory
-src_folder = "./Grid_Information/Demand/"
-summary_file_name = "DUK.csv"
-
-# Grabbing all of the data from the specified folder and consolidating sources
-# combine_sources(src_folder)
-
-# The data as a dataframe
-df = get_demand_data(os.path.join(src_folder,summary_file_name))
-
-
-# Geeting the time (ydata), values (xdata), and column info (info)
-xdata, ydata, info = get_data_lists(df)
-test = [pd.Timestamp(i) for i in xdata]
-test[0].ctime(), xdata[0]
-test[3] > test[1]
-pd.Timestamp("20190113T01:01:01-05").ctime()
-np.datetime64(pd.Timestamp(xdata[0]))
+h = np.ceil(len(region_name)/max_subplot_wide).astype(int)
+w = min([len(region_name),max_subplot_wide])
 
 
-# Getting the hourly data in an hourly basis
-hr_bins = get_hour_bins(ydata)
-
-
-# Getting statistic parameters about the demand curves
-sigma = [np.nanstd(i) for i in hr_bins]
-avg = [np.nanmean(i) for i in hr_bins]
-median = [np.nanmedian(i) for i in hr_bins]
-
-# Getting a list of plotting lines
-plt_lines = [avg,
-             np.subtract(avg,np.multiply(2,sigma)),
-             np.add(avg,np.multiply(2,sigma)) ]
-
-plt.figure()
-plot_data_lists(ydata,line_type="k.",xdata_list=xdata)
-plot_data_lists(plt_lines,
-                line_type="--",
-                my_linewidth=3,
-                legend=["mean","-2 sigma","+2 sigma"])
-
+c = 1
+for r in region_name:
+    plt.subplot(h, w, c)
+    do_everything(date_range, data_type, r,
+                  sub_source_list=sub_source_list,
+                  normalized=False,
+                  title=r,
+                  interval=24 )
+    c += 1
+plt.suptitle((date_range[0] + " -> " + date_range[1]))
 plt.show()
-
-# %%
-# plt.plot(df["Demand (MWh)"])
-# vd.basic_plot(df, "Demand (MWh)", xstring=0)
-test = pd.read_csv("./Grid_Information/Demand/DUK.csv",index_col=0)
-test.index.to_numpy()
-pd.Timestamp(test["time"][4])
