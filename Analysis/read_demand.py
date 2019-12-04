@@ -106,7 +106,7 @@ def slice_up_data(time_data, y_values, date_range, **kwargs):
     desired_dates = []
     final_data = []
 
-    while i >= end_index:
+    while i > end_index:
         dum_list = []
         dum_dlist = []
 
@@ -206,17 +206,31 @@ def do_everything(date_range,data_name,region_name,**kwargs):
     xlabel = kwargs.get("xlabel","")
     sub_source_list = kwargs.get("sub_source_list",[""])
     sub_source_loc = kwargs.get("sub_source_loc","Net generation by energy source")
+    return_df = kwargs.get("return_df",False)
 
     sliced_time, sliced_ydata, info = get_data(general_folder, data_name,
                                             region_name, interval, normalized)
 
     if not "" in sub_source_list:
         if data_name != "Net generation by energy source":
-            _, sliced_sub_data, sub_info = get_data(general_folder, sub_source_loc,
+            tst, sliced_sub_data, sub_info = get_data(general_folder, sub_source_loc,
                                                     region_name, interval, normalized)
+            # print("sliced_sub_data =",len(tst))
+            # for i in range(len(sliced_time)):
+            #     print(sliced_time[i])
+            #     try:
+            #         print(tst[i])
+            #     except:
+            #         print("miss")
+            #         pass
+            # exit()
 
             sliced_ydata = [np.squeeze(i) for i in sliced_ydata]
             sub_load = get_gen_source(sub_info, sliced_sub_data, sub_source_list)
+
+            print("sub_load =",len(sub_load))
+            print("sliced_ydata =",len(sliced_ydata))
+            # exit()
 
             try:
                 if not sub_load:
@@ -224,7 +238,8 @@ def do_everything(date_range,data_name,region_name,**kwargs):
                 else:
                     sliced_ydata = np.subtract(sliced_ydata,sub_load)
             except Exception as e:
-                print("there was a problem subtracting sub-demands")
+                print(e)
+                print("there was a problem subtracting sub-demands", region_name)
                 pass
         else:
             sliced_ydata = get_gen_source(info, sliced_ydata, sub_source_list)
@@ -252,20 +267,45 @@ def do_everything(date_range,data_name,region_name,**kwargs):
     plt.title(title)
     plt.xlabel(xlabel)
 
+    if return_df:
+        return hr_bins
+
 # ==============================================================================
 
-date_range = ["6-01-2019","10-20-2019"]
-data_type = "Net generation by energy source" #"Demand"
-region_name = ["DUK","CISO", "SWPP"]
-sub_source_list = ["solar","wind"]
+date_range = ["09-01-2019","10-15-2019"]
+
+data_type = "Net generation by energy source" # "Demand"
+data_type = "Demand"
+
+region_name = ["DUK"] #, "CISO", "SWPP"
+
+sub_source_list = [""]
+# sub_source_list = ["wind","solar"]
+
 max_subplot_wide = 2
 
 h = np.ceil(len(region_name)/max_subplot_wide).astype(int)
 w = min([len(region_name),max_subplot_wide])
 
+region_name = "DUK"
+my_list = do_everything(date_range, data_type, region_name,
+              sub_source_list=sub_source_list,
+              normalized=False,
+              # title=r,
+              interval=24,
+              return_df=True )
+
+# Creates a datafram rows=day, column=hr
+my_df = pd.DataFrame(np.hstack(my_list))
+
+my_df.to_csv("./Grid_Information/Curve_Fitting/" + region_name + ".csv",index=False,header=False)
+
+
+# %%
 
 c = 1
 for r in region_name:
+    print(r)
     plt.subplot(h, w, c)
     do_everything(date_range, data_type, r,
                   sub_source_list=sub_source_list,
@@ -275,3 +315,5 @@ for r in region_name:
     c += 1
 plt.suptitle((date_range[0] + " -> " + date_range[1]))
 plt.show()
+
+# NOTE: Figure out what is going on with the greater than/greater than or equal to in the slice up data function
