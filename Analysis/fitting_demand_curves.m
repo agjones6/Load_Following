@@ -50,63 +50,75 @@ end
 % plot(norm_data{2},'*b')
 
 %% Defining a function to be used to fit 
-region = 2;
+region = 1;
 t_mesh = linspace(1,num_hours,500) - 1;
-N = 4;
-lb = -1;
+[t_obs,s_index] = sort(flat_time{region});
+val_obs = flat_data{region}(s_index);
+N = 3;
+lb = 0;
 ub = 1;
 fun_type = "lin";
+options.nsimu = 10000; 
+num_DRAMS = 4;
 
 % Guessing initial values for the parameters random [-1,1]
 if fun_type == "sin"
-    q_guess = (ub-lb).*rand(2,N+1)+lb;
+    q_guess = (ub-lb).*rand(1,(N*2)+1)+lb;
 else
     q_guess = (ub-lb).*rand(1,N+1)+lb;
 end
 
+% Defining the Least Squares model and Function Model
+if fun_type == "sin"
+    curr_model = @(time,q) sin_fun(N,time,q); 
+    curr_ss = @(time,real_vals,q) sin_lsq(N,time,real_vals,q);
+else
+    curr_model = @(time,q) lin_fun(N,time,q); 
+    curr_ss = @(time,real_vals,q) lin_lsq(N,time,real_vals,q); 
+end
 
 % These are the parameters found from the least squares method
-if fun_type == "sin"
-    q_new = fminsearch( @(q)sin_lsq(N,flat_time{region},flat_data{region},q), q_guess);
-else
-    q_new = fminsearch( @(q)lin_lsq(N,flat_time{region},flat_data{region},q), q_guess);
-end 
+q_new = fminsearch( @(q)curr_ss(t_obs,val_obs,q), q_guess);
 
 % Values from the model evaluated at times from the data
-if fun_type == "sin"
-   model_vals = sin_fun(N,flat_time{region},q_new); 
-else
-    model_vals = lin_fun(N,flat_time{region},q_new);
-end
+model_vals = curr_model(t_obs,q_new);
+mesh_vals = curr_model(t_mesh,q_new); 
+    
+figure(4); clf
+plot(t_mesh, mesh_vals, 'LineWidth',2)
+hold on
+plot(t_obs,val_obs,'*')
+title('Least Squares')
+hold off
 
 %% Trying DRAM with the Linear Model
 % t_fun = @(q) Linear_Fun(N,flat_time{reg},flat_data{reg},q)
 % t_fun(q_new)
 
-[data.xdata,s_index] = sort(flat_time{region});
-data.ydata = flat_data{region}(s_index);
+data.xdata = t_obs;
+data.ydata = val_obs;
 
-SSq_0 = nansum((model_vals - flat_data{region}).^2);
-s_0   =  ((1/(length(flat_time{region})-(N+1))) * SSq_0 ).^0.5;
-model.ssfun = @(q,data) lin_lsq(N,data.xdata,data.ydata,q);
+SSq_0 = nansum((model_vals - val_obs).^2);
+s_0   =  ((1/(length(t_obs)-(N+1))) * SSq_0 ).^0.5;
 model.sigma2 = s_0^2;
+model.ssfun = @(q,data) curr_ss(data.xdata,data.ydata,q);
 
 % Parameters to be used by DRAM
 q_0 = q_new;
 
 % Setting the options
-options.nsimu = 5000; 
 options.updatesigma = 1; 
 % options.qcov = V_0;
 
-num_DRAMS = 4;
+
 for i = 1:num_DRAMS
     if i ~= 1
        q_0 = res.mean; 
+       q_0 = chain(end,:);
     end
     
     % Parameter cell array
-    for i2 = 0:N
+    for i2 = 0:(length(q_guess)-1)
         if i2 == 0
             params = { {"p"+string(i2),q_0(i2+1) } };
         else 
@@ -117,12 +129,12 @@ for i = 1:num_DRAMS
     [res,chain,s2chain] = mcmcrun(model,data,params,options);
 end
 
-% Plotting DRAM figures
+%% Plotting DRAM figures
 figure(1); clf; 
 mcmcplot(chain,[],res,'chainpanel'); 
 
-figure(2); clf;
-mcmcplot(chain,[],res,'pairs');
+% figure(2); clf;
+% mcmcplot(chain,[],res,'pairs');
 
 figure(3); clf;
 mcmcplot(chain,[],res,'dens-hist');
@@ -130,18 +142,72 @@ mcmcplot(chain,[],res,'dens-hist');
 %% Using the parameters found in DRAM to plot the actual points and model
 q_DRAM = res.mean;
 % q_DRAM = chain(end,:);
-if fun_type == "sin"
-    vals_DRAM = sin_fun(N,t_mesh,q_DRAM);
-else 
-    vals_DRAM = lin_fun(N,t_mesh,q_DRAM);
+
+mesh_DRAM = curr_model(t_mesh,q_DRAM);
+vals_DRAM = curr_model(t_obs,q_DRAM);
+
+SSq_0 = curr_ss(t_obs,val_obs,q_DRAM);
+s_0   =  ((1/(24-(length(q_DRAM)))) * SSq_0 ).^0.5;
+
+%
+h = 0.001;
+num_param = length(q_DRAM);
+X_0 = zeros(length(t_obs),num_param);
+for i = 1:num_param
+    base_mat = ones(1,num_param);
+    base_mat(i) = base_mat(i) + h;
+    val_div = h * q_DRAM(i);
+    diff_vals = curr_model(t_obs,q_DRAM.*base_mat);
+    
+    % Setting up the Sensitivity Matrix
+    X_0(:,i) = (  diff_vals - val_obs)./val_div;
+end
+X_0(isnan(X_0)) = 0;
+
+% Calculating the sensitivity Matrix
+V_0 = s_0^2 * (transpose(X_0)*X_0)^-1;
+% V_0 =  (res.S20^2).*(transpose(X_0)*X_0)^-1;
+% V_0 = (transpose(X_0)*X_0)^-1;
+% V_0 = (res.S20.^2).*res.cov;
+% R_0 = chol(V_0);
+V_0 = res.qcov.*res.adascale.^2;
+
+% Getting the interval around a function
+fun_var = zeros(length(t_obs),1);
+for i = 1:length(t_obs)
+    S = X_0(i,:)';
+    fun_var(i) = transpose(S) * V_0 * S;
+end
+% Standard Deviation
+fun_SD = (fun_var).^0.5;
+fun_SD2 = fun_SD;
+
+% Getting the max Standard deviation for each time value
+curr_max = 0;
+for i = 1:length(t_obs)-1
+    if i == 1
+        st = i;
+    elseif t_obs(i) ~= t_obs(i+1)
+        en = i;
+        fun_SD2(st:en) = mean(fun_SD2(st:en));
+        st = i + 1;
+    elseif i == length(t_obs) - 1
+        fun_SD2(st:end) = mean(fun_SD2(st:end));
+    end    
 end
 
-figure(6); clf
-plot(t_mesh,vals_DRAM)
-hold on
-plot(flat_time{region},flat_data{region},'.')
-hold off
+% Trying to get confidence intervals
+conf_interval = 0.99;
+t_val = tinv(conf_interval, length(t_obs)-(length(q_DRAM)) );
 
+%
+figure(6); clf
+plot(t_mesh,mesh_DRAM,'LineWidth',2)
+hold on
+plot(t_obs,val_obs,'*')
+plot(t_obs,vals_DRAM+t_val.*[fun_SD2,-fun_SD2],'-k','Linewidth',2)
+title('DRAM Final')
+hold off
 %% Using Prediction capabilities of the DRAM codes
 % modelfun = @(x,theta) lin_fun(N,x,theta);
 % pred_x = t_mesh;
@@ -187,11 +253,23 @@ function f = lin_fun(N,x,q)
     end
 end
 function f = sin_fun(N,x,q)
-    for i = 0:N
-        if i == 0
-            f = q(2,i + 1) ;
+    num_el = N * 2 + 1;
+    i = 1;
+    c = 0;
+    while i < num_el 
+        if i == 1
+            f = q(i) ;
+            i = i + 1;
         else
-            f = f + q(1,i + 1) .* sin(q(2,i+1).*x);
+            if c == 0
+                f = f + q(i) .* sin(q(i+1).*x);
+                i = i + 2;
+                c = 1;
+            else
+                f = f + q(i) .* sin(q(i+1).*x);
+                i = i + 2;
+                c = 0;
+            end
         end
     end
 end
