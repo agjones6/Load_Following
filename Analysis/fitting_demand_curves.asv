@@ -53,16 +53,10 @@ end
 region = 2;
 t_mesh = linspace(1,num_hours,500) - 1;
 N = 4;
-lb = -1;
-ub = 1;
-fun_type = "lin";
-
-% Guessing initial values for the parameters random [-1,1]
-if fun_type == "sin"
-    q_guess = (ub-lb).*rand(2,N+1)+lb;
-else
-    q_guess = (ub-lb).*rand(1,N+1)+lb;
-end
+lb = 1;
+ub = 5;
+q_guess = (ub-lb).*rand(1,N+1)+lb;
+fun_type = 
 
 
 % These are the parameters found from the least squares method
@@ -95,13 +89,13 @@ model.sigma2 = s_0^2;
 q_0 = q_new;
 
 % Setting the options
-options.nsimu = 5000; 
+options.nsimu = 1000; 
 options.updatesigma = 1; 
 % options.qcov = V_0;
 
 num_DRAMS = 4;
 for i = 1:num_DRAMS
-    if i ~= 1
+    if i ~= 0
        q_0 = res.mean; 
     end
     
@@ -143,27 +137,27 @@ plot(flat_time{region},flat_data{region},'.')
 hold off
 
 %% Using Prediction capabilities of the DRAM codes
-% modelfun = @(x,theta) lin_fun(N,x,theta);
-% pred_x = t_mesh;
-% out = mcmcpred(res, chain, s2chain, data.xdata, modelfun); 
-% figure(4); clf;
-% mcmcpredplot(out);
-% hold on
-% plot(data.xdata,data.ydata,'sr'); % add data points to the plot
+modelfun = @(x,theta) lin_fun(N,x,theta);
+pred_x = t_mesh;
+out = mcmcpred(res, chain, s2chain, data.xdata, modelfun); 
+figure(4); clf;
+mcmcpredplot(out);
+hold on
+plot(data.xdata,data.ydata,'sr'); % add data points to the plot
 
 %%
-% t_mesh = linspace(1,num_hours,100);
-% N = 3;
-% % q_guess = rand(1,N+1);
-% q_guess = 2*rand(2,N+1) + -1;
-% % 
-% q_new = fminsearch( @(q)lin_lsq(N,flat_time{1},flat_data{1},q), q_guess);
-% model_mesh_vals = sin_fun(N,t_mesh,q_new);
-% figure(1)
-% plot(t_mesh,model_mesh_vals)
-% hold on
-% plot(flat_time{1},flat_data{1},'.')
-% hold off
+t_mesh = linspace(1,num_hours,100);
+N = 3;
+% q_guess = rand(1,N+1);
+q_guess = 2*rand(2,N+1) + -1;
+% 
+q_new = fminsearch( @(q)lin_lsq(N,flat_time{1},flat_data{1},q), q_guess);
+model_mesh_vals = sin_fun(N,t_mesh,q_new);
+figure(1)
+plot(t_mesh,model_mesh_vals)
+hold on
+plot(flat_time{1},flat_data{1},'.')
+hold off
 
 % NOTES:
 %   for N = 3 -> q = [0.615530548571756,-0.0450119413794037,0.00537547180319710,-0.000142979280213835]

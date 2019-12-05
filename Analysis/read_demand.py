@@ -272,7 +272,7 @@ def do_everything(date_range,data_name,region_name,**kwargs):
 
 # ==============================================================================
 
-date_range = ["09-01-2019","10-15-2019"]
+date_range = ["04-01-2019","04-30-2019"]
 
 data_type = "Net generation by energy source" # "Demand"
 data_type = "Demand"
