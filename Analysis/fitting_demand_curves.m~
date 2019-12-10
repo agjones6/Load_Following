@@ -185,7 +185,6 @@ end
 % Standard Deviation
 fun_SD = (fun_var).^0.5;
 fun_SD2 = fun_SD;
-fun_SD2 = flatten_mat(t_obs,fun_SD2);
 
 % Getting the max Standard deviation for each time value
 curr_max = 0;
@@ -230,20 +229,18 @@ hold off
 
 % NOTES:
 %   for N = 3 -> q = [0.615530548571756,-0.0450119413794037,0.00537547180319710,-0.000142979280213835]
-function f = flatten_mat(t_obs,X)
-    for i = 1:length(t_obs)-1
-        if i == 1
-            st = i;
-        elseif t_obs(i) ~= t_obs(i+1)
-            en = i;
-            X(st:en) = mean(X(st:en));
-            st = i + 1;
-        elseif i == length(t_obs) - 1
-            X(st:end) = mean(X(st:end));
-        end    
-    end
-    f = X;
-end 
+for i = 1:length(t_obs)-1
+    if i == 1
+        st = i;
+    elseif t_obs(i) ~= t_obs(i+1)
+        en = i;
+        fun_SD2(st:en) = mean(fun_SD2(st:en));
+        st = i + 1;
+    elseif i == length(t_obs) - 1
+        fun_SD2(st:end) = mean(fun_SD2(st:end));
+    end    
+end
+e
 function new_mat = get_diag(X)
     new_mat = ones(1,length(X));
     for i = 1:length(X)

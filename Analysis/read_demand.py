@@ -272,12 +272,14 @@ def do_everything(date_range,data_name,region_name,**kwargs):
 
 # ==============================================================================
 
-date_range = ["04-01-2019","04-30-2019"]
+date_range = ["10-01-2019","10-30-2019"]
+my_month = "October"
+region_name = "CISO"
 
 data_type = "Net generation by energy source" # "Demand"
 data_type = "Demand"
 
-region_name = ["DUK"] #, "CISO", "SWPP"
+# region_name = ["DUK"] #, "CISO", "SWPP"
 
 sub_source_list = [""]
 # sub_source_list = ["wind","solar"]
@@ -287,7 +289,7 @@ max_subplot_wide = 2
 h = np.ceil(len(region_name)/max_subplot_wide).astype(int)
 w = min([len(region_name),max_subplot_wide])
 
-region_name = "DUK"
+
 my_list = do_everything(date_range, data_type, region_name,
               sub_source_list=sub_source_list,
               normalized=False,
@@ -298,7 +300,8 @@ my_list = do_everything(date_range, data_type, region_name,
 # Creates a datafram rows=day, column=hr
 my_df = pd.DataFrame(np.hstack(my_list))
 
-my_df.to_csv("./Grid_Information/Curve_Fitting/" + region_name + ".csv",index=False,header=False)
+# Saving the dataframe to a file
+my_df.to_csv("./Grid_Information/Curve_Fitting/" + region_name +"_"+ my_month + ".csv",index=False,header=False)
 
 
 # %%
