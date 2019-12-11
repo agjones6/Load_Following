@@ -146,7 +146,7 @@ def find_date_index(time_data,date):
         c += 1
     return c
 
-def get_data(general_folder, data_name, region_name, interval, normalized, **kwargs):
+def get_data(general_folder, data_name, region_name, date_range, interval, **kwargs):
 
     # Defining source directory
     src_folder = os.path.join(general_folder,data_name)
@@ -162,10 +162,6 @@ def get_data(general_folder, data_name, region_name, interval, normalized, **kwa
     # This slices up the data lists into intervals of a given length (24 hours) and
     #   puts the data in cronological order
     sliced_time, sliced_ydata = slice_up_data(time_data, ydata, date_range, interval=interval)
-
-    # Normalizing the data if the input is given
-    if normalized:
-        sliced_ydata = np.divide(sliced_ydata,np.nanmax(sliced_ydata))
 
     return sliced_time, sliced_ydata, info
 
@@ -196,7 +192,7 @@ def get_gen_source(info, data_list, source_list):
 
     return sub_load_list
 
-def do_everything(date_range,data_name,region_name,**kwargs):
+def final_data(date_range,data_name,region_name,**kwargs):
 
     # Handling optional inputs
     interval = kwargs.get("interval",24)
@@ -209,12 +205,14 @@ def do_everything(date_range,data_name,region_name,**kwargs):
     return_df = kwargs.get("return_df",False)
 
     sliced_time, sliced_ydata, info = get_data(general_folder, data_name,
-                                            region_name, interval, normalized)
+                                               region_name, date_range, interval)
+
+    # NOTE: This is where the time data needs to be checks to ensure there no missing parts
 
     if not "" in sub_source_list:
         if data_name != "Net generation by energy source":
             tst, sliced_sub_data, sub_info = get_data(general_folder, sub_source_loc,
-                                                    region_name, interval, normalized)
+                                                      region_name, date_range, interval)
             # print("sliced_sub_data =",len(tst))
             # for i in range(len(sliced_time)):
             #     print(sliced_time[i])
@@ -225,12 +223,19 @@ def do_everything(date_range,data_name,region_name,**kwargs):
             #         pass
             # exit()
 
-            sliced_ydata = [np.squeeze(i) for i in sliced_ydata]
+            # sliced_ydata = [np.squeeze(i) for i in sliced_ydata]
+            sliced_ydata = np.hstack(sliced_ydata)
             sub_load = get_gen_source(sub_info, sliced_sub_data, sub_source_list)
 
             print("sub_load =",len(sub_load))
             print("sliced_ydata =",len(sliced_ydata))
-            # exit()
+            print(len(sub_load))
+            print(sliced_ydata)
+            print("This is not ready yet")
+            # basically the sub-demand from the specified source is not lining
+            #   up properly with the source. The size and orientation of the matrix
+            #   needs to be checked and fixed.
+            exit()
 
             try:
                 if not sub_load:
@@ -245,33 +250,111 @@ def do_everything(date_range,data_name,region_name,**kwargs):
             sliced_ydata = get_gen_source(info, sliced_ydata, sub_source_list)
 
     # Getting the hourly data in an hourly basis
-    hr_bins = get_hour_bins(sliced_ydata)
+    data_bins = get_hour_bins(sliced_ydata)
 
-    # Getting statistic parameters about the demand curves
-    sigma = [np.nanstd(i) for i in hr_bins]
-    avg = [np.nanmean(i) for i in hr_bins]
-    median = [np.nanmedian(i) for i in hr_bins]
+    # Converting the bins of data to a numpy array
+    data_array = np.hstack(data_bins)
 
-
-    # Getting a list of plotting lines
-    plt_lines = [avg,
-                 np.subtract(avg,np.multiply(2,sigma)),
-                 np.add(avg,np.multiply(2,sigma)) ]
-
-    plot_data_lists(sliced_ydata,line_type="k.")#,xdata_list=xdata)
-    plot_data_lists(plt_lines,
-                    line_type="--",
-                    my_linewidth=3,
-                    legend=["mean","-2 sigma","+2 sigma"])
-
-    plt.title(title)
-    plt.xlabel(xlabel)
+    # If the data is desired to be normalized
+    if normalized:
+        max_val = np.nanmax(data_array)
+        data_array = np.divide(data_array,max_val)
 
     if return_df:
-        return hr_bins
+        # converting to a data frame
+        return pd.DataFrame(data_array)
+    else:
+        return data_array
+
+    # ---> All of this is old and used for basic plotting
+    # Getting statistic parameters about the demand curves
+    # sigma = [np.nanstd(i) for i in hr_bins]
+    # avg = [np.nanmean(i) for i in hr_bins]
+    # median = [np.nanmedian(i) for i in hr_bins]
+    #
+    #
+    # # Getting a list of plotting lines
+    # plt_lines = [avg,
+    #              np.subtract(avg,np.multiply(2,sigma)),
+    #              np.add(avg,np.multiply(2,sigma)) ]
+    #
+    # plot_data_lists(sliced_ydata,line_type="k.")#,xdata_list=xdata)
+    # plot_data_lists(plt_lines,
+    #                 line_type="--",
+    #                 my_linewidth=3,
+    #                 legend=["mean","-2 sigma","+2 sigma"])
+    #
+    # plt.title(title)
+    # plt.xlabel(xlabel)
+
+def poly_fit(data_array, **kwargs):
+# This function is made to return the coefficients of the desired polynomial.
+#   The input data_array should be a row x col = day x hr matrix
+
+    poly_order = kwargs.get("poly_order",5)
+
+    # This gets the number of hours and days as variables
+    dum_sz = data_array.shape
+    num_days = dum_sz[0]
+    num_hrs  = dum_sz[1]
+
+    # Gets a singular array of times (0-23) hours
+    dum_times = [np.array(np.arange(num_hrs))]
+    # Time array is built
+    time_array = dum_times
+    for i in range(num_days-1):
+        time_array = np.concatenate((time_array,dum_times))
+
+    # Getting flat arrays
+    time_flat = time_array.flatten()
+    data_flat = data_array.flatten()
+
+    # Getting a polynomial fit coefficients for the data array
+    coef = np.polyfit(time_flat, data_flat, poly_order)
+
+    # Getting the values of the model that correspond to the observation data
+    t_mesh = np.linspace(0,23,500)
+    model_eval = np.polyval(coef,time_flat)
+    model_mesh = np.polyval(coef,t_mesh)
+
+
+    # --> Determining the uncertainty in the polynomial fit for every hour
+    # Getting Sum of Squares error
+    SS_error = np.sum( np.power(np.subtract(data_array.flatten(), model_eval),2) )
+
+    # Getting the observation Sigma I think
+    s_0 = ((1/num_hrs) * SS_error)**(0.5)
+
+    # Calculating a sensitivity matrix
+    num_param = len(coef)
+    c = 0
+    h = 0.0001
+    X_0 = []
+    for q in coef:
+        base_mat = np.ones(num_param)
+        base_mat[c] = base_mat[c] + h
+        denom = h * q
+        diff_vals = np.polyval(np.multiply(coef,base_mat),t_mesh)
+
+        X_0.append(np.divide(np.subtract(diff_vals, model_mesh),denom))
+
+        c += 1
+
+    # Turning the X_0 array into a numpy array
+    X_0 = np.transpose((X_0))
+    print(X_0)
+    # Calculating the V matrix
+
+
+    print(X_0[0,:])
+    exit()
+    print(s_0)
+    exit()
+
+
+    return coef
 
 # ==============================================================================
-
 date_range = ["10-01-2019","10-30-2019"]
 my_month = "October"
 region_name = "CISO"
@@ -284,39 +367,47 @@ data_type = "Demand"
 sub_source_list = [""]
 # sub_source_list = ["wind","solar"]
 
-max_subplot_wide = 2
 
-h = np.ceil(len(region_name)/max_subplot_wide).astype(int)
-w = min([len(region_name),max_subplot_wide])
-
-
-my_list = do_everything(date_range, data_type, region_name,
+# This either returns a pandas Data frame or numpy array
+#   scheme is row = day, column = hr
+my_list = final_data(date_range, data_type, region_name,
               sub_source_list=sub_source_list,
-              normalized=False,
-              # title=r,
+              normalized=True,
               interval=24,
-              return_df=True )
+              return_df=False )
 
 # Creates a datafram rows=day, column=hr
-my_df = pd.DataFrame(np.hstack(my_list))
+# my_df = pd.DataFrame(my_list)
+# test = np.array(np.hstack(my_list))
+poly_fit(my_list)
 
+t_mesh = np.linspace(0,23,300)
+
+vals = np.polyval(test,t_mesh)
+
+plt.figure()
+plt.plot(t_mesh,vals)
+plt.plot(time_array,data_array,"*")
+plt.show()
 # Saving the dataframe to a file
-my_df.to_csv("./Grid_Information/Curve_Fitting/" + region_name +"_"+ my_month + ".csv",index=False,header=False)
+# my_df.to_csv("./Grid_Information/Curve_Fitting/" + region_name +"_"+ my_month + ".csv",index=False,header=False)
 
 
 # %%
-
-c = 1
-for r in region_name:
-    print(r)
-    plt.subplot(h, w, c)
-    do_everything(date_range, data_type, r,
-                  sub_source_list=sub_source_list,
-                  normalized=False,
-                  title=r,
-                  interval=24 )
-    c += 1
-plt.suptitle((date_range[0] + " -> " + date_range[1]))
-plt.show()
+# max_subplot_wide = 2
+# h = np.ceil(len(region_name)/max_subplot_wide).astype(int)
+# w = min([len(region_name),max_subplot_wide])
+# c = 1
+# for r in region_name:
+#     print(r)
+#     plt.subplot(h, w, c)
+#     do_everything(date_range, data_type, r,
+#                   sub_source_list=sub_source_list,
+#                   normalized=False,
+#                   title=r,
+#                   interval=24 )
+#     c += 1
+# plt.suptitle((date_range[0] + " -> " + date_range[1]))
+# plt.show()
 
 # NOTE: Figure out what is going on with the greater than/greater than or equal to in the slice up data function
