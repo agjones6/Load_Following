@@ -18,6 +18,8 @@ register_matplotlib_converters()
 import statistics as stats
 import re
 import requests
+import scipy
+from scipy.stats import t
 
 def get_demand_data(filename):
 # This function is made to get the data from a file and put it into a pandas dataframe
@@ -291,12 +293,15 @@ def poly_fit(data_array, **kwargs):
 # This function is made to return the coefficients of the desired polynomial.
 #   The input data_array should be a row x col = day x hr matrix
 
-    poly_order = kwargs.get("poly_order",5)
+    poly_order = kwargs.get("poly_order",7)
+    confidence_value = kwargs.get("confidence_value",0.99)
 
     # This gets the number of hours and days as variables
     dum_sz = data_array.shape
     num_days = dum_sz[0]
     num_hrs  = dum_sz[1]
+
+    DOF = num_hrs - (poly_order + 1)
 
     # Gets a singular array of times (0-23) hours
     dum_times = [np.array(np.arange(num_hrs))]
@@ -320,10 +325,10 @@ def poly_fit(data_array, **kwargs):
 
     # --> Determining the uncertainty in the polynomial fit for every hour
     # Getting Sum of Squares error
-    SS_error = np.sum( np.power(np.subtract(data_array.flatten(), model_eval),2) )
+    SS_error = np.sum( np.power(np.subtract(data_flat, model_eval),2) )
 
     # Getting the observation Sigma I think
-    s_0 = ((1/num_hrs) * SS_error)**(0.5)
+    s_0 = ((1/DOF) * SS_error)**(0.5)
 
     # Calculating a sensitivity matrix
     num_param = len(coef)
@@ -334,21 +339,77 @@ def poly_fit(data_array, **kwargs):
         base_mat = np.ones(num_param)
         base_mat[c] = base_mat[c] + h
         denom = h * q
-        diff_vals = np.polyval(np.multiply(coef,base_mat),t_mesh)
+        diff_vals = np.polyval(np.multiply(coef,base_mat),time_flat)
 
-        X_0.append(np.divide(np.subtract(diff_vals, model_mesh),denom))
+        X_0.append(np.divide(np.subtract(diff_vals, model_eval),denom))
 
         c += 1
 
     # Turning the X_0 array into a numpy array
     X_0 = np.transpose((X_0))
-    print(X_0)
-    # Calculating the V matrix
+
+    # Getting an R matrix for calculating the Variance
+    R = data_flat - model_eval
+
+    # Sigma^2 for the function
+    sig2 = np.multiply((1/DOF), np.matmul(np.transpose(R),R))
+    # print(sig2)
+
+    # Calculating the V matrix (covariance)
+    V = np.multiply(sig2, np.linalg.inv(np.matmul(np.transpose(X_0),X_0)))
+
+    # Getting the delta Matrix
+    delta = np.diag(V)
+    SD_mat = np.power(np.diag(V),0.5)
+
+    # Getting the t distribution value
+
+    t_dist = t(df=DOF)
+    t_val = t_dist.ppf(confidence_value)
+
+    dq = []
+    for d in SD_mat:
+        dq.append(t_val*d)
+
+    dq = np.array(dq)
+
+    q_UB = coef + dq
+    q_LB = coef - dq
+
+    model_UB = np.polyval(q_UB,t_mesh)
+    model_LB = np.polyval(q_LB,t_mesh)
+
+    # Trying a different method for calculating the function's uncertainty
+    fun_V = []
+    for i in range(len(X_0)):
+        S = np.transpose(X_0[i,:])
+        fun_V.append(np.matmul(np.matmul(np.transpose(S),V),S))
+
+    fun_V = np.array(fun_V)
+
+    # Functional Standard Deviation
+    fun_SD = np.power(fun_V,0.5)
+
+    # Getting bounds
+    time_short = time_flat[0:24]
+    model_short = np.polyval(coef,time_short)
+    UB_vals = model_short + t_val*fun_SD[0:24]
+    LB_vals = model_short - t_val*fun_SD[0:24]
 
 
-    print(X_0[0,:])
-    exit()
-    print(s_0)
+    print(time_short)
+    # plt.figure()
+    # plt.plot(t_mesh,model_mesh)
+    # plt.plot(time_short,UB_vals,"--k")
+    # plt.plot(time_short,LB_vals,"--k")
+    # plt.plot(time_flat,data_flat,".")
+    # plt.show()
+
+    # print("sigma    ",SD_mat)
+    # print("delta q's", dq)
+    # print("UB       ", q_UB)
+    # print("Nominal  ", coef )
+    # print("LB       ", q_LB)
     exit()
 
 
