@@ -20,6 +20,7 @@ import re
 import requests
 import scipy
 from scipy.stats import t
+import matplotlib.patheffects as pe
 
 def get_demand_data(filename):
 # This function is made to get the data from a file and put it into a pandas dataframe
@@ -49,6 +50,8 @@ def get_hour_bins(ydata_list):
 
     # Number of data points (days for 24 hour cycle)
     num_points = len(ydata_list[0])
+    # print(num_points)
+    # exit()
 
     my_bins = []
     for i in range(num_points): # 24 for 24 hours
@@ -116,7 +119,7 @@ def slice_up_data(time_data, y_values, date_range, **kwargs):
         en = i
         c = 0
         for i2 in range(0,-interval,-1):
-            # print(i+i2)
+            # print(i+i2,start_index)
             if ((i+i2) <= start_index):
                 # print(i2)
                 if c == 0:
@@ -125,6 +128,7 @@ def slice_up_data(time_data, y_values, date_range, **kwargs):
                 en = (i+i2)
                 dum_list.append(time_data[i+i2].ctime())
                 # dum_dlist.append(y_values[i+i2,:].item())
+
 
         desired_dates.append(dum_list)
         final_data.append(np.flip(y_values[en:st,:],axis=0))
@@ -141,7 +145,7 @@ def find_date_index(time_data,date):
     c = 0
     for i in time_data:
         # print(i.ctime())
-        if i < pd_date:
+        if i <= pd_date:
             # print("here",i.ctime())
             break
 
@@ -254,6 +258,8 @@ def final_data(date_range,data_name,region_name,**kwargs):
     # Getting the hourly data in an hourly basis
     data_bins = get_hour_bins(sliced_ydata)
 
+    # print((data_bins))
+    # exit()
     # Converting the bins of data to a numpy array
     data_array = np.hstack(data_bins)
 
@@ -268,33 +274,58 @@ def final_data(date_range,data_name,region_name,**kwargs):
     else:
         return data_array
 
-    # ---> All of this is old and used for basic plotting
-    # Getting statistic parameters about the demand curves
-    # sigma = [np.nanstd(i) for i in hr_bins]
-    # avg = [np.nanmean(i) for i in hr_bins]
-    # median = [np.nanmedian(i) for i in hr_bins]
-    #
-    #
-    # # Getting a list of plotting lines
-    # plt_lines = [avg,
-    #              np.subtract(avg,np.multiply(2,sigma)),
-    #              np.add(avg,np.multiply(2,sigma)) ]
-    #
-    # plot_data_lists(sliced_ydata,line_type="k.")#,xdata_list=xdata)
-    # plot_data_lists(plt_lines,
-    #                 line_type="--",
-    #                 my_linewidth=3,
-    #                 legend=["mean","-2 sigma","+2 sigma"])
-    #
-    # plt.title(title)
-    # plt.xlabel(xlabel)
+def check_data(data_array):
+# This function is made to check all of the days for missing data and remove the
+#   days that are missing.
+
+    # This gets the number of hours and days as variables
+    dum_sz = data_array.shape
+    num_days = dum_sz[0]
+    num_hrs  = dum_sz[1]
+
+    # Going through every day to find nan's
+    new_data = []
+    for i in range(num_days):
+        curr_data = data_array[i,:]
+        if not np.isnan(curr_data).any():
+            new_data.append(curr_data)
+
+    new_data = np.array(new_data)
+
+    return new_data
+
+def avg_coef(time_array,data_array,num_days,poly_order):
+    all_coef = []
+    Problem_Data = []
+    for i in range(num_days):
+        curr_data = data_array[i,:]
+        curr_time = time_array[i,:]
+        try:
+            all_coef.append(np.polyfit(curr_time,curr_data,poly_order))
+        except:
+            print("problem using element ", i)
+            Problem_Data.append(curr_data)
+            pass
+
+        # print(all_coef)
+        # print(np.mean(all_coef,axis=0))
+        coef = np.mean(all_coef,axis=0)
+        Problem_Data = np.transpose(np.array(Problem_Data))
+        # print(Problem_Data.shape)
+        # exit()
+
+    return coef, Problem_Data
 
 def poly_fit(data_array, **kwargs):
 # This function is made to return the coefficients of the desired polynomial.
 #   The input data_array should be a row x col = day x hr matrix
 
-    poly_order = kwargs.get("poly_order",7)
-    confidence_value = kwargs.get("confidence_value",0.99)
+    poly_order = kwargs.get("poly_order",5)
+    confidence_value = kwargs.get("confidence_value",0.98)
+    type_of_fit = kwargs.get("type_of_fit","avg")
+
+    # Removing days with nan's in them
+    data_array = check_data(data_array)
 
     # This gets the number of hours and days as variables
     dum_sz = data_array.shape
@@ -315,7 +346,15 @@ def poly_fit(data_array, **kwargs):
     data_flat = data_array.flatten()
 
     # Getting a polynomial fit coefficients for the data array
-    coef = np.polyfit(time_flat, data_flat, poly_order)
+    try:
+        if type_of_fit == "avg":
+            coef = np.polyfit(time_flat, data_flat, poly_order)
+        else: # Individual
+            coef, _ = avg_coef(time_array,data_array,num_days,poly_order)
+    except Exception as e:
+        print("error in fitting polynomial")
+        coef,Problem_Data = avg_coeff(time_array,data_array,num_days,poly_order)
+
 
     # Getting the values of the model that correspond to the observation data
     t_mesh = np.linspace(0,23,500)
@@ -363,7 +402,6 @@ def poly_fit(data_array, **kwargs):
     SD_mat = np.power(np.diag(V),0.5)
 
     # Getting the t distribution value
-
     t_dist = t(df=DOF)
     t_val = t_dist.ppf(confidence_value)
 
@@ -391,32 +429,54 @@ def poly_fit(data_array, **kwargs):
     fun_SD = np.power(fun_V,0.5)
 
     # Getting bounds
-    time_short = time_flat[0:24]
-    model_short = np.polyval(coef,time_short)
-    UB_vals = model_short + t_val*fun_SD[0:24]
-    LB_vals = model_short - t_val*fun_SD[0:24]
+    time_short = time_flat[0:num_hrs]
+    AVG_vals = np.polyval(coef,time_short)
 
+    # coef - an array fitted parameters from polyfit
+    # SD_mat - an array of parameter standard deviations
+    # AVG_vals - model evaluation for each hour
+    # fun_SD - standard deviation for every hour
+    return coef, SD_mat, AVG_vals, fun_SD[0:num_hrs]
 
-    print(time_short)
-    # plt.figure()
-    # plt.plot(t_mesh,model_mesh)
-    # plt.plot(time_short,UB_vals,"--k")
-    # plt.plot(time_short,LB_vals,"--k")
-    # plt.plot(time_flat,data_flat,".")
-    # plt.show()
+def data_bounds(AVG_vals, fun_SD,**kwargs):
+# This function is purely to get the bounds associated with the functional fitting
+#   The model is assumed to have already been evaluated
+#
+# AVG_vals - each hour's model value
+# SD_vals  - the standard deviation at each hour
 
-    # print("sigma    ",SD_mat)
-    # print("delta q's", dq)
-    # print("UB       ", q_UB)
-    # print("Nominal  ", coef )
-    # print("LB       ", q_LB)
-    exit()
+    num_sigmas = kwargs.get("num_sigmas",3)
 
+    UB_vals = AVG_vals + num_sigmas*fun_SD
+    LB_vals = AVG_vals - num_sigmas*fun_SD
 
-    return coef
+    bounds = np.transpose(np.vstack([UB_vals,LB_vals]))
+
+    return bounds
+
+def pull_color(color_count):
+
+    col_tup = ( '#1f77b4',
+                '#ff7f0e',
+                '#2ca02c',
+                '#d62728',
+                '#9467bd',
+                '#8c564b',
+                '#e377c2',
+                '#7f7f7f',
+                '#bcbd22',
+                '#17becf',
+                (0.3 , 0.5 , 0.2),
+                (0.2 , 0.4 , 0.6),
+                (0.2 , 0.2 , 0.5) )
+
+    col_val = col_tup[color_count%len(col_tup)]
+
+    return col_val
+
 
 # ==============================================================================
-date_range = ["10-01-2019","10-30-2019"]
+date_range = ["02-15-2018","03-30-2018"]
 my_month = "October"
 region_name = "CISO"
 
@@ -431,44 +491,29 @@ sub_source_list = [""]
 
 # This either returns a pandas Data frame or numpy array
 #   scheme is row = day, column = hr
-my_list = final_data(date_range, data_type, region_name,
-              sub_source_list=sub_source_list,
-              normalized=True,
-              interval=24,
-              return_df=False )
+data_list = final_data(date_range, data_type, region_name,
+                       sub_source_list=sub_source_list,
+                       normalized=True,
+                       interval=24,
+                       return_df=False )
 
 # Creates a datafram rows=day, column=hr
 # my_df = pd.DataFrame(my_list)
 # test = np.array(np.hstack(my_list))
-poly_fit(my_list)
+coef, SD_mat, AVG_vals, fun_SD = poly_fit(data_list,
+                                          type_of_fit="avg",
+                                          poly_order=7)
 
-t_mesh = np.linspace(0,23,300)
-
-vals = np.polyval(test,t_mesh)
-
-plt.figure()
-plt.plot(t_mesh,vals)
-plt.plot(time_array,data_array,"*")
-plt.show()
-# Saving the dataframe to a file
-# my_df.to_csv("./Grid_Information/Curve_Fitting/" + region_name +"_"+ my_month + ".csv",index=False,header=False)
+bounds = data_bounds(AVG_vals, fun_SD)
 
 
-# %%
-# max_subplot_wide = 2
-# h = np.ceil(len(region_name)/max_subplot_wide).astype(int)
-# w = min([len(region_name),max_subplot_wide])
-# c = 1
-# for r in region_name:
-#     print(r)
-#     plt.subplot(h, w, c)
-#     do_everything(date_range, data_type, r,
-#                   sub_source_list=sub_source_list,
-#                   normalized=False,
-#                   title=r,
-#                   interval=24 )
-#     c += 1
-# plt.suptitle((date_range[0] + " -> " + date_range[1]))
+# time_short = np.arange(24)
+# plt.figure()
+# plt.plot(time_short,np.transpose(data_list),'.k')
+# plt.plot(time_short, AVG_vals,LineWidth=3,Color=pull_color(0),path_effects=[pe.Stroke(linewidth=3, foreground='k'), pe.Normal()])
+# plt.plot(time_short,bounds,"--",LineWidth=3,Color=pull_color(0))
 # plt.show()
+
+
 
 # NOTE: Figure out what is going on with the greater than/greater than or equal to in the slice up data function
