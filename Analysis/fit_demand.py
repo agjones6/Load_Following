@@ -7,14 +7,18 @@ import os
 import matplotlib
 import matplotlib.pyplot as plt
 import sys
-analysis_path = "/Users/AndyJones/Documents/GitHub/master_proj/Analysis"
+# analysis_path = "/Users/AndyJones/Documents/GitHub/master_proj/Analysis"
+analysis_path = "C:/Users/agjones6/Documents/GitHub/master_proj/Analysis"
 if not analysis_path in sys.path:
     sys.path.append(analysis_path)
 import read_demand as rd
 
-date_range = ["01-01-2019","01-30-2019"]
+import statsmodels.tsa.api as sm
+from statsmodels.tsa.api import ExponentialSmoothing as ExpSmooth
+
+date_range = ["01-03-2019","01-04-2019"]
 region_name = ["CAR","CENT","CAL"]#["CISO","DUK","FLA"]
-region_name = ["CAL"]#["CISO","DUK","FLA"]
+region_name = ["CAR"]
 
 data_type = "Net generation by energy source" # "Demand"
 data_type = "Demand"
@@ -24,7 +28,33 @@ data_type = "Demand"
 sub_source_list = [""]
 # sub_source_list = ["wind","solar"]
 
+# =================== Testing for time series analysis ========================
+# data_df = rd.final_data(date_range, data_type, region_name[0],
+#               sub_source_list=sub_source_list,
+#               normalized=True,
+#               interval=1,
+#               return_df=True )
+# pred_df = rd.final_data(date_range, "Day-ahead demand forecast", region_name[0],
+#               sub_source_list=sub_source_list,
+#               normalized=True,
+#               interval=1,
+#               return_df=True )
+#
+# fit1 = ExpSmooth(data_df[0:-48],
+#                  seasonal_periods=24*7,
+#                  trend='add',
+#                  damped=True,
+#                  seasonal='add').fit(use_boxcox=True)
+#
+# # Plotting the forecasting
+# plt.plot(data_df,'*--')
+# plt.plot(pred_df,'.k')
+# fit1.forecast(48).plot()
+# fit1.predict(0,len(fit1.fittedvalues)).plot(style='--', color='red')
+# plt.show()
 
+
+# %% =================== THIS USES POLYNOMIAL FITS ============================
 # This either returns a pandas Data frame or numpy array
 #   scheme is row = day, column = hr
 coef = []
