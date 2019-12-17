@@ -9,7 +9,7 @@ my_Path = "/Users/AndyJones/Documents/GitHub/master_proj"; % Mac
 % my_Path = "C:\Users\agjones6\Documents\GitHub\master_proj"; % Windows
 
 % Defining the directory where the files contain demand data 
-my_Dir = "/Grid_Information/Curve_Fitting/*.csv";
+my_Dir = "/Grid_Information/Curve_Fitting_Proj/*.csv";
 
 % Getting all of the csv files in the folder location with 
 my_Files = dir(my_Path + my_Dir);
@@ -43,10 +43,38 @@ for i = 1:length(my_Files)
         flat_time{i}(st:en) = (1:num_hours) - 1;
     end
 end
+%%
+r = 2;
+hr_mesh = linspace(0,23,100);
 
-% figure(1)
-% plot(norm_data{1},'*r')
-% hold on
+hr = 0:23;
+for i = 1:length(norm_data{r})
+    td1 = norm_data{r}(:,i)';
+    td1(isnan(td1)) = 0;
+    t_fit1(i,:) = polyfit(hr,td1,5);
+    vals1(i,:) = polyval(t_fit1(i,:),hr_mesh);
+end
+figure(1)
+for i = 1:6
+    histogram(t_fit1(:,i),10)
+    hold on
+end
+%%
+td2 = flat_data{r};
+hr2 = flat_time{r};
+td2(isnan(td2)) = 0;
+[t_fit2,S] = polyfit(hr2,td2,5);
+
+
+[vals2,delta] = polyval(t_fit2,hr_mesh,S);
+
+figure(1)
+% plot(hr_mesh,vals1,'Linewidth',1.8)
+plot(hr_mesh,vals2,'Linewidth',1.8)
+hold on
+plot(hr_mesh,vals2+,'--k')
+plot(hr2,td2,'*')
+
 % plot(norm_data{2},'*b')
 
 %% Defining a function to be used to fit 
@@ -54,12 +82,12 @@ region = 2;
 t_mesh = linspace(1,num_hours,500) - 1;
 [t_obs,s_index] = sort(flat_time{region});
 val_obs = flat_data{region}(s_index);
-N = 3;
+N = 5;
 lb = 0;
 ub = 1;
-fun_type = "sin";
-options.nsimu = 5000; 
-num_DRAMS = 8;
+fun_type = "lin";
+options.nsimu = 1000; 
+num_DRAMS = 1;
 
 % Guessing initial values for the parameters random [-1,1]
 if fun_type == "sin"
@@ -141,6 +169,7 @@ mcmcplot(chain,[],res,'dens-hist');
 
 %% Using the parameters found in DRAM to plot the actual points and model
 q_DRAM = res.mean;
+q_DRAM = fliplr(t_fit2);
 % q_DRAM = chain(end,:);
 
 mesh_DRAM = curr_model(t_mesh,q_DRAM);
@@ -185,6 +214,7 @@ end
 % Standard Deviation
 fun_SD = (fun_var).^0.5;
 fun_SD2 = fun_SD;
+fun_SD2 = flatten_mat(t_obs,fun_SD2);
 
 % Getting the max Standard deviation for each time value
 curr_max = 0;
@@ -229,18 +259,20 @@ hold off
 
 % NOTES:
 %   for N = 3 -> q = [0.615530548571756,-0.0450119413794037,0.00537547180319710,-0.000142979280213835]
-for i = 1:length(t_obs)-1
-    if i == 1
-        st = i;
-    elseif t_obs(i) ~= t_obs(i+1)
-        en = i;
-        fun_SD2(st:en) = mean(fun_SD2(st:en));
-        st = i + 1;
-    elseif i == length(t_obs) - 1
-        fun_SD2(st:end) = mean(fun_SD2(st:end));
-    end    
-end
-e
+function f = flatten_mat(t_obs,X)
+    for i = 1:length(t_obs)-1
+        if i == 1
+            st = i;
+        elseif t_obs(i) ~= t_obs(i+1)
+            en = i;
+            X(st:en) = mean(X(st:en));
+            st = i + 1;
+        elseif i == length(t_obs) - 1
+            X(st:end) = mean(X(st:end));
+        end    
+    end
+    f = X;
+end 
 function new_mat = get_diag(X)
     new_mat = ones(1,length(X));
     for i = 1:length(X)

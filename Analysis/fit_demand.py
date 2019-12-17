@@ -6,10 +6,15 @@ import numpy as np
 import os
 import matplotlib
 import matplotlib.pyplot as plt
+import sys
+analysis_path = "/Users/AndyJones/Documents/GitHub/master_proj/Analysis"
+if not analysis_path in sys.path:
+    sys.path.append(analysis_path)
 import read_demand as rd
 
 date_range = ["01-01-2019","01-30-2019"]
-region_name = ["CAR","CENT","CAL","PJM"]#["CISO","DUK","FLA"]
+region_name = ["CAR","CENT","CAL"]#["CISO","DUK","FLA"]
+region_name = ["CAL"]#["CISO","DUK","FLA"]
 
 data_type = "Net generation by energy source" # "Demand"
 data_type = "Demand"
@@ -28,6 +33,8 @@ AVG_vals = []
 fun_SD = []
 data = []
 bounds = []
+mesh_vals = []
+tmesh = np.linspace(0,23,1000)
 for reg in region_name:
     data_list = rd.final_data(date_range, data_type, reg,
                   sub_source_list=sub_source_list,
@@ -47,6 +54,8 @@ for reg in region_name:
     data.append(data_list)
     bounds.append(rd.data_bounds(AVG_vals[-1],fun_SD[-1],num_sigmas=2))
 
+    mesh_vals.append(np.polyval(coef[-1],tmesh))
+
 # Converting to numpy arrays
 # coef = np.transpose(np.array(coef))
 # SD_mat = np.transpose(np.array(SD_mat))
@@ -57,11 +66,11 @@ t = np.arange(24)
 my_plots = []
 plt.figure()
 
-# for i in range(len(AVG_vals)):
-#     plt.plot(t,np.transpose(data[i]),'.',color=rd.pull_color(i))
+for i in range(len(AVG_vals)):
+    plt.plot(t,np.transpose(data[i]),'.k')#,color=rd.pull_color(i))
 
 for i in range(len(AVG_vals)):
-    plt.plot(t,AVG_vals[i],linewidth=3,color=rd.pull_color(i),label=region_name[i])
+    plt.plot(tmesh,mesh_vals[i],linewidth=3,color=rd.pull_color(i),label=region_name[i])
     plt.plot(t,bounds[i],'--',color=rd.pull_color(i))
 
 

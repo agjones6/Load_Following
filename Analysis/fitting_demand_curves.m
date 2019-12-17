@@ -9,7 +9,7 @@ my_Path = "/Users/AndyJones/Documents/GitHub/master_proj"; % Mac
 % my_Path = "C:\Users\agjones6\Documents\GitHub\master_proj"; % Windows
 
 % Defining the directory where the files contain demand data 
-my_Dir = "/Grid_Information/Curve_Fitting/*.csv";
+my_Dir = "/Grid_Information/Curve_Fitting_Proj/*.csv";
 
 % Getting all of the csv files in the folder location with 
 my_Files = dir(my_Path + my_Dir);
@@ -43,23 +43,54 @@ for i = 1:length(my_Files)
         flat_time{i}(st:en) = (1:num_hours) - 1;
     end
 end
+%%
+r = 2;
+hr_mesh = linspace(0,23,100);
 
-% figure(1)
-% plot(norm_data{1},'*r')
-% hold on
+hr = 0:23;
+for i = 1:length(norm_data{r})
+    td1 = norm_data{r}(:,i)';
+    td1(isnan(td1)) = 0;
+    t_fit1(i,:) = polyfit(hr,td1,5);
+    vals1(i,:) = polyval(t_fit1(i,:),hr_mesh);
+end
+figure(1)
+for i = 1:6
+    histogram(t_fit1(:,i),10)
+    hold on
+end
+%%
+r = 1;
+td2 = flat_data{r};
+hr2 = flat_time{r};
+td2(isnan(td2)) = 0;
+[t_fit2,S] = polyfit(hr2,td2,5);
+
+t_fit3 = [-2.6523e-6, 1.4759e-4, -2.9747e-3, 2.6467e-2, -8.7564e-2, 6.90297e-1];
+[vals2,delta] = polyval(t_fit2,hr_mesh,S);
+vals3 = polyval(t_fit3,hr_mesh);
+
+figure(1);clf
+% plot(hr_mesh,vals1,'Linewidth',1.8)
+plot(hr_mesh,vals2,'Linewidth',1.8)
+hold on
+plot(hr_mesh,vals3,'Linewidth',1.8)
+plot(hr_mesh,vals2+[2*delta;-2*delta],'--k')
+plot(hr2,td2,'*')
+
 % plot(norm_data{2},'*b')
 
 %% Defining a function to be used to fit 
-region = 2;
+region = 1;
 t_mesh = linspace(1,num_hours,500) - 1;
 [t_obs,s_index] = sort(flat_time{region});
 val_obs = flat_data{region}(s_index);
-N = 3;
+N = 5;
 lb = 0;
 ub = 1;
-fun_type = "sin";
-options.nsimu = 5000; 
-num_DRAMS = 8;
+fun_type = "lin";
+options.nsimu = 1000; 
+num_DRAMS = 1;
 
 % Guessing initial values for the parameters random [-1,1]
 if fun_type == "sin"
@@ -141,6 +172,7 @@ mcmcplot(chain,[],res,'dens-hist');
 
 %% Using the parameters found in DRAM to plot the actual points and model
 q_DRAM = res.mean;
+q_DRAM = fliplr(t_fit2);
 % q_DRAM = chain(end,:);
 
 mesh_DRAM = curr_model(t_mesh,q_DRAM);
@@ -152,7 +184,7 @@ DOF = 24-length(q_DRAM);
 s_0   =  ( (1/DOF) * SSq_0 ).^0.5;
 
 %
-h = 0.001;
+h = 0.0001;
 num_param = length(q_DRAM);
 X_0 = zeros(length(t_obs),num_param);
 for i = 1:num_param
@@ -162,12 +194,12 @@ for i = 1:num_param
     diff_vals = curr_model(t_obs,q_DRAM.*base_mat);
     
     % Setting up the Sensitivity Matrix
-    X_0(:,i) = (  diff_vals - val_obs)./val_div;
+    X_0(:,i) = (  diff_vals - vals_DRAM)./val_div;
 end
 X_0(isnan(X_0)) = 0;
 
 % Calculating the sensitivity Matrix
-V_0 = s_0^2 * (transpose(X_0)*X_0).^-1;
+V_0 = s_0 * (transpose(X_0)*X_0)^-1;
 % V_0 =  (res.S20.^0.5).*(transpose(X_0)*X_0)^-1;
 % V_0 = (transpose(X_0)*X_0)^-1;
 % V_0 = (res.S20.^2).*res.cov;
