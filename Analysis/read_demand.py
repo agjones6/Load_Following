@@ -294,7 +294,10 @@ def check_data(data_array):
 
     return new_data
 
-def avg_coef(time_array,data_array,num_days,poly_order):
+def avg_coef(time_array,data_array,num_days,poly_order, **kwargs):
+
+    return_all = kwargs.get("return_all",False)
+
     all_coef = []
     Problem_Data = []
     for i in range(num_days):
@@ -314,7 +317,10 @@ def avg_coef(time_array,data_array,num_days,poly_order):
         # print(Problem_Data.shape)
         # exit()
 
-    return coef, Problem_Data
+    if return_all:
+        return all_coef, Problem_Data
+    else:
+        return coef, Problem_Data
 
 def poly_fit(data_array, **kwargs):
 # This function is made to return the coefficients of the desired polynomial.
@@ -323,6 +329,7 @@ def poly_fit(data_array, **kwargs):
     poly_order = kwargs.get("poly_order",5)
     confidence_value = kwargs.get("confidence_value",0.98)
     type_of_fit = kwargs.get("type_of_fit","avg")
+    return_all = kwargs.get("return_option",False)
 
     # Removing days with nan's in them
     data_array = check_data(data_array)
@@ -342,101 +349,119 @@ def poly_fit(data_array, **kwargs):
         time_array = np.concatenate((time_array,dum_times))
 
     # Getting flat arrays
-    time_flat = time_array.flatten()
-    data_flat = data_array.flatten()
+    time_flat = np.array(time_array).flatten()
+    data_flat = np.array(data_array).flatten()
 
     # Getting a polynomial fit coefficients for the data array
     try:
-        if type_of_fit == "avg":
+        if type_of_fit == "avg": # Using all of the data at the same time
             coef = np.polyfit(time_flat, data_flat, poly_order)
-        else: # Individual
+            all_coef = [coef]
+        elif type_of_fit.lower() == "ind":
+            all_coef, _ = avg_coef(time_array,data_array,num_days,poly_order,return_all=True)
+        else: # Individual but averaged later
             coef, _ = avg_coef(time_array,data_array,num_days,poly_order)
+            all_coef = [coef]
     except Exception as e:
         print("error in fitting polynomial")
-        coef,Problem_Data = avg_coeff(time_array,data_array,num_days,poly_order)
+        coef,Problem_Data = avg_coef(time_array,data_array,num_days,poly_order)
+
+    # Adding a loop to do all of these actions for each individual set of parameters
+    SD_mat_list = []
+    AVG_vals_list = []
+    fun_SD_list = []
+    coef_list = []
+    for coef in all_coef:
+        # Getting the values of the model that correspond to the observation data
+        t_mesh = np.linspace(0,23,500)
+        model_eval = np.polyval(coef,time_flat)
+        model_mesh = np.polyval(coef,t_mesh)
 
 
-    # Getting the values of the model that correspond to the observation data
-    t_mesh = np.linspace(0,23,500)
-    model_eval = np.polyval(coef,time_flat)
-    model_mesh = np.polyval(coef,t_mesh)
+        # --> Determining the uncertainty in the polynomial fit for every hour
+        # Getting Sum of Squares error
+        SS_error = np.sum( np.power(np.subtract(data_flat, model_eval),2) )
 
+        # Getting the observation Sigma I think
+        s_0 = ((1/DOF) * SS_error)**(0.5)
 
-    # --> Determining the uncertainty in the polynomial fit for every hour
-    # Getting Sum of Squares error
-    SS_error = np.sum( np.power(np.subtract(data_flat, model_eval),2) )
+        # Calculating a sensitivity matrix
+        num_param = len(coef)
+        c = 0
+        h = 0.0001
+        X_0 = []
+        for q in coef:
+            base_mat = np.ones(num_param)
+            base_mat[c] = base_mat[c] + h
+            denom = h * q
+            diff_vals = np.polyval(np.multiply(coef,base_mat),time_flat)
 
-    # Getting the observation Sigma I think
-    s_0 = ((1/DOF) * SS_error)**(0.5)
+            X_0.append(np.divide(np.subtract(diff_vals, model_eval),denom))
 
-    # Calculating a sensitivity matrix
-    num_param = len(coef)
-    c = 0
-    h = 0.0001
-    X_0 = []
-    for q in coef:
-        base_mat = np.ones(num_param)
-        base_mat[c] = base_mat[c] + h
-        denom = h * q
-        diff_vals = np.polyval(np.multiply(coef,base_mat),time_flat)
+            c += 1
 
-        X_0.append(np.divide(np.subtract(diff_vals, model_eval),denom))
+        # Turning the X_0 array into a numpy array
+        X_0 = np.transpose((X_0))
 
-        c += 1
+        # Getting an R matrix for calculating the Variance
+        R = data_flat - model_eval
 
-    # Turning the X_0 array into a numpy array
-    X_0 = np.transpose((X_0))
+        # Sigma^2 for the function
+        sig2 = np.multiply((1/DOF), np.matmul(np.transpose(R),R))
+        # print(sig2)
 
-    # Getting an R matrix for calculating the Variance
-    R = data_flat - model_eval
+        # Calculating the V matrix (covariance)
+        V = np.multiply(sig2, np.linalg.inv(np.matmul(np.transpose(X_0),X_0)))
 
-    # Sigma^2 for the function
-    sig2 = np.multiply((1/DOF), np.matmul(np.transpose(R),R))
-    # print(sig2)
+        # Getting the delta Matrix
+        delta = np.diag(V)
+        SD_mat = np.power(np.diag(V),0.5)
+        #
+        # # Getting the t distribution value
+        # t_dist = t(df=DOF)
+        # t_val = t_dist.ppf(confidence_value)
+        #
+        # dq = []
+        # for d in SD_mat:
+        #     dq.append(t_val*d)
+        #
+        # dq = np.array(dq)
+        #
+        # q_UB = coef + dq
+        # q_LB = coef - dq
+        #
+        # model_UB = np.polyval(q_UB,t_mesh)
+        # model_LB = np.polyval(q_LB,t_mesh)
 
-    # Calculating the V matrix (covariance)
-    V = np.multiply(sig2, np.linalg.inv(np.matmul(np.transpose(X_0),X_0)))
+        # Trying a different method for calculating the function's uncertainty
+        fun_V = []
+        for i in range(len(X_0)):
+            S = np.transpose(X_0[i,:])
+            fun_V.append(np.matmul(np.matmul(np.transpose(S),V),S))
 
-    # Getting the delta Matrix
-    delta = np.diag(V)
-    SD_mat = np.power(np.diag(V),0.5)
+        fun_V = np.array(fun_V)
 
-    # Getting the t distribution value
-    t_dist = t(df=DOF)
-    t_val = t_dist.ppf(confidence_value)
+        # Functional Standard Deviation
+        fun_SD = np.power(fun_V,0.5)
+        fun_SD = fun_SD[0:num_hrs]
 
-    dq = []
-    for d in SD_mat:
-        dq.append(t_val*d)
+        # Getting bounds
+        time_short = time_flat[0:num_hrs]
+        AVG_vals = np.polyval(coef,time_short)
 
-    dq = np.array(dq)
-
-    q_UB = coef + dq
-    q_LB = coef - dq
-
-    model_UB = np.polyval(q_UB,t_mesh)
-    model_LB = np.polyval(q_LB,t_mesh)
-
-    # Trying a different method for calculating the function's uncertainty
-    fun_V = []
-    for i in range(len(X_0)):
-        S = np.transpose(X_0[i,:])
-        fun_V.append(np.matmul(np.matmul(np.transpose(S),V),S))
-
-    fun_V = np.array(fun_V)
-
-    # Functional Standard Deviation
-    fun_SD = np.power(fun_V,0.5)
-
-    # Getting bounds
-    time_short = time_flat[0:num_hrs]
-    AVG_vals = np.polyval(coef,time_short)
+        SD_mat_list.append(SD_mat)
+        AVG_vals_list.append(AVG_vals)
+        fun_SD_list.append(fun_SD)
+        coef_list.append(coef)
 
     # coef - an array fitted parameters from polyfit
     # SD_mat - an array of parameter standard deviations
     # AVG_vals - model evaluation for each hour
     # fun_SD - standard deviation for every hour
-    return coef, SD_mat, AVG_vals, fun_SD[0:num_hrs]
+    if type_of_fit.lower() == "avg":
+        return coef, SD_mat, AVG_vals, fun_SD
+    else:
+        return coef_list, SD_mat_list, AVG_vals_list, fun_SD_list
 
 def data_bounds(AVG_vals, fun_SD,**kwargs):
 # This function is purely to get the bounds associated with the functional fitting
@@ -476,35 +501,35 @@ def pull_color(color_count):
 
 
 # ==============================================================================
-date_range = ["02-15-2018","03-30-2018"]
-my_month = "October"
-region_name = "CISO"
-
-data_type = "Net generation by energy source" # "Demand"
-data_type = "Demand"
-
-# region_name = ["DUK"] #, "CISO", "SWPP"
-
-sub_source_list = [""]
-# sub_source_list = ["wind","solar"]
-
-
-# This either returns a pandas Data frame or numpy array
-#   scheme is row = day, column = hr
-data_list = final_data(date_range, data_type, region_name,
-                       sub_source_list=sub_source_list,
-                       normalized=True,
-                       interval=24,
-                       return_df=False )
-
-# Creates a datafram rows=day, column=hr
-# my_df = pd.DataFrame(my_list)
-# test = np.array(np.hstack(my_list))
-coef, SD_mat, AVG_vals, fun_SD = poly_fit(data_list,
-                                          type_of_fit="avg",
-                                          poly_order=7)
-
-bounds = data_bounds(AVG_vals, fun_SD)
+# date_range = ["02-15-2018","03-30-2018"]
+# my_month = "October"
+# region_name = "CISO"
+#
+# data_type = "Net generation by energy source" # "Demand"
+# data_type = "Demand"
+#
+# # region_name = ["DUK"] #, "CISO", "SWPP"
+#
+# sub_source_list = [""]
+# # sub_source_list = ["wind","solar"]
+#
+#
+# # This either returns a pandas Data frame or numpy array
+# #   scheme is row = day, column = hr
+# data_list = final_data(date_range, data_type, region_name,
+#                        sub_source_list=sub_source_list,
+#                        normalized=True,
+#                        interval=24,
+#                        return_df=False )
+#
+# # Creates a datafram rows=day, column=hr
+# # my_df = pd.DataFrame(my_list)
+# # test = np.array(np.hstack(my_list))
+# coef, SD_mat, AVG_vals, fun_SD = poly_fit(data_list,
+#                                           type_of_fit="avg",
+#                                           poly_order=7)
+#
+# bounds = data_bounds(AVG_vals, fun_SD)
 
 
 # time_short = np.arange(24)

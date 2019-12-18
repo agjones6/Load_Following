@@ -16,7 +16,7 @@ import read_demand as rd
 import statsmodels.tsa.api as sm
 from statsmodels.tsa.api import ExponentialSmoothing as ExpSmooth
 
-date_range = ["01-03-2019","01-04-2019"]
+date_range = ["01-03-2019","01-06-2019"]
 region_name = ["CAR","CENT","CAL"]#["CISO","DUK","FLA"]
 region_name = ["CAR"]
 
@@ -65,7 +65,12 @@ data = []
 bounds = []
 mesh_vals = []
 tmesh = np.linspace(0,23,1000)
+type_of_fit = "ind"
 for reg in region_name:
+# Note: at the end of this loop, the data is stored in a list. Each different region
+#       makes up the list. Inside the region list, there is another list of each day
+#       if the type_of_fit is set to "ind". This stores data protaining to each day
+#       for every region. So it follows DATA[REGION] or DATA[REGION][DAY]
     data_list = rd.final_data(date_range, data_type, reg,
                   sub_source_list=sub_source_list,
                   normalized=True,
@@ -73,7 +78,7 @@ for reg in region_name:
                   return_df=False )
 
     dum_tup = rd.poly_fit(data_list,
-                          type_of_fit="avg",
+                          type_of_fit=type_of_fit,
                           poly_order=7)
 
     coef.append(dum_tup[0])
@@ -82,9 +87,15 @@ for reg in region_name:
     fun_SD.append(dum_tup[3])
 
     data.append(data_list)
-    bounds.append(rd.data_bounds(AVG_vals[-1],fun_SD[-1],num_sigmas=2))
 
-    mesh_vals.append(np.polyval(coef[-1],tmesh))
+    # This stores data for every day if the type of fit is "individual"
+    if type_of_fit.lower() == "ind":
+        for i in range(len(coef)):
+            bounds.append(rd.data_bounds(AVG_vals[-1][i],fun_SD[-1][i],num_sigmas=2))
+            mesh_vals.append(np.polyval(coef[-1][i],tmesh))
+    else:
+        bounds.append(rd.data_bounds(AVG_vals[-1],fun_SD[-1],num_sigmas=2))
+        mesh_vals.append(np.polyval(coef[-1],tmesh))
 
 # Converting to numpy arrays
 # coef = np.transpose(np.array(coef))

@@ -1,3 +1,4 @@
+# Website with details: https://www.eia.gov/opendata/qb.php
 # Getting an API to use
 # http://api.eia.gov/category/?api_key=YOUR_API_KEY_HERE&category_id=0
 # key = d1dc5bf9effa0cab55bca470266b6339
