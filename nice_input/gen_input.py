@@ -119,7 +119,9 @@ def read_my_input(myFile_name):
 
     base_file_txt = open("./nice_input/short_input.txt").read()
 
+    c_outer = 0
     for line in open(myFile_name).readlines():
+
         # Each of the options are split up by semi colons
         all_options = line.split(";")
 
@@ -171,8 +173,7 @@ def read_my_input(myFile_name):
                                 counts[c-1] = 0
             # print(all_comb[i])
 
-
-        c = 0
+        # c = 0
         for comb in all_comb:
             # Setting the text of the file to the base file
             curr_file_text = base_file_txt
@@ -183,11 +184,11 @@ def read_my_input(myFile_name):
 
 
             # Saving the file general run naming scheme
-            new_file = open("./runFiles/r" + str(c) + ".txt","w")
+            new_file = open("./runFiles/r" + str(c_outer) + ".txt","w")
             new_file.write(curr_file_text)
             new_file.close()
 
-            c += 1
+            c_outer += 1
 
 
 
@@ -296,9 +297,8 @@ def running_code(runFile_name, inputFile_txt):
 # new_file.write(my_filetxt)
 
 # This reads my base input file to make all of the combinations of options
-myFile_name = "my_input.txt"
+myFile_name = "my_input0.txt"
 read_my_input(myFile_name) # Actually makes the files
-
 
 # This moves files and runs the code from the runfiles in the run folders
 run_location = "./runFiles"

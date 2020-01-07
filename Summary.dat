@@ -11,7 +11,7 @@
  TES Data File            ./MPower/TESMode0.dat   
  Initialization mode      0
   
- Step Change in Load to   85.00 %    .00 seconds into the simulation
+ Daily Load File          ./load_file2.txt        
 
  No Upsets                               
 
@@ -20,7 +20,8 @@
  Upset Parameter 3   .0000E+00
  Upset Parameter 4   .0000E+00
 
- Simulation time    600.00 seconds
+ Control Rods in Automatic
+ Simulation time   3600.00 seconds
  Output File Write Interval   1 seconds
  Restart File Write Interval 100000 seconds
   

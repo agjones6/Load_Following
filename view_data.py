@@ -19,7 +19,7 @@ def get_df(filename):
     header_list.append("TES_TBV(4)")
 
     # Reading in the data from the file
-    rawData = pd.read_table(filename, skiprows=1, header=None, delim_whitespace=True)
+    rawData = pd.read_csv(filename,skiprows=1, header=None, delim_whitespace=True)
 
     # Changing the name of the headers to match what they are in the file
     rawData.columns = header_list
@@ -95,7 +95,7 @@ def comp_plot(df_list, ystring , **kwargs):
 #  ============================================================================
 
 # Defining a source folder
-src_dir = "./Results/myCase2"
+src_dir = "./Results/myCase5"
 
 rawData = []
 runNames = []
@@ -110,11 +110,20 @@ for file in os.listdir(src_dir):
 
 
 
-comp_plot(rawData,"Demand" ,
+comp_plot(rawData,"Wload" ,
            keep_fig=True,
            case_names=runNames,
            normalized=True)
 
+comp_plot(rawData,"Wturb" ,
+           keep_fig=True,
+           case_names=runNames,
+           normalized=True)
+
+comp_plot(rawData,"Qrx" ,
+           keep_fig=True,
+           case_names=runNames,
+           normalized=True)
 
 plt.show()
 # %%

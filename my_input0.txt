@@ -1,0 +1,1 @@
+N2; DESTINATION_FOLDER, ./Results/myCase5; SOURCE_FOLDER, ./NuScale, ./MPower; IDEMAND, 2; DEMAND_PARAMETER, "./load_file1.txt", "./load_file2.txt"; SIMULATION_TIME, 3600

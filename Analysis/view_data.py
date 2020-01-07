@@ -19,7 +19,8 @@ def get_df(filename):
     header_list.append("TES_TBV(4)")
 
     # Reading in the data from the file
-    rawData = pd.read_table(filename, skiprows=1, header=None, delim_whitespace=True)
+    # rawData = pd.read_table(filename, skiprows=1, header=None, delim_whitespace=True)
+    rawData = pd.read_csv(filename,skiprows=1, header=None, delim_whitespace=True)
 
     # Changing the name of the headers to match what they are in the file
     rawData.columns = header_list
@@ -58,12 +59,14 @@ def basic_plot(df, ystring , **kwargs):
         plt.close(dum_fig)
 
 # Defining the file name
-filename = "./Results/tst_file.dat"
+filename = "./Results/myCase4/N4.dat"
 
 # Putting the data into a data
 rawData = get_df(filename)
 
 # %%
 basic_plot(rawData,"Qsteam" ,
+           keep_fig=True)
+basic_plot(rawData,"Demand" ,
            keep_fig=True)
 plt.show()
