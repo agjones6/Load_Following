@@ -7,6 +7,7 @@ import os
 import matplotlib
 import matplotlib.pyplot as plt
 import sys
+import re
 # analysis_path = "/Users/AndyJones/Documents/GitHub/master_proj/Analysis"
 analysis_path = "C:/Users/agjones6/Documents/GitHub/master_proj/Analysis"
 if not analysis_path in sys.path:
@@ -103,6 +104,12 @@ for reg in region_name:
     else:
         bounds.append(rd.data_bounds(AVG_vals[-1],fun_SD[-1],num_sigmas=2))
         mesh_vals.append(np.polyval(coef[-1],tmesh))
+
+
+# Setting the variable for the coefficients of the polynomial
+q = np.squeeze(np.mean(coef,axis=1))
+
+rd.write_demand(q,100,filename="default")
 
 # Converting to numpy arrays
 # coef = np.transpose(np.array(coef))

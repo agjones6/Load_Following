@@ -499,6 +499,62 @@ def pull_color(color_count):
 
     return col_val
 
+# --> This will be a subroutine to write demand curves to text files to be used in Dr. Doster's code
+def write_demand(q,num_time,**kwargs):
+    # Handling optional key words
+    directory = kwargs.get("directory","./Load_Profiles") # Directory Location
+    filename = kwargs.get("filename","default")           # File name. 'default' will open one named load_profile#.txt
+    st_time = kwargs.get("st_time", 0)                    # Starting time to write
+    en_time = kwargs.get("en_time", 24)                   # Ending time
+
+    # Checking if the directory exists, if not it is created
+    if not os.path.isdir(directory):
+        os.mkdir(directory)
+
+    # Checking if the file name is "default"
+    if filename.lower() == "default":
+        num_list = []
+        for file in os.listdir(directory):
+            if "load_file" in file:
+                # Getting the name of the file without the extension
+                base_name = file.split(".")[0]
+
+                # Checking the number at the end of the base name
+                regex = r'load_file(\d*)'
+
+                found_text = re.search(regex, base_name)
+                try:
+                    num_list.append(int(found_text.group(1)))
+                except:
+                    pass
+
+        # Finding the maximum number
+        if len(num_list) == 0:
+            new_num = 0
+        else:
+            new_num = max(num_list) + 1
+
+        # Getting the new filename
+        filename = "load_file" + str(new_num) + ".txt"
+
+    # Defining a time mesh
+    t_mesh = np.linspace(st_time,en_time,num_time)
+
+    # Calculating values using the polyval function
+    model_vals = np.polyval(q,t_mesh)
+
+    # Putting the time and model values into a matrix
+    print_mat = np.vstack((t_mesh,model_vals*100))
+
+    # Writing to the file
+    filepath = os.path.join(directory,filename)
+    f = open(filepath,"w")
+    f.write(str(num_time) + " \n")
+    for i in range(num_time):
+        f.write(str(t_mesh[i]) + ", " + str(model_vals[i]*100))
+        f.write(" \n")
+
+    f.close()
 
 # ==============================================================================
 # date_range = ["02-15-2018","03-30-2018"]
