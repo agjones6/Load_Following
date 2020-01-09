@@ -16,8 +16,8 @@ def find_val(raw_text,kw):
     try:
         found_val = found_text.group(1)
     except:
-        print("error getting " + kw)
-        found_val = "ERROR"
+        # print("error getting " + kw)
+        found_val = ""
 
     return found_val
 
@@ -57,35 +57,53 @@ def write_file(dest_file, raw_text, **kwargs):
         src_folder = ""
 
     # Getting the Variable to auto-populate the files
-    auto_files = fv("AUTO_CHOOSE_FILES")
+    auto_files = fv("CHANGE_FILES")
     if auto_files.lower() == "true":
         auto_files = True
     else:
         auto_files = False
 
     # --> Writing the files portions
-    if auto_files and (src_folder != ""):
-        f.write('"' + find_auto(src_folder, "Geometry",exclude="BOP") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "Core") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "Component") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "Gains") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "Sensors") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "Valves") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "BOPGeometry") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "Trips") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "Init") + '"' + "\n")
-        f.write('"' + find_auto(src_folder, "TESMode") + '"' + "\n")
-    else:
-        f.write('"' + os.path.join(src_folder, fv("GEOMETRY_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("REACTOR_DATA_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("COMPONENT_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("CONTROLLER_GAINS_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("SENSOR_DATA_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("VALVE_DATA_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("BOP_GEOMETRY_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("TRIP_SET_POINTS_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("INITIAL_CONDITIONS_FILE")).replace("\\","/") + '"' + "\n")
-        f.write('"' + os.path.join(src_folder, fv("TES_PARAMETER_FILES")).replace("\\","/") + '"' + "\n")
+    input_file_list = ["Geometry", "Core", "Component",
+                       "Gains", "Sensors", "Valves",
+                       "BOPGeometry", "Trips", "Init",
+                       "TESMode"]
+    deck_file_list = ["GEOMETRY_FILE", "REACTOR_DATA_FILE", "COMPONENT_FILE",
+                      "CONTROLLER_GAINS_FILE", "SENSOR_DATA_FILE", "VALVE_DATA_FILE",
+                      "BOP_GEOMETRY_FILE", "TRIP_SET_POINTS_FILE", "INITIAL_CONDITIONS_FILE",
+                      "TES_PARAMETER_FILES"]
+    for i in range(len(input_file_list)):
+        c_val = fv(deck_file_list[i])
+        if c_val == "" or c_val == "default":
+            if "Geometry" == input_file_list[i]:
+                f.write('"' + find_auto(src_folder, input_file_list[i], exclude="BOP") + '"' + "\n")
+            else:
+                f.write('"' + find_auto(src_folder, input_file_list[i]) + '"' + "\n")
+        else:
+            # f.write('"' + os.path.join(src_folder, c_val).replace("\\","/") + '"' + "\n")
+            f.write('"' + c_val + '"' + "\n")
+    # if auto_files and (src_folder != ""):
+    #     f.write('"' + find_auto(src_folder, "Geometry",exclude="BOP") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "Core") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "Component") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "Gains") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "Sensors") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "Valves") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "BOPGeometry") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "Trips") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "Init") + '"' + "\n")
+    #     f.write('"' + find_auto(src_folder, "TESMode") + '"' + "\n")
+    # else:
+    #     f.write('"' + os.path.join(src_folder, fv("GEOMETRY_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("REACTOR_DATA_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("COMPONENT_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("CONTROLLER_GAINS_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("SENSOR_DATA_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("VALVE_DATA_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("BOP_GEOMETRY_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("TRIP_SET_POINTS_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("INITIAL_CONDITIONS_FILE")).replace("\\","/") + '"' + "\n")
+    #     f.write('"' + os.path.join(src_folder, fv("TES_PARAMETER_FILES")).replace("\\","/") + '"' + "\n")
 
     # Writing the number portions
     f.write(fv("INIT_MODE") + "\n")
@@ -106,7 +124,9 @@ def replace_text(raw_text,kw, new_value):
         my_str_val = str(new_value)
         try:
             new_text = re.sub(regex,  r"\1 " + my_str_val + r"\3", raw_text, flags=re.IGNORECASE)
-        except:
+        except Exception as e:
+            print(e)
+            print(my_str_val)
             print("WARNING WARNING: The substitution messed up")
             new_text = raw_text
     else:
@@ -120,12 +140,34 @@ def read_my_input(myFile_name):
     base_file_txt = open("./nice_input/short_input.txt").read()
 
     c_outer = 0
-    for line in open(myFile_name).readlines():
 
+    # Getting each of the designated sections of roptions into a list to be used
+    c = 0
+    section_list = []
+    for line in open(myFile_name).read().split("\n"):
+        # Taking off leading and trailing spaces
+        line = line.strip(" ")
+
+        # Handinling of the line is blank
+        if len(line) == 0:
+            continue
+
+        # If this is the first time the string has been encountered
+        if c == 0:
+            c_text = ""
+            c += 1
+
+        # Adding the current text to the string of text
+        c_text = c_text + line
+        if not line[-1] == ";":
+            section_list.append(c_text)
+            c = 0
+
+    # Handling the options that act to duplicate the run but not mix up the option
+
+    for line in section_list:
         # Each of the options are split up by semi colons
         all_options = line.split(";")
-
-        case_name = "test"
 
         c = 0
         # Getting options and values to handle later
@@ -135,15 +177,33 @@ def read_my_input(myFile_name):
 
             # Making the options into an array to be used
             o = (o.split(","))
-            o = [i.strip(" \n") for i in o]
+            o = [i.replace("\n","") for i in o]
+            o = [i.strip(" ") for i in o]
 
-            # Handling the First entry because it is the name of the run
-            if c == 0:
-                if o[0].lower() != "default":
-                    case_name = o[0]
-            else:
-                options.append(o[0])
-                vals.append(o[1:])
+            # The Option names are put in options and the values for the options are in vals
+            options.append(o[0])
+            vals.append(o[1:])
+
+            # --> Handling special default cases
+            # Case for pulling demand curves
+            if options[-1].upper() == "DEMAND_PARAMETER":
+                try:
+                    potential_path = vals[-1][0]
+                    potential_path = potential_path.replace('"','')
+                    if os.path.isdir(potential_path):
+                        demand_filenames = os.listdir(potential_path)
+
+                        new_file_opt = ['"' + potential_path + "/" + f + '"' for f in demand_filenames]
+                        if len(new_file_opt) == 0:
+                            print("No Demand File in directory: " + potential_path)
+                            break
+
+                        # Setting the grabbed filenames to the value to be used in generating runfiles
+                        vals[-1] = new_file_opt
+
+                except Exception as e:
+                    print(e)
+                    pass
 
             c += 1
 
@@ -173,6 +233,36 @@ def read_my_input(myFile_name):
                                 counts[c-1] = 0
             # print(all_comb[i])
 
+        new_combo_list = []
+        for comb in all_comb:
+            new_v_list = []
+            v_index = []
+            r = 0
+            for v in comb:
+                # Checking that there is a
+                if "|" in v:
+                    new_v_list.append(v.split("|"))
+                    v_index.append(r)
+                r += 1
+
+            if len(new_v_list) != 0:
+                num_additions = len(new_v_list[0])
+                try:
+                    for a in range(num_additions):
+                        new_comb = []
+                        for v in range(len(comb)):
+                            if v in v_index:
+                                new_comb.append(new_v_list[v_index.index(v)][a])
+                            else:
+                                new_comb.append(comb[v])
+                        new_combo_list.append(new_comb)
+                except Exception as e:
+                    print(e)
+                    new_combo_list = []
+
+        if len(new_combo_list) != 0:
+            all_comb = new_combo_list
+
         # c = 0
         for comb in all_comb:
             # Setting the text of the file to the base file
@@ -194,7 +284,6 @@ def read_my_input(myFile_name):
 
         # print(options)
         # print(vals)
-
 def get_default_name(file_text):
 # Basically counting what is already in the destination folder and what is being generated
 #   so each of the files generated will have a different arbitrary name
@@ -225,7 +314,7 @@ def get_default_name(file_text):
     spec_files = [i for i in all_files if i[0].lower() == first_letter.lower()]
 
     # Getting just the numbers from the strings
-    regex = r'.*(\d+).*'
+    regex = r'.(\d+).*'
     try:
         spec_numbers = [int(re.search(regex,i).group(1)) for i in spec_files]
     except Exception as e:
@@ -278,6 +367,24 @@ def copy_fin_files(dest_dir, source_file, new_file_name):
     # Copying the file
     shutil.copy(source_file,os.path.join(dest_dir,new_file_name))
 
+def change_restart_time(restart_file,restart_time):
+# This function changes the first line of the restart file to the restart time given
+    f_orig = open(restart_file).readlines()
+
+    f_new = open(restart_file,"w")
+
+    c = 0
+    for line in f_orig:
+        if c == 0:
+            f_new.write(restart_time + " \n")
+        else:
+            f_new.write(line)
+
+        c += 1
+
+    f_new.close()
+
+
 def running_code(runFile_name, inputFile_txt):
 
     # Taking my input file and making Dr. Doster's
@@ -297,10 +404,10 @@ def running_code(runFile_name, inputFile_txt):
 # new_file.write(my_filetxt)
 
 # This reads my base input file to make all of the combinations of options
-myFile_name = "my_input0.txt"
+myFile_name = "full_day_input.txt"
 read_my_input(myFile_name) # Actually makes the files
 
-# This moves files and runs the code from the runfiles in the run folders
+# %% This moves files and runs the code from the runfiles in the run folders
 run_location = "./runFiles"
 for file in os.listdir(run_location):
     path_to_source = os.path.join(run_location,file) #.replace("\\","/")
@@ -312,7 +419,9 @@ for file in os.listdir(run_location):
     # exit()
 
     # Getting the file name from the input file and the output folder
-    my_file_name = get_default_name(input_deck)
+    my_file_name = find_val(input_deck,"RUN_NAME")
+    if my_file_name.lower() == "default":
+        my_file_name = get_default_name(input_deck)
 
     # Making a folder and copying the input deck into a folder
     dest_dir = find_val(input_deck,"DESTINATION_FOLDER")
@@ -321,8 +430,16 @@ for file in os.listdir(run_location):
     # Running the code
     running_code(path_to_source, input_deck)
 
+    # --> Performing options enacted by the outer shell
+    # This is the time that will be at the top of the restart file
+    restart_time = find_val(input_deck,"RESTART_TIME")
+    if restart_time != "" and restart_time.strip(" ") != "default":
+        change_restart_time("Restart.dat", restart_time)
+
     # Copying the files
     copy_fin_files(dest_dir,"System.dat",my_file_name)
+    copy_fin_files(os.path.join(dest_dir,"Summary"),"Summary.dat",my_file_name)
+    copy_fin_files(os.path.join(dest_dir,"Restart"),"Restart.dat",my_file_name)
 
     # Removing the run files from the 'runFile' directory
     os.remove(os.path.join(run_location,file))

@@ -2,15 +2,14 @@
 
 >> INPUT FILES
 	SOURCE_FOLDER  							./NuScale
+	AUTO_CHOOSE_FILES						True 			# This makes all of the geometry files get pulled from the folder above
 	RUN_NAME								default
 	DESTINATION_FOLDER 						./Results
-
-	INITIAL_CONDITIONS_FILE    default
 
 >> RUN OPTIONS
 	INIT_MODE 									0  # Initial Conditions File
 
-	START_TIME 									0.0
+	START_TIME 									0
 	IDEMAND											0 	# Step Change in Load
 	DEMAND_PARAMETER 						90	# Final Turbine Load
 
@@ -25,5 +24,3 @@
 >> OUTPUT OPTIONS
 	OUTPUT_LOCATION 						./Results
 	OUTPUT_NAME 								default
-
-	RESTART_TIME 								0.0
