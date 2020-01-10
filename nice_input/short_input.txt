@@ -26,4 +26,6 @@
 	OUTPUT_LOCATION 						./Results
 	OUTPUT_NAME 								default
 
-	RESTART_TIME 								0.0
+	RESTART_TIME 								default
+
+	RUN_TO_STEADY_STATE 				TRUE

@@ -68,13 +68,26 @@ def comp_plot(df_list, ystring , **kwargs):
 
     # Plotting the desired data
     dum_fig = plt.figure()
+    i = 0
     for df in df_list:
         xvals = df[xstring]
 
         if normalized:
+            # Normalizing based on reactor
+            # if case_names != "" and len(case_names) == len(df_list):
+                # try:
+                #     first_letter = case_names[i][0]
+                #     if first_letter.upper() == "N":
+                #         nom_pwr =
+                #
+                # except Exception as e:
+                #     print(e)
+                #     pass
             yvals = df[ystring]/df[ystring][0]
         else:
             yvals = df[ystring]
+
+        i += 1
 
         plt.plot(xvals,yvals)
         plt.xlabel(xstring)
@@ -95,7 +108,7 @@ def comp_plot(df_list, ystring , **kwargs):
 #  ============================================================================
 
 # Defining a source folder
-src_dir = "./Results/myCase5"
+src_dir = "./Results/myCase8"
 
 rawData = []
 runNames = []
@@ -108,22 +121,22 @@ for file in os.listdir(src_dir):
         rawData.append(get_df(os.path.join(src_dir,file)))
         runNames.append(file.split(".")[0])
 
-
+norm = True
 
 comp_plot(rawData,"Wload" ,
            keep_fig=True,
            case_names=runNames,
-           normalized=True)
+           normalized=norm)
 
 comp_plot(rawData,"Wturb" ,
            keep_fig=True,
            case_names=runNames,
-           normalized=True)
+           normalized=norm)
 
 comp_plot(rawData,"Qrx" ,
            keep_fig=True,
            case_names=runNames,
-           normalized=True)
+           normalized=norm)
 
 plt.show()
 # %%
@@ -140,3 +153,62 @@ plt.show()
 #'RhoCBB', 'RhoCBC', 'RhoCBD', 'TESLoad', 'TESFlowDemand', 'FlowAUX1', 'FlowAUX2',
 # 'FlowAUX3', 'PTAP', 'Tsat Tap', 'PTES', 'TES_TBV(1)', 'TES_TBV(2)', 'TES_TBV(3)',
 #'TES_TBV(4)']
+
+# ---> This is the order of the initial conditions file. I will used these values for normalizing
+# --> Or I can just let it ride for a while at full power and pull the full power values directly into a dataframe
+# Read(2,*)Time
+# Read(2,*)Qrx,Qth,Qtrans,Trx,Tclad
+# Read(2,*)NI,NX
+# Read(2,*)(Precursor(j),j=1,6)
+# Read(2,*)(gammaDH(j),j=1,11)
+# Read(2,*)Flowv,Flow1,Flow2
+# Read(2,*)(Told(i),i=1,26)
+# Read(2,*)THLIND,TCLIND
+# Read(2,*)Pp,Px
+# Read(2,*)VOL(1),VOL(2),VOL(3),VOL(4),Ax5,PRZLVL
+# Read(2,*)alphagPx(1),alphagPx(2),alphagPx(3),alphagPx(4)
+# Read(2,*)rholPx(1),rholPx(2),rholPx(3),rholPx(4)
+# Read(2,*)ulPx(1),ulPx(2),ulPx(3),ulPx(4)
+# Read(2,*)rhogPx(1),rhogPx(2),rhogPx(3),rhogPx(4)
+# Read(2,*)ugPx(1),ugPx(2),ugPx(3),ugPx(4)
+# Read(2,*)rhoPx(1),rhoPx(2),rhoPx(3),rhoPx(4)
+# Read(2,*)rhouPx(1),rhouPx(2),rhouPx(3),rhouPx(4)
+# Read(2,*)VelPx(1),VelPx(2),VelPx(3),VelPx(4),VelPx(5)
+# Read(2,*)VSRVPx(1),VSRVPx(2),VSRVPx(3),VSRVPx(4)
+# Read(2,*)PRZMass(1),PRZMass(2),PRZMass(3),PRZMass(4)
+# Read(2,*)PRZE(1),PRZE(2),PRZE(3),PRZE(4)
+# Read(2,*)QHTRP,QHTRB,SCVPosition,Vspray
+# Read(2,*)mdotCHRG,mdotLD
+# do j=1,26
+# do i=1,nodesSG(j)
+# read(2,*)TSG(i,j),hSG(i,j)
+# enddo
+# enddo
+# Read(2,*)CriticalLength1,CriticalLength2
+# Read(2,*)SGMass1,SGMass2
+# do i=1,4
+# Read(2,*)BANKPOSITION(i)
+# enddo
+# Read(2,*)DeltaPFHSG1,DeltaPEHSG1,DeltaPHSG1
+# Read(2,*)DeltaPFHSG2,DeltaPEHSG2,DeltaPHSG2
+# Read(2,*)Qsteam,Wload,Wturb,PSGIND,Pimpulse,p_hdr
+# do i=1,60
+# read(2,*) velocity_kk(i),pressure_kk(i),ie_kk(i),
+# %	kafa_kk(i),aj_kk(i),density_kk(i)
+# enddo
+# c
+# Read(2,*) FlowSG,FlowFDInd,FlowDEMAND,FlowSteamInd,FeedSHIM
+# Read(2,*) OmegaFP, FCV, FBV
+# Read(2,*) TBVposition
+# Read(2,*) Tfeed
+# Read(2,*)TCVposition
+# Read(2,*)TfuelAVE
+# Read(2,*)TfuelHOT
+# Read(2,*)uHOT
+# Read(2,*)MDNBR
+# c.
+# Read(2,*)TESLoad,TESFlowDemand,TESSHIM,FlowAUX1,FlowAUX2,
+# %         FlowAUX3,PTAP,rhoTAP,hTAP,PTES											   !Konor
+# Read(2,*)IOPENTES(1),IOPENTES(2),IOPENTES(3),IOPENTES(4)
+# Read(2,*)TES_TBV(1),TES_TBV(2),TES_TBV(3),TES_TBV(4)
+# Read(2,*)ICLOSETBV,LockTBV
