@@ -3,6 +3,7 @@ import re
 import os
 import shutil
 import subprocess
+# import view_data as vd
 
 
 def find_val(raw_text,kw):
@@ -396,15 +397,20 @@ def running_code(runFile_name, inputFile_txt):
     cmd = 'echo ' + "'" + runFile_name.replace("/","\\") + "'" +  ' | .\\Code\\base_exec2.exe'
     subprocess.call(cmd,shell=True)
 
+def check_steady_state(data_file):
+# This function is made to check if the current run has reached steady state
 
-# def conv_backslash(my_text):
-#     my_text =
+    # Defining a list of values to check
+    check_vals = ["Qrx"]
 
-# new_file = open("./runFiles/test2.txt","w")
-# new_file.write(my_filetxt)
+    # For every value to check, the slope of the data is calculated
+    # for val in check_vals:
+
+
+# =============================================================================
 
 # This reads my base input file to make all of the combinations of options
-myFile_name = "full_day_input.txt"
+myFile_name = "my_input0.txt"
 read_my_input(myFile_name) # Actually makes the files
 
 # %% This moves files and runs the code from the runfiles in the run folders

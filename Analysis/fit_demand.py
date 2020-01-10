@@ -22,7 +22,7 @@ from scipy.stats import beta
 
 date_range = ["01-03-2019","05-30-2019"]
 region_name = ["CAR","CENT","CAL"]#["CISO","DUK","FLA"]
-region_name = ["CAL"]
+region_name = ["CAR"]
 
 data_type = "Net generation by energy source" # "Demand"
 data_type = "Demand"
@@ -109,7 +109,9 @@ for reg in region_name:
 # Setting the variable for the coefficients of the polynomial
 q = np.squeeze(np.mean(coef,axis=1))
 
-rd.write_demand(q,100,filename="default")
+# Input for the writing demand function is:
+    # q, num_time, directory, filename, st_time, en_time
+# rd.write_demand(q,100,filename="default")
 
 # Converting to numpy arrays
 # coef = np.transpose(np.array(coef))
@@ -123,15 +125,7 @@ rd.write_demand(q,100,filename="default")
 # plt.plot(t,np.mean(data[0], axis=0))
 # plt.plot(t,np.transpose(data[0]),'*')
 
-# This is finding the sum of squared errors
-SS_error = np.sum((AVG_vals[0] - AVG_obs[0])**2,axis=1)
-# bnds = a[1]
-# hist_loc = np.digitize(test,bnds)
-# my_groups = [[]]*30
 
-# Testing a histogram of the sum of squares
-# a = plt.hist(test,bins=30,range=(0,0.5))
-# plt.show()
 
 # len(coef[0][0,:])
 AVG_test = np.array(data[0])
@@ -155,10 +149,27 @@ for i in range(24):
     plt.title(i)
     print(a, b, mloc, sca)
 
-    plt.show()
+    if i != 4:
+        plt.close()
+    else:
+        plt.show()
+        exit()
 
+    # plt.show()
 
-# --> This was trying to use the observed squared error distribution to relate each parameter in the group
+# %% ========================= SQUARED ERROR ABOUT THE MEAN =======================
+# This is finding the sum of squared errors
+# SS_error = np.sum((AVG_vals[0] - AVG_obs[0])**2,axis=1)
+#
+# # Testing a histogram of the sum of squares
+# a = plt.hist(SS_error,bins=30,range=(0,0.5))
+# plt.show()
+#
+# bnds = a[1]
+# hist_loc = np.digitize(SS_error,bnds)
+# my_groups = [[]]*30
+#
+# # --> This was trying to use the observed squared error distribution to relate each parameter in the group
 # beta_coef = []
 # for i in range(len(my_groups)):
 #     n = i + 1
@@ -171,7 +182,7 @@ for i in range(24):
 #         i2 += 1
 #
 #     beta_coef.append(np.array(curr_set_val))
-
+#
 # for i in range(len(beta_coef)):
 #     b = beta_coef[i]
 #     if not len(b) == 0:
