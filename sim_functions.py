@@ -10,7 +10,10 @@ import re
 import shutil
 import subprocess
 
-#  ========================= OUTPUT ANALYSIS ===================================
+#  =============================================================================
+#                              OUTPUT ANALYSIS
+#  =============================================================================
+
 def get_df(filename):
     # Getting the file as an object
     my_file = open(filename,'r')
@@ -21,7 +24,11 @@ def get_df(filename):
     # Seperating the headers using regex
     regex_header = r'\s\s(\w.*?\(?\w\)?)\s\s'
     header_list = re.findall(regex_header,first_line)
-    header_list.append("TES_TBV(4)")
+
+    if not "TES_TBV(4)" in header_list:
+        header_list.append("TES_TBV(4)")
+    if not "Time" in header_list:
+        header_list.insert(0,"Time")
 
     # Reading in the data from the file
     rawData = pd.read_csv(filename,skiprows=1, header=None, delim_whitespace=True)
@@ -70,6 +77,11 @@ def comp_plot(df_list, ystring , **kwargs):
     keep_fig = kwargs.get('keep_fig',True)
     case_names = kwargs.get('case_names',"")
     normalized = kwargs.get('normalized',False)
+    norm_source = kwargs.get('norm_source',"default")
+
+    # Pulling Nominal Operation values if they are desired
+    if normalized:
+        nom_NuScale, nom_MPower = pull_FP_data(source=norm_source, num_points=20)
 
     # Plotting the desired data
     dum_fig = plt.figure()
@@ -79,16 +91,18 @@ def comp_plot(df_list, ystring , **kwargs):
 
         if normalized:
             # Normalizing based on reactor
-            # if case_names != "" and len(case_names) == len(df_list):
-                # try:
-                #     first_letter = case_names[i][0]
-                #     if first_letter.upper() == "N":
-                #         nom_pwr =
-                #
-                # except Exception as e:
-                #     print(e)
-                #     pass
-            yvals = df[ystring]/df[ystring][0]
+            if case_names != "" and len(case_names) == len(df_list):
+                try:
+                    first_letter = case_names[i][0]
+                    if first_letter == "N":
+                        yvals = df[ystring]/nom_NuScale[ystring]
+                    elif first_letter == "M":
+                        yvals = df[ystring]/nom_MPower[ystring]
+
+                except Exception as e:
+                    print(e)
+                    yvals = df[ystring]
+                    pass
         else:
             yvals = df[ystring]
 
@@ -180,25 +194,129 @@ def combine_output_files(src_folder):
             path_list.append(os.path.join(src_folder,obj))
 
 
-    for i in range(len(name_list)):
+    # for i in range(len(name_list)):
+    i = 0
+    while i < len(name_list):
         file1 = name_list[i]
+        dlt_names = []
+        dlt_files = []
         if len(file1) == 1:
             main_df = get_df(path_list[i])
             new_df = main_df
-            for i2 in range(len(name_list)):
+            # for i2 in range(len(name_list)):
+            i2 = 0
+            while i2 < len(name_list):
                 file2 = name_list[i2]
                 if len(file2) > 1:
                     if file2[0] == file1[0]:
                         sub_df = get_df(path_list[i2])
                         new_df = pd.concat([new_df, sub_df])
-                        # Pull in dataframes and concatenate them
-        print(new_df)
-        exit()
+
+                        # Getting list of files to delete
+                        dlt_names.append(name_list[i2])
+                        dlt_files.append(path_list[i2])
+                i2 += 1
+
+        # Saving the new data
+        try:
+            # Erasing Duplicate Values
+            new_df = new_df.drop_duplicates()
+
+            # Dropping the file_name column
+            if "file_name" in new_df.columns:
+                new_df = new_df.drop(columns=["file_name"])
+
+            # Saving the new dataframe as a csv
+            new_df.to_csv(path_list[i], index=False)
+
+            # Replacing the text in the csv with spaces like Doster's .dat files
+            new_text = open(path_list[i]).read().replace(",","    ")
+
+            open(path_list[i],"w").write(new_text)
+            for del_i in range(len(dlt_files)):
+                # print(d_file)
+                # Removing the values from the lists
+                name_list.remove(dlt_names[del_i])
+                path_list.remove(dlt_files[del_i])
+
+                # Deleting the files
+                os.remove(dlt_files[del_i])
+
+        except Exception as e:
+            print(e)
+            # This keeps the original files without erasing the original files
+            # Dropping the file_name column
+            if "file_name" in new_df.columns:
+                main_df = main_df.drop(columns=["file_name"])
+
+            # Saving the new dataframe as a csv
+            main_df.to_csv(path_list[i], index=False)
+
+            # Replacing the text in the csv with spaces like Doster's .dat files
+            new_text = open(path_list[i]).read().replace(",","    ")
+
+            open(path_list[i],"w").write(new_text)
+
+        i += 1
+
+def get_folder_rawData(src_dir):
+# This pulls all of the .dat file data and names from a given directory
+
+    rawData = []
+    runNames = []
+    dir_list = os.listdir(src_dir)
+    dir_list.sort()
+    for file in dir_list:
+        # Getting the file extenion
+        ext = file.split(".")[-1]
+
+        # If the file is a .dat file, pull the data
+        if ext == "dat":
+            rawData.append(get_df(os.path.join(src_dir,file)))
+            runNames.append(file.split(".")[0])
+
+    return rawData, runNames
+
+def pull_FP_data(**kwargs):
+# This function pulls the data from a nominal location to use in normalizing the
+#   output data.
+
+    # Loacation of the source file is this by default
+    source_dir = kwargs.get("source","default")
+    num_points = kwargs.get("num_points",10)
+    save_new = kwargs.get('norm_source',False)
+
+    if source_dir == "default":
+        # This is pulling from smaller files to
+        NuScale_data = pd.read_csv("./NuScale/nom_cond.csv",header=None,squeeze=True,index_col=0)
+        MPower_data = pd.read_csv("./MPower/nom_cond.csv",header=None,squeeze=True,index_col=0)
+    else:
+        # Pulling the data
+        rawData_list, runName_list = get_folder_rawData(source_dir)
+
+        NuScale_data = 0
+        MPower_data = 0
+        for i in range(len(rawData_list)):
+            if "N" in runName_list[i]:
+                NuScale_data = rawData_list[i].iloc[-num_points:-1,:]
+                NuScale_data = NuScale_data.mean()
+            elif "M" in runName_list[i]:
+                MPower_data = rawData_list[i].iloc[-num_points:-1,:]
+                MPower_data = MPower_data.mean()
+
+    if save_new:
+        NuScale_data.to_csv("./NuScale/nom_cond.csv",header=False)
+        MPower_data.to_csv("./MPower/nom_cond.csv",header=False)
+
+    return NuScale_data, MPower_data
+
+
 
 
 #  =============================================================================
+#                     GENERATING INPUT AND RUNNING SIMULATOR
+#  =============================================================================
 
-#  ============== GENERATING INPUT AND RUNNING SIMULATOR =======================
 def find_val(raw_text,kw):
     # This function is designed to pull the very next space deliminated value
     #   after the given text key word
@@ -226,8 +344,7 @@ def find_auto(src_dir, kw, **kwargs):
 
     return os.path.join(src_dir,desired_file).replace("\\","/")
 
-def write_file(dest_file, raw_text, **kwargs):
-# This function is made to write a file to be used as an input for the code
+def write_file(dest_file, raw_text, **kwargs):# This function is made to write a file to be used as an input for the code
 
     abs_path = kwargs.get('abs_path', False)
 
@@ -544,11 +661,23 @@ def get_default_letter(run_name):
 #   current filename's name different
 #   EX) N0 -> N0_a -> N0_b
     # First splitting based on underscore
+    fl = "a"
     try:
         name_list = run_name.split("_")
         run_name = name_list[0]
         cletter = name_list[-1]
-        nletter = chr(ord(cletter)+1)
+        cnum = ord(cletter[-1])
+        if len(name_list) <= 1:
+            nletter = fl
+        elif cnum < ord(fl) + 25:
+            if len(cletter) == 1:
+                nletter = chr(cnum+1)
+            else:
+                nletter = cletter[:-1] + chr(cnum+1)
+            # print(chr(cnum))
+        else:
+            nletter = cletter + fl
+
     except:
         nletter = "a"
 

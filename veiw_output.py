@@ -7,22 +7,16 @@ import re
 import shutil
 import subprocess
 
-src_dir = "./Results/myCase8"
+src_dir = "./Results/myCase1"
 
-rawData = []
-runNames = []
-for file in os.listdir(src_dir):
-    # Getting the file extenion
-    ext = file.split(".")[-1]
+# Pulling all of the ".dat" files in a directory
+rawData, runNames = get_folder_rawData(src_dir)
 
-    # If the file is a .dat file, pull the data
-    if ext == "dat":
-        rawData.append(get_df(os.path.join(src_dir,file)))
-        runNames.append(file.split(".")[0])
+# Normalizing
+norm = True
 
-norm = False
-
-data_list = ["Qrx"]
+# List of thinks to plot
+data_list = ["Qrx", "Tmod","Wturb", "MDNBR"]
 
 for data_name in data_list:
     comp_plot(rawData, data_name ,

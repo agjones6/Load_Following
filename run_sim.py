@@ -18,6 +18,7 @@ if not analysis_path in sys.path:
 # fileName = "./Results/myCase8/N4.dat"
 # ss = check_steady_state(fileName)
 
+
 # %%
 # This reads my base input file to make all of the combinations of options
 myFile_name = "my_input0.txt"
@@ -31,7 +32,7 @@ c = 0
 r_count = 0 # Tracker to count how many times it restarts
 max_r_count = 50
 
-while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 3:
+while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
 
     # --> Reading in the input file
     # if there is a restart deck needed, use the deck in the ss_restart_deck variable
@@ -60,8 +61,8 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 3:
     dest_dir = find_val(input_deck,"DESTINATION_FOLDER")
 
     # TESTING for combining files
-    combine_output_files(dest_dir)
-    exit()
+    # combine_output_files(dest_dir)
+    # exit()
 
     copy_input_deck(dest_dir,path_to_source,my_file_name)
 
@@ -73,7 +74,8 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 3:
     # This checks the output to see if it is steady state
     ss_option_name = find_val(input_deck,"RUN_TO_STEADY_STATE")
     if ss_option_name.lower() == "true":
-        ss_condition = check_steady_state("System.dat")
+        ss_condition = check_steady_state("System.dat", slope_tolerance=1e-6
+        )
         if not ss_condition and r_count < max_r_count:
             ss_restart_deck = input_deck
             ss_restart_deck = replace_text(ss_restart_deck, "INITIAL_CONDITIONS_FILE", "./Restart.dat")
@@ -100,8 +102,9 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 3:
     # curr_file = open(os.path.join(dest_dir,my_file_name),"w")
 
     # exit()
-
-
+#
+combine_output_files(dest_dir)
+# exit()
 
 
 
