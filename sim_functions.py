@@ -9,6 +9,7 @@ import os
 import re
 import shutil
 import subprocess
+# import ./Analysis/read_demand as rd
 
 #  =============================================================================
 #                              OUTPUT ANALYSIS
@@ -78,6 +79,7 @@ def comp_plot(df_list, ystring , **kwargs):
     case_names = kwargs.get('case_names',"")
     normalized = kwargs.get('normalized',False)
     norm_source = kwargs.get('norm_source',"default")
+    ylabel = kwargs.get("ylabel",ystring)
 
     # Pulling Nominal Operation values if they are desired
     if normalized:
@@ -94,9 +96,9 @@ def comp_plot(df_list, ystring , **kwargs):
             if case_names != "" and len(case_names) == len(df_list):
                 try:
                     first_letter = case_names[i][0]
-                    if first_letter == "N":
+                    if first_letter.upper() == "N":
                         yvals = df[ystring]/nom_NuScale[ystring]
-                    elif first_letter == "M":
+                    elif first_letter.upper() == "M":
                         yvals = df[ystring]/nom_MPower[ystring]
 
                 except Exception as e:
@@ -106,11 +108,15 @@ def comp_plot(df_list, ystring , **kwargs):
         else:
             yvals = df[ystring]
 
-        i += 1
+        if i != 0:
+            plt.plot(xvals,yvals,"-.",linewidth=2)
+        else:
+            plt.plot(xvals,yvals,linewidth=3)
 
-        plt.plot(xvals,yvals)
-        plt.xlabel(xstring)
-        plt.ylabel(ystring)
+        plt.xlabel(xstring + " (s)")
+        plt.ylabel(ylabel)
+
+        i += 1
 
     if case_names != "" and len(case_names) == len(df_list):
         plt.legend(case_names)

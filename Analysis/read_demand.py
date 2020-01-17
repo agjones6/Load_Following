@@ -263,10 +263,23 @@ def final_data(date_range,data_name,region_name,**kwargs):
     # Converting the bins of data to a numpy array
     data_array = np.hstack(data_bins)
 
+    # This little section makes the end of one day the same as the previous day
+    endpoint_shit = True
+    if endpoint_shit:
+        first_hour = data_array[:,0]
+        shifted_data = np.zeros(len(first_hour))
+        shifted_data[0:-1] = first_hour[1:]
+        dum_arr = np.column_stack((data_array,shifted_data))
+        data_array = np.delete(dum_arr,-1,axis=0)
+
     # If the data is desired to be normalized
-    if normalized:
+    if normalized == "range":
         max_val = np.nanmax(data_array)
         data_array = np.divide(data_array,max_val)
+    elif normalized == "day":
+        for i in range(len(data_array)):
+            max_val = np.nanmax(data_array[i])
+            data_array[i] = data_array[i]/max_val
 
     if return_df:
         # converting to a data frame
@@ -274,19 +287,36 @@ def final_data(date_range,data_name,region_name,**kwargs):
     else:
         return data_array
 
+def normalize_data(data_list,**kwargs):
+# This function is made to normalize the data passed through in different ways
+    norm_type = kwargs.get("norm_type","range")
+
+    if norm_type == "range":
+        max_val = np.nanmax(data_list)
+        norm_data = np.divide(data_list,max_val)
+    elif norm_type == "day":
+        max_list = [np.max(data_list[i]) for i in range(len(data_list)) ]
+        norm_data = []
+        for i in range(len(data_list)):
+            norm_data.append(data_list[i]/max_list[i])
+
+    return norm_data
 def check_data(data_array):
 # This function is made to check all of the days for missing data and remove the
 #   days that are missing.
 
     # This gets the number of hours and days as variables
-    dum_sz = data_array.shape
-    num_days = dum_sz[0]
-    num_hrs  = dum_sz[1]
+    try:
+        dum_sz = data_array.shape
+    except:
+        dum_sz = np.shape(data_array)
+    num_days = int(dum_sz[0])
+    num_hrs  = int(dum_sz[1])
 
     # Going through every day to find nan's
     new_data = []
     for i in range(num_days):
-        curr_data = data_array[i,:]
+        curr_data = data_array[i]
         if not np.isnan(curr_data).any():
             new_data.append(curr_data)
 
@@ -506,6 +536,7 @@ def write_demand(q,num_time,**kwargs):
     filename = kwargs.get("filename","default")           # File name. 'default' will open one named load_profile#.txt
     st_time = kwargs.get("st_time", 0)                    # Starting time to write
     en_time = kwargs.get("en_time", 24)                   # Ending time
+    connect_time = kwargs.get("connect_time", 0)            # Continuous days. This makes the last point match the first this time
 
     # Checking if the directory exists, if not it is created
     if not os.path.isdir(directory):
@@ -538,11 +569,18 @@ def write_demand(q,num_time,**kwargs):
         filename = "load_file" + str(new_num) + ".txt"
 
     # Defining a time mesh
-    t_mesh = np.linspace(st_time,en_time,num_time)
+    t_mesh = np.linspace(st_time,en_time - connect_time, num_time)
 
     # Calculating values using the polyval function
     model_vals = np.polyval(q,t_mesh)
 
+    # Fixing values if connecting start and end is desired
+    if connect_time != 0:
+        num_time = num_time + 1
+        model_vals = model_vals.append()
+
+    print(model)
+    exit()
     # Putting the time and model values into a matrix
     print_mat = np.vstack((t_mesh,model_vals*100))
 
