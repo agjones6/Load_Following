@@ -1,4 +1,4 @@
- Case File                .\runFiles\r3.txt       
+ Case File                .\runFiles\r9.txt       
  Geometry File            ./MPower/MPowerGeometrym
  Core Data File           ./MPower/MPowerCorek.dat
  Component Data File      ./MPower/MPowerComponent
@@ -11,7 +11,7 @@
  TES Data File            ./MPower/TESMode0.dat   
  Initialization mode      0
   
- Daily Load File          ./load_file2.txt        
+ Step Change in Load to   73.09 %    .00 seconds into the simulation
 
  No Upsets                               
 
@@ -21,7 +21,7 @@
  Upset Parameter 4   .0000E+00
 
  Control Rods in Automatic
- Simulation time   3600.00 seconds
+ Simulation time   3000.00 seconds
  Output File Write Interval   1 seconds
  Restart File Write Interval 100000 seconds
   

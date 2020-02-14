@@ -28,4 +28,4 @@
 
 	RESTART_TIME 								default
 
-	RUN_TO_STEADY_STATE 				TRUE
+	RUN_TO_STEADY_STATE 				FALSE

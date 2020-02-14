@@ -20,6 +20,8 @@ import re
 import requests
 import scipy
 from scipy.stats import t
+from scipy.stats import norm
+from scipy.stats import beta
 import matplotlib.patheffects as pe
 
 def get_demand_data(filename):
@@ -300,18 +302,24 @@ def normalize_data(data_list,**kwargs):
         for i in range(len(data_list)):
             norm_data.append(data_list[i]/max_list[i])
 
-    return norm_data
+    return np.array(norm_data)
 def check_data(data_array):
 # This function is made to check all of the days for missing data and remove the
 #   days that are missing.
-
+    data_array = np.array(data_array)
     # This gets the number of hours and days as variables
     try:
         dum_sz = data_array.shape
     except:
         dum_sz = np.shape(data_array)
-    num_days = int(dum_sz[0])
-    num_hrs  = int(dum_sz[1])
+
+    try:
+        num_days = int(dum_sz[0])
+        num_hrs  = int(dum_sz[1])
+    except:
+        num_days = 1
+        num_hrs = int(dum_sz[0])
+        return data_array
 
     # Going through every day to find nan's
     new_data = []
@@ -366,8 +374,13 @@ def poly_fit(data_array, **kwargs):
 
     # This gets the number of hours and days as variables
     dum_sz = data_array.shape
-    num_days = dum_sz[0]
-    num_hrs  = dum_sz[1]
+    try:
+        num_days = dum_sz[0]
+        num_hrs  = dum_sz[1]
+    except:
+        num_days = 1
+        num_hrs = dum_sz[0]
+
 
     DOF = num_hrs - (poly_order + 1)
 
@@ -577,10 +590,9 @@ def write_demand(q,num_time,**kwargs):
     # Fixing values if connecting start and end is desired
     if connect_time != 0:
         num_time = num_time + 1
-        model_vals = model_vals.append()
+        model_vals = np.append(model_vals,model_vals[0])
+        t_mesh = np.append(t_mesh,en_time)
 
-    print(model)
-    exit()
     # Putting the time and model values into a matrix
     print_mat = np.vstack((t_mesh,model_vals*100))
 
@@ -594,45 +606,265 @@ def write_demand(q,num_time,**kwargs):
 
     f.close()
 
+def plt_dist(stats,**kwargs):
+# This function is designed to plot a given distribution either normal or beta
+#   depending on the stats passed through and set the bounds for the plot
+# If desired, a histogram is also plotted against the distribution
+    hist_data = kwargs.get("hist_data",[])
+    hist_bins = kwargs.get("hist_bins",10)
+    bounds = kwargs.get("bounds",3)
+    num_points = kwargs.get("num_points",1000)
+
+    # Getting the values for the desired distribution
+    if len(stats) == 2: # Normal Distribution
+        # Calculating an x distribution
+        LB = stats[0] - stats[1]*bounds
+        UB = stats[0] + stats[1]*bounds
+        x_dist = np.linspace(LB,UB,num_points)
+        dist_vals = norm.pdf(x_dist,stats[0],stats[1])
+    elif len(stats) == 4: # Beta distribution
+        # Calculating an x distribution
+        LB = stats[2] - 0.01
+        UB = stats[2] + stats[3] + 0.01
+        x_dist = np.linspace(LB,UB,num_points)
+        dist_vals = beta.pdf(x_dist,stats[0],stats[1],loc=stats[2],scale=stats[3])
+    else:
+        return
+
+    # Plotting the distributions
+    # plt.figure()
+    plt.plot(x_dist,dist_vals)
+
+    if hist_data != []:
+        plt.hist(hist_data, density=True, bins=hist_bins)
+
+    plt.xlim((LB,UB))
+
+def predict_from_diff(s_list,P0,**kwargs):
+# This function is designed to predict a load profile with given values for
+#   a given list of slopes and an intial starting load
+#
+# s_list = a list of slopes
+# P0 = the starting point
+
+    dx = kwargs.get("dx",1)
+    scale_val = kwargs.get("scale_val",1)
+
+    P_list = [P0]
+    for i in range(len(s_list)):
+        s = s_list[i]
+        P_list.append(s*dx + P_list[-1])
+
+    P_list = np.array(P_list)
+
+    if scale_val != None:
+        if scale_val == "norm":
+            P_list = P_list/np.amax(P_list)
+        else:
+            P_list = P_list + (scale_val - np.amax(P_list))
+
+    return P_list
+
+def check_likelihood(tmesh, V, stats, **kwargs):
+# This funciton is made to check the likelihood of a model. This is done by
+    # comparing the model realization versus the hourly distribution for the
+    # observations.
+
+    time_hr = kwargs.get("time_hr",np.arange(len(stats)))
+
+    # This loop pulls the values to directly compare to the discrete hours.
+        # The weird structure basically only adds to the compare value list when
+        # the time mesh is equal to the course mesh.
+    r = 0
+    comp_vals = []
+    dum_V = []
+    checked_slopes = []
+    for i in range(len(tmesh)):
+        t = tmesh[i]
+
+        # print(t,time_hr[r],time_hr[r+1])
+        if r <= len(time_hr) - 2:
+            if t >= time_hr[r] and t < time_hr[r+1]:
+                dum_V.append(V[i])
+            elif t >= time_hr[r+1]:
+                checked_slopes.append(np.nanmean(dum_V))
+                comp_vals.append(checked_slopes[-1])
+                dum_V = [V[i]]
+                r += 1
+        elif r <= len(time_hr) - 1:
+            if i != len(tmesh) - 1:
+                if t >= time_hr[r] and t < time_hr[r] + 1:
+                    dum_V.append(V[i])
+                elif t >= time_hr[r] + 1:
+                    checked_slopes.append(np.nanmean(dum_V))
+                    comp_vals.append(checked_slopes[-1])
+                    dum_V = []
+                    r += 1
+            else:
+                checked_slopes.append(np.nanmean(dum_V))
+                comp_vals.append(checked_slopes[-1])
+        else:
+            break
+    # print(np.array(checked_slopes))
+        # if r > len(time_hr) - 1:
+        #     break
+
+    # Discerning the type of distribution
+    if len(stats[0]) == 2:
+        dist_name = "norm"
+    elif len(stats[0]) == 4:
+        dist_name = "beta"
+    else:
+        print("Unkown distribution")
+        return
+
+    # At this point, comp_vals should be the same length as stats
+    res_val = []
+    for i in range(len(comp_vals)):
+        if dist_name == "norm":
+            mean = stats[i,0]
+            sigma = stats[i,1]
+
+            res_val.append(abs(comp_vals[i] - mean)/sigma)
+
+    return np.array(res_val)
+
+def take_deriv(time, fx):
+    # This calculates the discrete hourly derivative for each day
+    # Handling the case of one day or multiple days
+    if len(fx.shape) == 1:
+        der = (fx[1:] - fx[0:-1])/(time[1:] - time[0:-1])
+    else:
+        der = (fx[:,1:] - fx[:,0:-1])/(time[1:] - time[0:-1])
+
+    return der
+
 # ==============================================================================
-# date_range = ["02-15-2018","03-30-2018"]
-# my_month = "October"
-# region_name = "CISO"
-#
-# data_type = "Net generation by energy source" # "Demand"
-# data_type = "Demand"
-#
-# # region_name = ["DUK"] #, "CISO", "SWPP"
-#
-# sub_source_list = [""]
-# # sub_source_list = ["wind","solar"]
-#
-#
-# # This either returns a pandas Data frame or numpy array
-# #   scheme is row = day, column = hr
-# data_list = final_data(date_range, data_type, region_name,
-#                        sub_source_list=sub_source_list,
-#                        normalized=True,
-#                        interval=24,
-#                        return_df=False )
-#
-# # Creates a datafram rows=day, column=hr
-# # my_df = pd.DataFrame(my_list)
-# # test = np.array(np.hstack(my_list))
-# coef, SD_mat, AVG_vals, fun_SD = poly_fit(data_list,
-#                                           type_of_fit="avg",
-#                                           poly_order=7)
-#
-# bounds = data_bounds(AVG_vals, fun_SD)
+#                           MAKING A CLASS
+# ==============================================================================
+class load_profile:
+    def __init__(self,date_range,region_name, **kwargs):
+        self.date_range = date_range
+        self.region_name = region_name
 
 
-# time_short = np.arange(24)
-# plt.figure()
-# plt.plot(time_short,np.transpose(data_list),'.k')
-# plt.plot(time_short, AVG_vals,LineWidth=3,Color=pull_color(0),path_effects=[pe.Stroke(linewidth=3, foreground='k'), pe.Normal()])
-# plt.plot(time_short,bounds,"--",LineWidth=3,Color=pull_color(0))
-# plt.show()
+        self.data_type = kwargs.get("data_type","Demand")
+
+        # OPTIONAL ARGUMENTS
+        #
+        # sub_source_list = The subset of data to subtract to show instabilities
+        # poly_order = the order of polynomial to use in the fit
+        # type of fit = [ind,avg] This is how the function makes polynomial fits.
+        #                   'ind' does every day seperately. 'avg' puts all of the data together
+        # norm_type = ["day","range"] This determines how the data is normalized.
+        #                   'day' normalizes based on each day's max. 'range' normalizes
+        #                   based on the max value in the desired range
+        #
+
+        self.sub_source_list = kwargs.get("sub_source_list",[""])
+        # sub_source_list = ["wind","solar"]
+
+        self.poly_order = kwargs.get("poly_order",9)
+        self.type_of_fit = kwargs.get("type_of_fit","ind")
+        self.norm_type = kwargs.get("norm_type","day")
+
+        # =================== THIS USES POLYNOMIAL FITS ============================
+        # This either returns a pandas Data frame or numpy array
+        #   scheme is row = day, column = hr
+        self.tmesh = np.linspace(0,24,1000)
+        self.hr_obs = np.arange(25)
+
+        #       for every region. So it follows DATA[REGION] or DATA[REGION][DAY]
+        self.raw_data = final_data(self.date_range, self.data_type, self.region_name,
+                                       sub_source_list=self.sub_source_list,
+                                       normalized=False,
+                                       interval=24,
+                                       return_df=False )
+
+        # Normalizing data
+        self.norm_data = normalize_data(self.raw_data,norm_type="day")
+
+        # fitting the polynomial and getting some basic stats about it
+        dum_tup = poly_fit(self.norm_data,
+                              type_of_fit=self.type_of_fit,
+                              poly_order=self.poly_order)
+
+        # Getting the values from the polynomial fit
+        self.coef = dum_tup[0]
+        self.coef_SD = dum_tup[1]
+        self.model_mean = dum_tup[2]
+        self.model_SD = dum_tup[3]
+
+        # Calculating the average observation value
+        self.mean_obs = np.mean(self.norm_data,axis=0)
+
+        # This stores data for every day if the type of fit is "individual"
+        if self.type_of_fit.lower() == "ind":
+            self.model_bounds = []
+            self.mesh_vals = []
+            for i in range(len(self.coef)):
+                self.model_bounds.append(data_bounds(self.model_mean[i],self.model_SD[i],num_sigmas=2))
+                self.mesh_vals.append(np.polyval(self.coef[i],self.tmesh))
+        else:
+            self.model_bounds = data_bounds(self.model_mean,self.model_SD,num_sigmas=2)
+            self.mesh_vals = np.polyval(coef[-1],tmesh)
 
 
+        # %% FINDING THE MAXIMUM DEMAND PER DAY
+        self.daily_max_list = [np.max(self.raw_data[i]) for i in range(len(self.raw_data)) ]
+        # plt.hist(max_list,bins=45)
 
-# NOTE: Figure out what is going on with the greater than/greater than or equal to in the slice up data function
+    def calc_diff_info(self, **kwargs):
+    # This function is made to calculate the differences in electricity demand per hour
+    #   to apply to calculating ramp rates
+    # Results in the distribution stats as well:
+    #   norm: [mean, standard deviation]
+    #   beta: [a, b, mLoc, sca]
+
+        self.diff_fit_type = kwargs.get("diff_fit_type","norm")
+
+        # This calculates the discrete hourly derivative for each day
+        self.diff_data = self.norm_data[:,1:] - self.norm_data[:,0:-1]
+
+        # Calculating distributions for each of the hourly differences
+        # self.diff_mean_list = []
+        # self.diff_SD_list = []
+        self.diff_stats = []
+        for i in range(len(self.diff_data[0,:])):
+            if self.diff_fit_type.lower() == "norm":
+                self.diff_stats.append(norm.fit(self.diff_data[:,i]))
+            elif self.diff_fit_type.lower() == "beta":
+                self.diff_stats.append(beta.fit(self.diff_data[:,i]))
+
+
+        # self.diff_mean_list = np.array(self.diff_mean_list)
+        # self.diff_SD_list = np.array(self.diff_SD_list)
+        self.diff_stats = np.array(self.diff_stats)
+
+    def diff_from_stats(self,**kwargs):
+    # This is made to find reasonable slopes from the calculated slope distributions
+        num_sig = kwargs.get("num_sig",2)
+
+        # Making sure that
+        try:
+            self.diff_stats
+        except:
+            print("make sure to run calc_diff_info. Without it, the neccessary info is not availible")
+            return
+
+        s_list = []
+        if len(self.diff_stats[0,:]) == 2:
+            for i in range(len(self.diff_stats[:,0])):
+                mu = self.diff_stats[i,0]
+                sig = self.diff_stats[i,1]
+
+                if mu >= 0:
+                    new_s = mu + num_sig * sig
+                else:
+                    new_s = mu - num_sig * sig
+
+                s_list.append(new_s)
+        else:
+            return
+
+        return np.array(s_list)

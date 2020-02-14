@@ -7,24 +7,46 @@ import re
 import shutil
 import subprocess
 
-src_dir = "./Results/myCase1"
+src_dir = "./Results/CAR_winter2"
 
 # Pulling all of the ".dat" files in a directory
 rawData, runNames = get_folder_rawData(src_dir)
 
+new_Names = []
+new_Data = []
+for i in range(len(runNames)):
+    if not "0" in runNames[i]:
+        new_Names.append(runNames[i])
+        new_Data.append(rawData[i])
+        # del runNames[i]
+        # runNames.del(i)
+
+runNames = new_Names
+rawData = new_Data
+
 # Normalizing
-norm = True
+norm = False
 
 # List of thinks to plot
-data_list = ["Qrx", "Tmod","Wturb", "MDNBR"]
+data_list = ["MDNBR"]
+ylabel_list = ["MDNBR"
+               ]
+figure_names = ["MDNBR.png"
+                ]
 
-for data_name in data_list:
+for i in range(len(data_list)):
+    data_name = data_list[i]
     comp_plot(rawData, data_name ,
                keep_fig=True,
                case_names=runNames,
-               normalized=norm)
-
-plt.show()
+               normalized=norm,
+               ylabel=ylabel_list[i])
+    if figure_names[i] != "":
+        plt.savefig("./pictures/" + "winter_" +  figure_names[i])
+# plt.show()
+exit()
+# %% Checking output
+# current_df = get_df("./System.dat")
 
 # ['Time', 'Qrx', 'Qth', 'Qtrans', 'Flowv', 'Pp', 'Px', 'PxIND', 'PRZLVL',
 #'PRZLVLIND', 'VelSRG', 'QHTRP', 'QHTRB', 'SCV Position', 'Spray GPM', 'THL',

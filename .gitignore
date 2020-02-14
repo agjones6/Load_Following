@@ -1,4 +1,5 @@
 Grid_Information/
-./Results/
-"./Old Files/*"
-./Old_Files/*
+Results/
+"Old Files"
+Old_Files
+pictures

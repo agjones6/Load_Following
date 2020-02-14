@@ -21,97 +21,111 @@ import scipy
 from scipy.stats import beta
 from scipy.stats import norm
 
-date_range = ["01-01-2019","02-28-2019"]
-date_range = ["05-01-2019","06-28-2019"]
-date_range = ["01-01-2019","01-31-2019"]
-region_name = ["CAR","CENT","CAL","US48"]#["CISO","DUK","FLA"]
-region_name = [region_name[0]]
+date_range = ["05-01-2019","07-30-2019"]
+date_range = ["01-01-2019","03-30-2019"]
+region_name = ["CAL"]
 
 data_type = "Net generation by energy source" # "Demand"
 data_type = "Demand"
 
 sub_source_list = [""]
-# sub_source_list = ["wind","solar"]
+
+# Calling a class to get all of the model values
+load_obj = rd.load_profile(date_range,region_name[0])
+
+# Adding information about the hourly differences to the class
+load_obj.calc_diff_info(diff_fit_type="norm") # Puts stuff into .diff_stats
+rd.take_deriv(load_obj.hr_obs, load_obj.norm_data)
+
+# Plotting the subplot of all demand distributions
+plt.figure()
+for hr in range(len(load_obj.diff_stats[:,0])):
+    plt.subplot(4,6,hr+1)
+    rd.plt_dist(load_obj.diff_stats[hr,:],
+            hist_data=load_obj.diff_data[:,hr],
+            hist_bins=20)
+    plt.title(str(hr))
+
+# plt.close()
+
+# NOTES
+    # So the things to keep into consideration are:
+    #   - scale_val in predict_from_diff. This changes the maximum value produced from
+    #       the method used. This should either be 1 (which makes the max value 1 with
+    #       adding) or 'norm' which normalizes the values to 1.
+
+# Getting estimated hourly ramp rates
+st_point = load_obj.mean_obs[0] # Starting point for the prediction
+st_point = 1 # Starting point for the prediction
+new_slopes = load_obj.diff_from_stats(num_sig=2)
+time_hr = np.arange(len(new_slopes))
+slope_likelihood = rd.check_likelihood(time_hr,new_slopes,load_obj.diff_stats)
+# print(slope_likelihood)
+# exit()
+
+# Back caluclating a new demand profile
+new_demand = rd.predict_from_diff(new_slopes, st_point,scale_val=1)
+
+# Fitting the new demand profile with a polynomial
+new_demand = [0.9, 0.75, 0.62, 0.55, 0.6, 0.72, 0.83, 0.94, 1.0, 0.92,
+                0.80, 0.70, 0.58, 0.50, 0.45, 0.52, 0.60, 0.75, 0.88, 1.0,
+                0.95, 0.88, 0.80, 0.70, 0.6 ]
+# new_demand = load_obj.norm_data[38]
+new_coef, new_coef_SD, _,_ = rd.poly_fit([new_demand],
+                                         type_of_fit="avg",
+                                         poly_order=9)
+
+# Using the model to get a mesh
+test_dist = np.polyval(new_coef,load_obj.tmesh)
+
+# Getting the slopes of the model
+disc_der = rd.take_deriv(load_obj.tmesh,test_dist)
+l_test = rd.check_likelihood(load_obj.tmesh,disc_der,load_obj.diff_stats)
+# print(new_slopes)
+l_str = []
+name_str = []
+i = 1
+for l in l_test:
+    name_str.append(str(i).ljust(10))
+    l_str.append(str(round(l,3)).ljust(10))
+    i += 1
+    print(name_str[-1],l_str[-1])
+# print(name_str)
+# print(l_str)
+print("\nMean likelihood: ", np.mean(l_test))
+# plt.figure()
+# plt.plot(l_test)
+# exit()
+
+
+plt.figure()
+plt.plot(load_obj.hr_obs,np.transpose(load_obj.norm_data),'.k')
+plt.plot(load_obj.mean_obs,linewidth=3,label="Mean Observations")
+plt.plot(load_obj.tmesh,test_dist,linewidth=3,label="Ramp fit")
+plt.plot(new_demand,'*c',markersize=10,linewidth=3,label="Ramp Extremes")
+plt.legend()
+# plt.show()
+# Next steps:
+    # add the hourly differences to the object.
+    # get the distributions of the hourly changes
+    # generate new load profiles based on the distributions of hourly changes
+        # This might mean generating new hourly points and doing another polyfit.
+
 
 # Options for writing a demand profile
 save_load_picture = ""
-save_load_name = ""
+save_load_name = "default"
 num_points = 100
 
-poly_order = 9
-# =================== THIS USES POLYNOMIAL FITS ============================
-# This either returns a pandas Data frame or numpy array
-#   scheme is row = day, column = hr
-coef = []
-SD_mat = []
-AVG_vals = []
-fun_SD = []
-data = []
-norm_data = []
-AVG_obs = []
-bounds = []
-mesh_vals = []
-tmesh = np.linspace(0,24,1000)
-type_of_fit = "ind"
-for reg in region_name:
-# Note: at the end of this loop, the data is stored in a list. Each different region
-#       makes up the list. Inside the region list, there is another list of each day
-#       if the type_of_fit is set to "ind". This stores data protaining to each day
-#       for every region. So it follows DATA[REGION] or DATA[REGION][DAY]
-    data_list = rd.final_data(date_range, data_type, reg,
-                  sub_source_list=sub_source_list,
-                  normalized=False,
-                  interval=24,
-                  return_df=False )
-
-    # Normalizing data
-    norm_data.append(rd.normalize_data(data_list,norm_type="day"))
-
-    # Fitting polynomial (un normalized and normalized)
-    # dum_tup2 = rd.poly_fit(data_list,
-    #                       type_of_fit=type_of_fit,
-    #                       poly_order=5)
-
-    dum_tup = rd.poly_fit(norm_data[-1],
-                          type_of_fit=type_of_fit,
-                          poly_order=poly_order)
-
-    # Getting the values from the polynomial fit
-    coef.append(dum_tup[0])
-    SD_mat.append(dum_tup[1])
-    AVG_vals.append(dum_tup[2])
-    fun_SD.append(dum_tup[3])
-
-    # Appending the data do a list
-    data.append(data_list)
-
-    # Calculating the average observation value
-    AVG_obs.append(np.mean(data[-1],axis=0))
-
-    # This stores data for every day if the type of fit is "individual"
-    if type_of_fit.lower() == "ind":
-        for i in range(len(coef)):
-            bounds.append(rd.data_bounds(AVG_vals[-1][i],fun_SD[-1][i],num_sigmas=2))
-            mesh_vals.append(np.polyval(coef[-1][i],tmesh))
-    else:
-        bounds.append(rd.data_bounds(AVG_vals[-1],fun_SD[-1],num_sigmas=2))
-        mesh_vals.append(np.polyval(coef[-1],tmesh))
-
-
-# %% FINDING THE MAXIMUM DEMAND PER DAY
-max_list = [np.max(data_list[i]) for i in range(len(data_list)) ]
-# plt.hist(max_list,bins=45)
-
-
 # %%
-# Setting the variable for the coefficients of the polynomial
-q = np.squeeze(np.mean(coef,axis=1))
-# plt.plot(np.array(range(24)),np.array(norm_data))
 # Input for the writing demand function is:
     # q, num_time, directory, filename, st_time, en_time
 if save_load_name != "":
-    rd.write_demand(q,num_points,filename=save_load_name)
+    rd.write_demand(new_coef, num_points,
+                    filename=save_load_name,
+                    connect_time=0)
 
+exit()
 ## %%
 t = np.arange(len(data_list[0]))
 my_plots = []
