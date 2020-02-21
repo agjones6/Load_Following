@@ -768,6 +768,9 @@ class load_profile:
         self.type_of_fit = kwargs.get("type_of_fit","ind")
         self.norm_type = kwargs.get("norm_type","day")
 
+        self.get_polyfit()
+
+    def get_polyfit(self):
         # =================== THIS USES POLYNOMIAL FITS ============================
         # This either returns a pandas Data frame or numpy array
         #   scheme is row = day, column = hr

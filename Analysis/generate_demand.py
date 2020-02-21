@@ -1,6 +1,10 @@
 # This python file is meant to use the functions from 'read_demand.py' to read in
 #   provide fitted results. This should be a cleansheet to provide final results
 
+# ==============================================================================
+#                           IMPORTING PACKAGES
+# ==============================================================================
+
 import pandas as pd
 import numpy as np
 import os
@@ -12,7 +16,7 @@ import re
 analysis_path = "C:/Users/agjones6/Documents/GitHub/master_proj/Analysis"
 if not analysis_path in sys.path:
     sys.path.append(analysis_path)
-import read_demand as rd
+import demand_functions as rd
 
 import statsmodels.tsa.api as sm
 from statsmodels.tsa.api import ExponentialSmoothing as ExpSmooth
