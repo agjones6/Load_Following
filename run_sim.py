@@ -28,6 +28,12 @@ read_my_input(myFile_name) # Actually makes the files
 run_location = "./runFiles"
 ss_restart_deck = []
 run_dir_list = os.listdir(run_location)
+
+# Fixing the dumb sorting issue
+new_run_dir_list = [r.strip("r").strip(".txt") for r in run_dir_list]
+new_run_dir_list.sort(key=int)
+run_dir_list = ["r" + r + ".txt" for r in new_run_dir_list]
+
 c = 0
 r_count = 0 # Tracker to count how many times it restarts
 max_r_count = 20
@@ -60,6 +66,15 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
     # Making a folder and copying the input deck into a folder
     dest_dir = find_val(input_deck,"DESTINATION_FOLDER")
 
+    # Changing the step change of the power level
+    power_level = find_val(input_deck, "DEMAND_PARAMETER")
+    if power_level.split("-")[0] == "first_line":
+        power_level_options = power_level.split("-")
+        if len(power_level_options) >= 2:
+            new_demand = get_line_value(power_level_options[1], 1)
+            new_demand = new_demand.strip("\n").split(",")[1].strip(" ")
+            input_deck = replace_text(input_deck, "DEMAND_PARAMETER", new_demand)
+
     # TESTING for combining files
     # combine_output_files(dest_dir)
     # exit()
@@ -81,12 +96,14 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
             ss_restart_deck = replace_text(ss_restart_deck, "INITIAL_CONDITIONS_FILE", "./Restart.dat")
             ss_restart_deck = replace_text(ss_restart_deck, "RUN_NAME", get_default_letter(my_file_name))
             # print(test)
+        else:
+            combine_output_files(dest_dir)
+
 
     # This is the time that will be at the top of the restart file
     restart_time = find_val(input_deck,"RESTART_TIME")
     # restart_file = find_val(input_deck,"INITIAL_CONDITIONS_FILE")
     if restart_time != "" and restart_time.strip(" ") != "default":
-        
         change_restart_time("Restart.dat", restart_time)
 
 
@@ -105,7 +122,7 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
 
     # exit()
 #
-combine_output_files(dest_dir)
+
 # exit()
 
 

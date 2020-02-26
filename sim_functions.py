@@ -322,11 +322,25 @@ def pull_FP_data(**kwargs):
 #  =============================================================================
 #                     GENERATING INPUT AND RUNNING SIMULATOR
 #  =============================================================================
+def get_line_value(file,num):
 
-def find_val(raw_text,kw):
+    file = file.strip('"')
+    if not os.path.isfile(file):
+        print("The file doesn't exist")
+        return
+
+    # Opening the file
+    f=open(file)
+
+    # Reading in the lines
+    lines=f.readlines()
+    f.close()
+    return lines[num]
+def find_val(raw_text,kw,**kwargs):
     # This function is designed to pull the very next space deliminated value
     #   after the given text key word
     # regex = re.escape(kw) + r' +([A-Z]*\.?[A-Z]*[a-z]) '
+    replace_val = kwargs.get("replace_val",None)
     regex = re.escape(kw) + r'[ \t]+([^ \t\n]*)[ \n\t]'
 
     found_text = re.search(regex, raw_text,flags=re.IGNORECASE)

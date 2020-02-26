@@ -35,7 +35,7 @@ data_type = "Demand"
 sub_source_list = [""]
 
 # Calling a class to get all of the model values
-load_obj = rd.load_profile(date_range,region_name[0])
+load_obj = rd.load_profile(date_range,region_name[0],norm_type="range")
 
 # Adding information about the hourly differences to the class
 load_obj.calc_diff_info(diff_fit_type="norm") # Puts stuff into .diff_stats
@@ -108,7 +108,7 @@ plt.plot(load_obj.mean_obs,linewidth=3,label="Mean Observations")
 plt.plot(load_obj.tmesh,test_dist,linewidth=3,label="Ramp fit")
 plt.plot(new_demand,'*c',markersize=10,linewidth=3,label="Ramp Extremes")
 plt.legend()
-# plt.show()
+plt.show()
 # Next steps:
     # add the hourly differences to the object.
     # get the distributions of the hourly changes
@@ -118,7 +118,7 @@ plt.legend()
 
 # Options for writing a demand profile
 save_load_picture = ""
-save_load_name = "default"
+save_load_name = "" #"default"
 num_points = 100
 
 # %%

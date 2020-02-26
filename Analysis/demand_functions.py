@@ -550,6 +550,7 @@ def write_demand(q,num_time,**kwargs):
     st_time = kwargs.get("st_time", 0)                    # Starting time to write
     en_time = kwargs.get("en_time", 24)                   # Ending time
     connect_time = kwargs.get("connect_time", 0)            # Continuous days. This makes the last point match the first this time
+    actual_demand = kwargs.get("actual_demand",False)
 
     # Checking if the directory exists, if not it is created
     if not os.path.isdir(directory):
@@ -581,20 +582,25 @@ def write_demand(q,num_time,**kwargs):
         # Getting the new filename
         filename = "load_file" + str(new_num) + ".txt"
 
-    # Defining a time mesh
-    t_mesh = np.linspace(st_time,en_time - connect_time, num_time)
+    if actual_demand:
+        model_vals = q
+        num_time = len(model_vals)
+        t_mesh = np.linspace(st_time,en_time, num_time)
+    else:
+        # Defining a time mesh
+        t_mesh = np.linspace(st_time,en_time - connect_time, num_time)
 
-    # Calculating values using the polyval function
-    model_vals = np.polyval(q,t_mesh)
+        # Calculating values using the polyval function
+        model_vals = np.polyval(q,t_mesh)
 
-    # Fixing values if connecting start and end is desired
-    if connect_time != 0:
-        num_time = num_time + 1
-        model_vals = np.append(model_vals,model_vals[0])
-        t_mesh = np.append(t_mesh,en_time)
+        # Fixing values if connecting start and end is desired
+        if connect_time != 0:
+            num_time = num_time + 1
+            model_vals = np.append(model_vals,model_vals[0])
+            t_mesh = np.append(t_mesh,en_time)
 
-    # Putting the time and model values into a matrix
-    print_mat = np.vstack((t_mesh,model_vals*100))
+        # Putting the time and model values into a matrix
+        print_mat = np.vstack((t_mesh,model_vals*100))
 
     # Writing to the file
     filepath = os.path.join(directory,filename)
@@ -749,6 +755,7 @@ class load_profile:
 
 
         self.data_type = kwargs.get("data_type","Demand")
+        self.norm_type = kwargs.get("norm_type","day")
 
         # OPTIONAL ARGUMENTS
         #
@@ -785,7 +792,7 @@ class load_profile:
                                        return_df=False )
 
         # Normalizing data
-        self.norm_data = normalize_data(self.raw_data,norm_type="day")
+        self.norm_data = normalize_data(self.raw_data,norm_type=self.norm_type)
 
         # fitting the polynomial and getting some basic stats about it
         dum_tup = poly_fit(self.norm_data,

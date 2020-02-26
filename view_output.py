@@ -7,7 +7,7 @@ import re
 import shutil
 import subprocess
 
-src_dir = "./Results/CAR_winter2"
+src_dir = "./Results/ramp_dist/Case0"
 
 # Pulling all of the ".dat" files in a directory
 rawData, runNames = get_folder_rawData(src_dir)
@@ -25,13 +25,13 @@ runNames = new_Names
 rawData = new_Data
 
 # Normalizing
-norm = False
+norm = True
 
 # List of thinks to plot
-data_list = ["MDNBR"]
-ylabel_list = ["MDNBR"
+data_list = ["Qrx", "Wturb"]
+ylabel_list = [""
                ]
-figure_names = ["MDNBR.png"
+figure_names = [""
                 ]
 
 for i in range(len(data_list)):
@@ -39,11 +39,12 @@ for i in range(len(data_list)):
     comp_plot(rawData, data_name ,
                keep_fig=True,
                case_names=runNames,
-               normalized=norm,
-               ylabel=ylabel_list[i])
-    if figure_names[i] != "":
+               normalized=norm
+               # ylabel=ylabel_list[i]
+               )
+    if figure_names[0] != "":
         plt.savefig("./pictures/" + "winter_" +  figure_names[i])
-# plt.show()
+plt.show()
 exit()
 # %% Checking output
 # current_df = get_df("./System.dat")
