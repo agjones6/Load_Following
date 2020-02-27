@@ -216,34 +216,44 @@ def final_data(date_range,data_name,region_name,**kwargs):
                                                region_name, date_range, interval)
 
     # NOTE: This is where the time data needs to be checks to ensure there no missing parts
-
     if not "" in sub_source_list:
         if data_name != "Net generation by energy source":
-            tst, sliced_sub_data, sub_info = get_data(general_folder, sub_source_loc,
+            sliced_sub_time, sliced_sub_data, sub_info = get_data(general_folder, sub_source_loc,
                                                       region_name, date_range, interval)
-            # print("sliced_sub_data =",len(tst))
-            # for i in range(len(sliced_time)):
-            #     print(sliced_time[i])
-            #     try:
-            #         print(tst[i])
-            #     except:
-            #         print("miss")
-            #         pass
+            # print(sub_info)
             # exit()
+            # print("sliced_sub_data =",len(sliced_sub_time))
+            time_bool = []
+            # Testing all of the time locations to ensure the times match
+            #   A boolean expression will be made into a list for future
+            #   debugging if necessary.
+            for i in range(len(sliced_time)):
+                try:
+                    dum_bool = sliced_time[i] == sliced_sub_time[i]
+                except:
+                    dum_bool = None
+                    print("miss")
+                time_bool.append(dum_bool)
+            if not np.any(np.array(time_bool)):
+                print("There are Misaligned Dates! \n  -> Try choosing a different date range.")
+                exit()
 
             # sliced_ydata = [np.squeeze(i) for i in sliced_ydata]
-            sliced_ydata = np.hstack(sliced_ydata)
+            # sliced_ydata = np.hstack(sliced_ydata)
+            sliced_ydata = np.squeeze(np.array(sliced_ydata))
             sub_load = get_gen_source(sub_info, sliced_sub_data, sub_source_list)
 
-            print("sub_load =",len(sub_load))
-            print("sliced_ydata =",len(sliced_ydata))
-            print(len(sub_load))
-            print(sliced_ydata)
-            print("This is not ready yet")
+            # print("sub_load =",len(sub_load))
+            # print("sliced_ydata =",len(sliced_ydata))
+            # print(len(sub_load - sliced_ydata))
+            # print(np.array(sliced_ydata).shape)
+            # print(np.array(sub_load).shape)
+            # print(sliced_ydata - sub_load)
+            # print("This is not ready yet")
             # basically the sub-demand from the specified source is not lining
             #   up properly with the source. The size and orientation of the matrix
             #   needs to be checked and fixed.
-            exit()
+            # exit()
 
             try:
                 if not sub_load:
@@ -260,10 +270,10 @@ def final_data(date_range,data_name,region_name,**kwargs):
     # Getting the hourly data in an hourly basis
     data_bins = get_hour_bins(sliced_ydata)
 
-    # print((data_bins))
-    # exit()
     # Converting the bins of data to a numpy array
-    data_array = np.hstack(data_bins)
+    # data_array = np.hstack(data_bins)
+    data_array = np.squeeze(np.array(data_bins))
+    data_array = data_array.T
 
     # This little section makes the end of one day the same as the previous day
     endpoint_shit = True
@@ -283,11 +293,18 @@ def final_data(date_range,data_name,region_name,**kwargs):
             max_val = np.nanmax(data_array[i])
             data_array[i] = data_array[i]/max_val
 
-    if return_df:
-        # converting to a data frame
-        return pd.DataFrame(data_array)
+    if not "" in sub_source_list:
+        if return_df:
+            # converting to a data frame
+            return pd.DataFrame(data_array), sub_info
+        else:
+            return data_array, sub_info
     else:
-        return data_array
+        if return_df:
+            # converting to a data frame
+            return pd.DataFrame(data_array), "None"
+        else:
+            return data_array, "None"
 
 def normalize_data(data_list,**kwargs):
 # This function is made to normalize the data passed through in different ways
@@ -785,7 +802,8 @@ class load_profile:
         self.hr_obs = np.arange(25)
 
         #       for every region. So it follows DATA[REGION] or DATA[REGION][DAY]
-        self.raw_data = final_data(self.date_range, self.data_type, self.region_name,
+        self.raw_data, self.possible_sources = final_data(
+                                       self.date_range, self.data_type, self.region_name,
                                        sub_source_list=self.sub_source_list,
                                        normalized=False,
                                        interval=24,

@@ -32,38 +32,35 @@ from scipy.stats import norm
 # ==============================================================================
 # Defining how many days to predict out to
 num_days = 1
-num_trials = 6
+num_trials = 50
 
 # Defining the date range of data to pull in
 date_range = ["06-01-2019","08-30-2019"]
 
 # Desired Region Name
-region_name = ["CAR"]
+region_name = ["CENT"]
 
 # The type of data (should always be demand for the time being )
 data_type = "Demand"
 
 # Sub source my later be used to exclude solar/wind/etc, but right now, it is not.
-sub_source_list = [""]
+sub_source_list = ["solar","wind"]
+# sub_source_list = [""]
 
 # Calling a class to get all of the model values
-load_obj = rd.load_profile(date_range,region_name[0], norm_type="day") # norm_type="range"
+load_obj = rd.load_profile(date_range,region_name[0], norm_type="day",sub_source_list=sub_source_list) # norm_type="range"
     # coef = coefficients for each day [day]x[hour]x[coef]
     # mean_obs = the mean observations over the entire date range [hour]
     # daily_max_list = the maximum for each day [hour]
 UB_LB = np.array(np.mean(load_obj.model_bounds,axis=0))
 
-# plt.plot(load_obj.hr_obs, load_obj.mean_obs)
-# plt.plot(load_obj.hr_obs,UB_LB[:,0],'--k')
-# plt.plot(load_obj.hr_obs,UB_LB[:,1],'--k')
-# plt.show()
-# exit()
 
 # Getting the ramp rates for each hour
 load_obj.calc_diff_info(diff_fit_type="norm")
     # diff_stats = normal: [mean, standard deviation]
     #                beta: [a, b, mLoc, sca]
     #              ** for each hour **
+
 
 # --> Getting all of the hourly ramp rates from each hourly distribution
 st_point = load_obj.mean_obs[0] # Starting point for the prediction
@@ -104,7 +101,7 @@ mean_demand = rd.predict_from_diff(mean_slopes, st_point,scale_val=None)
 # --> Testing the likelyhood of the polynomial fitted generated curves
 
 # Setting values for saving the load profiles
-save_load_name = "default"
+save_load_name = "" # "default" works
 save_dir_name = "Load_Profiles/ramp_dist_CAR_summer"
 num_points = 100
 
@@ -146,7 +143,7 @@ print(rough_likelihood_hr)
 plt.figure()
 plt.hist(rough_likelihood_avg)
 plt.title(["likelihood"]+ region_name + date_range)
-plt.savefig(os.path.join(save_dir_name,"likelihood") + ".png")
+# plt.savefig(os.path.join(save_dir_name,"likelihood") + ".png")
 
 plt.figure()
 plt.plot(range(25),np.transpose(load_obj.norm_data), '.k',linewidth=3)
@@ -156,14 +153,17 @@ plt.plot(range(len(new_demand[0])),new_demand.T)
 # plt.plot(load_obj.hr_obs,UB_LB[:,0],'--k')
 # plt.plot(load_obj.hr_obs,UB_LB[:,1],'--k')
 plt.title(region_name + date_range)
-plt.savefig(os.path.join(save_dir_name,"realizations") + ".png")
+# plt.savefig(os.path.join(save_dir_name,"realizations") + ".png")
 plt.show()
 print(smooth_likelihood_avg)
-f = open(os.path.join(save_dir_name,"likelihood") + ".txt","w")
-for L in smooth_likelihood_avg:
-    f.write(str(L) + "\n")
-f.close()
+
+#
+# f = open(os.path.join(save_dir_name,"likelihood") + ".txt","w")
+# for L in smooth_likelihood_avg:
+#     f.write(str(L) + "\n")
+# f.close()
 exit()
+
 print(load_obj.diff_stats[0],load_obj.diff_stats[23])
 new_slopes = load_obj.diff_from_stats(num_sig=2)
 time_hr = np.arange(len(new_slopes))
