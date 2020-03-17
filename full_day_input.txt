@@ -1,241 +1,1267 @@
-RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case0;
-SOURCE_FOLDER, ./MPower;
-SIMULATION_TIME, 86400;
-IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist/load_file0.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist/Case0/Restart/M0.dat;
-RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
-
-
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case1;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist/load_file1.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCAL/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCAL/load_file0.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case1;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist/load_file1.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist/Case1/Restart/N0.dat|./Results/ramp_dist/Case1/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCAL/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/sCAL/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCAL/Case0/Restart/N0.dat|./Results/sCAL/Case0/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case2;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist/load_file2.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCAL/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCAL/load_file1.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case2;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist/load_file2.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist/Case2/Restart/N0.dat|./Results/ramp_dist/Case2/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCAL/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/sCAL/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCAL/Case1/Restart/N0.dat|./Results/sCAL/Case1/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case3;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist/load_file3.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCAL/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCAL/load_file2.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case3;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist/load_file3.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist/Case3/Restart/N0.dat|./Results/ramp_dist/Case3/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCAL/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/sCAL/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCAL/Case2/Restart/N0.dat|./Results/sCAL/Case2/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case4;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist/load_file4.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCAL/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCAL/load_file3.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case4;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist/load_file4.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist/Case4/Restart/N0.dat|./Results/ramp_dist/Case4/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCAL/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/sCAL/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCAL/Case3/Restart/N0.dat|./Results/sCAL/Case3/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case5;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist/load_file5.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCAL/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCAL/load_file4.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist/Case5;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist/load_file5.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist/Case5/Restart/N0.dat|./Results/ramp_dist/Case5/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCAL/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/sCAL/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCAL/Case4/Restart/N0.dat|./Results/sCAL/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCAL/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCAL/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCAL/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/sCAL/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCAL/Case5/Restart/N0.dat|./Results/sCAL/Case5/Restart/M0.dat
 
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case0;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist_CAR_summer/load_file0.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCAL/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCAL/load_file0.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case0;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist_CAR_summer/load_file0.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist_CAR_summer/Case0/Restart/N0.dat|./Results/ramp_dist_CAR_summer/Case0/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCAL/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/wCAL/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCAL/Case0/Restart/N0.dat|./Results/wCAL/Case0/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case1;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist_CAR_summer/load_file1.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCAL/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCAL/load_file1.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case1;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist_CAR_summer/load_file1.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist_CAR_summer/Case1/Restart/N0.dat|./Results/ramp_dist_CAR_summer/Case1/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCAL/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/wCAL/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCAL/Case1/Restart/N0.dat|./Results/wCAL/Case1/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case2;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist_CAR_summer/load_file2.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCAL/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCAL/load_file2.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case2;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist_CAR_summer/load_file2.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist_CAR_summer/Case2/Restart/N0.dat|./Results/ramp_dist_CAR_summer/Case2/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCAL/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/wCAL/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCAL/Case2/Restart/N0.dat|./Results/wCAL/Case2/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case3;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist_CAR_summer/load_file3.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCAL/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCAL/load_file3.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case3;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist_CAR_summer/load_file3.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist_CAR_summer/Case3/Restart/N0.dat|./Results/ramp_dist_CAR_summer/Case3/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCAL/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/wCAL/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCAL/Case3/Restart/N0.dat|./Results/wCAL/Case3/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case4;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist_CAR_summer/load_file4.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCAL/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCAL/load_file4.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case4;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist_CAR_summer/load_file4.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist_CAR_summer/Case4/Restart/N0.dat|./Results/ramp_dist_CAR_summer/Case4/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCAL/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/wCAL/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCAL/Case4/Restart/N0.dat|./Results/wCAL/Case4/Restart/M0.dat
 
 
 RUN_NAME, N0|M0;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case5;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 3000;
 IDEMAND, 0;
-DEMAND_PARAMETER, first_line-"./Load_Profiles/ramp_dist_CAR_summer/load_file5.txt";
 INITIAL_CONDITIONS_FILE, default;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, True
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCAL/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCAL/load_file5.txt"
 
 RUN_NAME, default;
-DESTINATION_FOLDER, ./Results/ramp_dist_CAR_summer/Case5;
 SOURCE_FOLDER, ./NuScale|./MPower;
 SIMULATION_TIME, 86400;
 IDEMAND, 2;
-DEMAND_PARAMETER, "./Load_Profiles/ramp_dist_CAR_summer/load_file5.txt";
-INITIAL_CONDITIONS_FILE, ./Results/ramp_dist_CAR_summer/Case5/Restart/N0.dat|./Results/ramp_dist_CAR_summer/Case5/Restart/M0.dat;
 RESTART_TIME, 0.0;
-RUN_TO_STEADY_STATE, FALSE
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCAL/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/wCAL/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCAL/Case5/Restart/N0.dat|./Results/wCAL/Case5/Restart/M0.dat
+
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAL/load_file0.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAL/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAL/Case0/Restart/N0.dat|./Results/sw_wCAL/Case0/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAL/load_file1.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAL/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAL/Case1/Restart/N0.dat|./Results/sw_wCAL/Case1/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAL/load_file2.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAL/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAL/Case2/Restart/N0.dat|./Results/sw_wCAL/Case2/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAL/load_file3.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAL/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAL/Case3/Restart/N0.dat|./Results/sw_wCAL/Case3/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAL/load_file4.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAL/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAL/Case4/Restart/N0.dat|./Results/sw_wCAL/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAL/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAL/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAL/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAL/Case5/Restart/N0.dat|./Results/sw_wCAL/Case5/Restart/M0.dat
+
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAL/load_file0.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAL/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAL/Case0/Restart/N0.dat|./Results/sw_sCAL/Case0/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAL/load_file1.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAL/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAL/Case1/Restart/N0.dat|./Results/sw_sCAL/Case1/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAL/load_file2.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAL/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAL/Case2/Restart/N0.dat|./Results/sw_sCAL/Case2/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAL/load_file3.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAL/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAL/Case3/Restart/N0.dat|./Results/sw_sCAL/Case3/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAL/load_file4.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAL/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAL/Case4/Restart/N0.dat|./Results/sw_sCAL/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAL/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAL/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAL/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAL/Case5/Restart/N0.dat|./Results/sw_sCAL/Case5/Restart/M0.dat
+
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCENT/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCENT/load_file0.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCENT/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/sCENT/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCENT/Case0/Restart/N0.dat|./Results/sCENT/Case0/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCENT/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCENT/load_file1.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCENT/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/sCENT/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCENT/Case1/Restart/N0.dat|./Results/sCENT/Case1/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCENT/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCENT/load_file2.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCENT/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/sCENT/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCENT/Case2/Restart/N0.dat|./Results/sCENT/Case2/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCENT/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCENT/load_file3.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCENT/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/sCENT/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCENT/Case3/Restart/N0.dat|./Results/sCENT/Case3/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCENT/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCENT/load_file4.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCENT/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/sCENT/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCENT/Case4/Restart/N0.dat|./Results/sCENT/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sCENT/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sCENT/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sCENT/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/sCENT/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sCENT/Case5/Restart/N0.dat|./Results/sCENT/Case5/Restart/M0.dat
+
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCENT/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCENT/load_file0.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCENT/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/wCENT/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCENT/Case0/Restart/N0.dat|./Results/wCENT/Case0/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCENT/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCENT/load_file1.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCENT/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/wCENT/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCENT/Case1/Restart/N0.dat|./Results/wCENT/Case1/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCENT/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCENT/load_file2.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCENT/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/wCENT/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCENT/Case2/Restart/N0.dat|./Results/wCENT/Case2/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCENT/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCENT/load_file3.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCENT/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/wCENT/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCENT/Case3/Restart/N0.dat|./Results/wCENT/Case3/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCENT/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCENT/load_file4.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCENT/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/wCENT/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCENT/Case4/Restart/N0.dat|./Results/wCENT/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/wCENT/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/wCENT/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/wCENT/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/wCENT/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/wCENT/Case5/Restart/N0.dat|./Results/wCENT/Case5/Restart/M0.dat
+
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCENT/load_file0.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCENT/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCENT/Case0/Restart/N0.dat|./Results/sw_wCENT/Case0/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCENT/load_file1.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCENT/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCENT/Case1/Restart/N0.dat|./Results/sw_wCENT/Case1/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCENT/load_file2.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCENT/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCENT/Case2/Restart/N0.dat|./Results/sw_wCENT/Case2/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCENT/load_file3.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCENT/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCENT/Case3/Restart/N0.dat|./Results/sw_wCENT/Case3/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCENT/load_file4.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCENT/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCENT/Case4/Restart/N0.dat|./Results/sw_wCENT/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCENT/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCENT/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCENT/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCENT/Case5/Restart/N0.dat|./Results/sw_wCENT/Case5/Restart/M0.dat
+
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCENT/load_file0.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCENT/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCENT/Case0/Restart/N0.dat|./Results/sw_sCENT/Case0/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCENT/load_file1.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCENT/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCENT/Case1/Restart/N0.dat|./Results/sw_sCENT/Case1/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCENT/load_file2.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCENT/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCENT/Case2/Restart/N0.dat|./Results/sw_sCENT/Case2/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCENT/load_file3.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCENT/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCENT/Case3/Restart/N0.dat|./Results/sw_sCENT/Case3/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCENT/load_file4.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCENT/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCENT/Case4/Restart/N0.dat|./Results/sw_sCENT/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCENT/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCENT/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCENT/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCENT/Case5/Restart/N0.dat|./Results/sw_sCENT/Case5/Restart/M0.dat
+
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAR/load_file0.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAR/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAR/Case0/Restart/N0.dat|./Results/sw_sCAR/Case0/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAR/load_file1.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAR/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAR/Case1/Restart/N0.dat|./Results/sw_sCAR/Case1/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAR/load_file2.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAR/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAR/Case2/Restart/N0.dat|./Results/sw_sCAR/Case2/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAR/load_file3.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAR/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAR/Case3/Restart/N0.dat|./Results/sw_sCAR/Case3/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAR/load_file4.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAR/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAR/Case4/Restart/N0.dat|./Results/sw_sCAR/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_sCAR/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_sCAR/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/sw_sCAR/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_sCAR/Case5/Restart/N0.dat|./Results/sw_sCAR/Case5/Restart/M0.dat
+
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case0;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAR/load_file0.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case0;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAR/load_file0.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAR/Case0/Restart/N0.dat|./Results/sw_wCAR/Case0/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case1;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAR/load_file1.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case1;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAR/load_file1.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAR/Case1/Restart/N0.dat|./Results/sw_wCAR/Case1/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case2;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAR/load_file2.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case2;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAR/load_file2.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAR/Case2/Restart/N0.dat|./Results/sw_wCAR/Case2/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case3;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAR/load_file3.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case3;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAR/load_file3.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAR/Case3/Restart/N0.dat|./Results/sw_wCAR/Case3/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case4;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAR/load_file4.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case4;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAR/load_file4.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAR/Case4/Restart/N0.dat|./Results/sw_wCAR/Case4/Restart/M0.dat
+
+
+RUN_NAME, N0|M0;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 3000;
+IDEMAND, 0;
+INITIAL_CONDITIONS_FILE, default;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, True;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case5;
+DEMAND_PARAMETER, first_line-"./Load_Profiles/sw_wCAR/load_file5.txt"
+
+RUN_NAME, default;
+SOURCE_FOLDER, ./NuScale|./MPower;
+SIMULATION_TIME, 86400;
+IDEMAND, 2;
+RESTART_TIME, 0.0;
+RUN_TO_STEADY_STATE, FALSE;
+DESTINATION_FOLDER, ./Results/sw_wCAR/Case5;
+DEMAND_PARAMETER, "./Load_Profiles/sw_wCAR/load_file5.txt";
+INITIAL_CONDITIONS_FILE, ./Results/sw_wCAR/Case5/Restart/N0.dat|./Results/sw_wCAR/Case5/Restart/M0.dat

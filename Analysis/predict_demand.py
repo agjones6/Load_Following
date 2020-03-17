@@ -30,12 +30,18 @@ from scipy.stats import norm
 # ==============================================================================
 #                           DEFINING CONTROL VARIABLES
 # ==============================================================================
+save_load_name = "default" # "" prevents
+key_name = "wCENT"
+save_dir_name = "Load_Profiles/" + key_name
+
 # Defining how many days to predict out to
 num_days = 1
-num_trials = 50
+num_trials = 6
+normalize_load = "day"
+prediction_scale = 1
 
 # Defining the date range of data to pull in
-date_range = ["06-01-2019","08-30-2019"]
+date_range = ["01-01-2019","03-30-2019"]
 
 # Desired Region Name
 region_name = ["CENT"]
@@ -43,12 +49,12 @@ region_name = ["CENT"]
 # The type of data (should always be demand for the time being )
 data_type = "Demand"
 
-# Sub source my later be used to exclude solar/wind/etc, but right now, it is not.
-sub_source_list = ["solar","wind"]
-# sub_source_list = [""]
+# Sub source my later be used to exclude solar/wind/etc
+# sub_source_list = ["solar","wind"]
+sub_source_list = [""]
 
 # Calling a class to get all of the model values
-load_obj = rd.load_profile(date_range,region_name[0], norm_type="day",sub_source_list=sub_source_list) # norm_type="range"
+load_obj = rd.load_profile(date_range,region_name[0], norm_type=normalize_load,sub_source_list=sub_source_list) # norm_type="range"
     # coef = coefficients for each day [day]x[hour]x[coef]
     # mean_obs = the mean observations over the entire date range [hour]
     # daily_max_list = the maximum for each day [hour]
@@ -59,14 +65,20 @@ UB_LB = np.array(np.mean(load_obj.model_bounds,axis=0))
 load_obj.calc_diff_info(diff_fit_type="norm")
     # diff_stats = normal: [mean, standard deviation]
     #                beta: [a, b, mLoc, sca]
+    #             uniform: [LB, UB]
     #              ** for each hour **
+# print(load_obj.diff_stats)
+# exit()
 
 
 # --> Getting all of the hourly ramp rates from each hourly distribution
 st_point = load_obj.mean_obs[0] # Starting point for the prediction
 hourly_ramps = []
 for stat in load_obj.diff_stats:
-    hourly_ramps.append(np.random.normal(stat[0],stat[1],(num_days,num_trials)))
+    if load_obj.diff_fit_type.lower() == "norm":
+        hourly_ramps.append(np.random.normal(stat[0],stat[1],(num_days,num_trials)))
+    elif load_obj.diff_fit_type.lower() == "uniform":
+        hourly_ramps.append(np.random.uniform(stat[0],stat[1],(num_days,num_trials)))
 
 # This an array of hourly ramp rates determined by the distributions at each hour
     # (hr, days, trials)
@@ -92,7 +104,7 @@ for i in range(num_days):
 # --> Calculating the new demand values based on the ramp rates
 new_demand = []
 for trial_slopes in new_slopes:
-    new_demand.append(rd.predict_from_diff(trial_slopes, st_point,scale_val=1))
+    new_demand.append(rd.predict_from_diff(trial_slopes, st_point,scale_val=prediction_scale))
 new_demand = np.array(new_demand)
 
 # Mean response prediction
@@ -101,8 +113,7 @@ mean_demand = rd.predict_from_diff(mean_slopes, st_point,scale_val=None)
 # --> Testing the likelyhood of the polynomial fitted generated curves
 
 # Setting values for saving the load profiles
-save_load_name = "" # "default" works
-save_dir_name = "Load_Profiles/ramp_dist_CAR_summer"
+
 num_points = 100
 
 # Getting the coefficients of the polynomials
@@ -110,10 +121,12 @@ new_coef = []
 smooth_demand = []
 smooth_der = []
 rough_der = []
-smooth_likelihood_hr = []
-rough_likelihood_hr = []
-smooth_likelihood_avg = []
-rough_likelihood_avg = []
+smooth_Z_hr = []
+rough_Z_hr = []
+smooth_Z_avg = []
+rough_Z_avg = []
+discrete_hrs = np.arange(len(new_demand[0]))
+
 for nd in new_demand:
     dum_coef, new_coef_SD, _,_ = rd.poly_fit([nd],
                                          type_of_fit="avg",
@@ -122,13 +135,13 @@ for nd in new_demand:
     smooth_demand.append(np.polyval(new_coef[-1],load_obj.tmesh))
 
     smooth_der.append(rd.take_deriv(load_obj.tmesh,smooth_demand[-1]))
-    rough_der.append(rd.take_deriv(load_obj.hr_obs, nd))
+    rough_der.append(rd.take_deriv(discrete_hrs, nd))
 
-    smooth_likelihood_hr.append(rd.check_likelihood(load_obj.tmesh,smooth_der[-1],load_obj.diff_stats))
-    rough_likelihood_hr.append(rd.check_likelihood(load_obj.hr_obs,rough_der[-1], load_obj.diff_stats))
+    smooth_Z_hr.append(rd.check_Z(load_obj.tmesh,smooth_der[-1],load_obj.diff_stats))
+    rough_Z_hr.append(rd.check_Z(discrete_hrs,rough_der[-1], load_obj.diff_stats))
 
-    smooth_likelihood_avg.append(np.mean(smooth_likelihood_hr[-1]))
-    rough_likelihood_avg.append(np.mean(rough_likelihood_hr[-1]))
+    smooth_Z_avg.append(np.mean(abs(smooth_Z_hr[-1])))
+    rough_Z_avg.append(np.mean( abs(rough_Z_hr[-1])))
 
     # Input for the writing demand function is:
         # q, num_time, directory, filename, st_time, en_time
@@ -139,23 +152,25 @@ for nd in new_demand:
                         actual_demand=True,
                         connect_time=0)
 
-print(rough_likelihood_hr)
+print(rough_Z_hr)
 plt.figure()
-plt.hist(rough_likelihood_avg)
-plt.title(["likelihood"]+ region_name + date_range)
-# plt.savefig(os.path.join(save_dir_name,"likelihood") + ".png")
+plt.hist(rough_Z_hr)
+plt.title(["Z Score"]+ region_name + date_range)
+plt.savefig(os.path.join(save_dir_name,"likelihood") + ".png")
 
 plt.figure()
-plt.plot(range(25),np.transpose(load_obj.norm_data), '.k',linewidth=3)
+plt.plot(range(25),np.transpose(load_obj.norm_data), '.k',linewidth=1, markersize=1.5)
 # plt.plot(load_obj.tmesh,np.transpose(smooth_demand),linewidth=3)
 plt.plot(range(len(new_demand[0])),new_demand.T)
 # plt.plot(range(len(new_demand[0])),mean_demand, '--k',linewidth=3)
 # plt.plot(load_obj.hr_obs,UB_LB[:,0],'--k')
 # plt.plot(load_obj.hr_obs,UB_LB[:,1],'--k')
-plt.title(region_name + date_range)
-# plt.savefig(os.path.join(save_dir_name,"realizations") + ".png")
+# plt.title(region_name + date_range)
+plt.xlabel("Time of Day (hour)")
+plt.ylabel("Normalized Electricity Demand")
+plt.savefig(os.path.join(save_dir_name,"realizations") + ".png")
 plt.show()
-print(smooth_likelihood_avg)
+print(rough_Z_avg)
 
 #
 # f = open(os.path.join(save_dir_name,"likelihood") + ".txt","w")

@@ -26,8 +26,8 @@ from scipy.stats import beta
 from scipy.stats import norm
 
 date_range = ["05-01-2019","07-30-2019"]
-date_range = ["01-01-2019","03-30-2019"]
-region_name = ["CAL"]
+date_range = ["01-01-2019","01-28-2019"]
+region_name = ["CAR"]
 
 data_type = "Net generation by energy source" # "Demand"
 data_type = "Demand"
@@ -35,7 +35,7 @@ data_type = "Demand"
 sub_source_list = [""]
 
 # Calling a class to get all of the model values
-load_obj = rd.load_profile(date_range,region_name[0],norm_type="range")
+load_obj = rd.load_profile(date_range,region_name[0],norm_type="day")
 
 # Adding information about the hourly differences to the class
 load_obj.calc_diff_info(diff_fit_type="norm") # Puts stuff into .diff_stats
@@ -63,7 +63,7 @@ st_point = load_obj.mean_obs[0] # Starting point for the prediction
 st_point = 1 # Starting point for the prediction
 new_slopes = load_obj.diff_from_stats(num_sig=2)
 time_hr = np.arange(len(new_slopes))
-slope_likelihood = rd.check_likelihood(time_hr,new_slopes,load_obj.diff_stats)
+slope_likelihood = rd.check_Z(time_hr,new_slopes,load_obj.diff_stats)
 # print(slope_likelihood)
 # exit()
 
@@ -71,9 +71,9 @@ slope_likelihood = rd.check_likelihood(time_hr,new_slopes,load_obj.diff_stats)
 new_demand = rd.predict_from_diff(new_slopes, st_point,scale_val=1)
 
 # Fitting the new demand profile with a polynomial
-new_demand = [0.9, 0.75, 0.62, 0.55, 0.6, 0.72, 0.83, 0.94, 1.0, 0.92,
-                0.80, 0.70, 0.58, 0.50, 0.45, 0.52, 0.60, 0.75, 0.88, 1.0,
-                0.95, 0.88, 0.80, 0.70, 0.6 ]
+# new_demand = [0.9, 0.75, 0.62, 0.55, 0.6, 0.72, 0.83, 0.94, 1.0, 0.92,
+#                 0.80, 0.70, 0.58, 0.50, 0.45, 0.52, 0.60, 0.75, 0.88, 1.0,
+#                 0.95, 0.88, 0.80, 0.70, 0.6 ]
 # new_demand = load_obj.norm_data[38]
 new_coef, new_coef_SD, _,_ = rd.poly_fit([new_demand],
                                          type_of_fit="avg",
@@ -84,29 +84,30 @@ test_dist = np.polyval(new_coef,load_obj.tmesh)
 
 # Getting the slopes of the model
 disc_der = rd.take_deriv(load_obj.tmesh,test_dist)
-l_test = rd.check_likelihood(load_obj.tmesh,disc_der,load_obj.diff_stats)
+Z_test = rd.check_Z(load_obj.tmesh,disc_der,load_obj.diff_stats)
 # print(new_slopes)
 l_str = []
 name_str = []
 i = 1
-for l in l_test:
+for l in Z_test:
     name_str.append(str(i).ljust(10))
     l_str.append(str(round(l,3)).ljust(10))
     i += 1
-    print(name_str[-1],l_str[-1])
+    print(i-1, l_str[-1])
 # print(name_str)
 # print(l_str)
-print("\nMean likelihood: ", np.mean(l_test))
+# print(Z_test)
+print("\nMean likelihood: ", np.mean(abs(Z_test)))
 # plt.figure()
-# plt.plot(l_test)
+# plt.plot(Z_test)
 # exit()
 
 
 plt.figure()
-plt.plot(load_obj.hr_obs,np.transpose(load_obj.norm_data),'.k')
-plt.plot(load_obj.mean_obs,linewidth=3,label="Mean Observations")
-plt.plot(load_obj.tmesh,test_dist,linewidth=3,label="Ramp fit")
-plt.plot(new_demand,'*c',markersize=10,linewidth=3,label="Ramp Extremes")
+plt.plot(load_obj.hr_obs,np.transpose(load_obj.norm_data),'.k',markersize=1.5)
+plt.plot(load_obj.mean_obs,linewidth=2,label="Mean Observations")
+plt.plot(load_obj.tmesh,test_dist,linewidth=3,label="Smooth Fit to Extreme")
+plt.plot(new_demand,'*c',markersize=10,linewidth=3,label="Extreme Realizations")
 plt.legend()
 plt.show()
 # Next steps:

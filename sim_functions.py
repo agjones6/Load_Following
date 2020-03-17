@@ -80,13 +80,15 @@ def comp_plot(df_list, ystring , **kwargs):
     normalized = kwargs.get('normalized',False)
     norm_source = kwargs.get('norm_source',"default")
     ylabel = kwargs.get("ylabel",ystring)
+    create_fig = kwargs.get("create_fig",True)
 
     # Pulling Nominal Operation values if they are desired
     if normalized:
         nom_NuScale, nom_MPower = pull_FP_data(source=norm_source, num_points=20)
 
     # Plotting the desired data
-    dum_fig = plt.figure()
+    if create_fig:
+        dum_fig = plt.figure()
     i = 0
     for df in df_list:
         xvals = df[xstring]

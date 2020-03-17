@@ -20,7 +20,7 @@ import re
 import requests
 import scipy
 from scipy.stats import t
-from scipy.stats import norm
+from scipy.stats import norm, uniform
 from scipy.stats import beta
 import matplotlib.patheffects as pe
 
@@ -688,7 +688,7 @@ def predict_from_diff(s_list,P0,**kwargs):
 
     return P_list
 
-def check_likelihood(tmesh, V, stats, **kwargs):
+def check_Z(tmesh, V, stats, **kwargs):
 # This funciton is made to check the likelihood of a model. This is done by
     # comparing the model realization versus the hourly distribution for the
     # observations.
@@ -748,7 +748,7 @@ def check_likelihood(tmesh, V, stats, **kwargs):
             mean = stats[i,0]
             sigma = stats[i,1]
 
-            res_val.append(abs(comp_vals[i] - mean)/sigma)
+            res_val.append((comp_vals[i] - mean)/sigma)
 
     return np.array(res_val)
 
@@ -863,7 +863,8 @@ class load_profile:
                 self.diff_stats.append(norm.fit(self.diff_data[:,i]))
             elif self.diff_fit_type.lower() == "beta":
                 self.diff_stats.append(beta.fit(self.diff_data[:,i]))
-
+            elif self.diff_fit_type.lower() == "uniform":
+                self.diff_stats.append(uniform.fit(self.diff_data[:,i]))
 
         # self.diff_mean_list = np.array(self.diff_mean_list)
         # self.diff_SD_list = np.array(self.diff_SD_list)

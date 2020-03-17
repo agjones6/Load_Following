@@ -7,19 +7,25 @@ import re
 import shutil
 import subprocess
 
-src_dir = "./Results/ramp_dist/Case0"
+src_dir = "./Results/ramp_dist_sCAR/Case5"
+# src_dir = "./Results/extreme_cases/Case0"
 
 # Pulling all of the ".dat" files in a directory
 rawData, runNames = get_folder_rawData(src_dir)
 
 new_Names = []
 new_Data = []
+skip0s = True
 for i in range(len(runNames)):
-    if not "0" in runNames[i]:
+    if skip0s:
+        if not "0" in runNames[i]:
+            new_Names.append(runNames[i])
+            new_Data.append(rawData[i])
+            # del runNames[i]
+            # runNames.del(i)
+    else:
         new_Names.append(runNames[i])
         new_Data.append(rawData[i])
-        # del runNames[i]
-        # runNames.del(i)
 
 runNames = new_Names
 rawData = new_Data
@@ -28,18 +34,19 @@ rawData = new_Data
 norm = True
 
 # List of thinks to plot
-data_list = ["Qrx", "Wturb"]
+data_list = ["MDNBR"]
 ylabel_list = [""
                ]
 figure_names = [""
                 ]
-
+plt.figure()
 for i in range(len(data_list)):
     data_name = data_list[i]
     comp_plot(rawData, data_name ,
                keep_fig=True,
                case_names=runNames,
-               normalized=norm
+               normalized=norm,
+               create_fig=False
                # ylabel=ylabel_list[i]
                )
     if figure_names[0] != "":

@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 # analysis_path = "/Users/AndyJones/Documents/GitHub/master_proj/Analysis"
 analysis_path = "C:/Users/agjones6/Documents/GitHub/master_proj/Analysis"
 if not analysis_path in sys.path:
@@ -38,6 +39,8 @@ c = 0
 r_count = 0 # Tracker to count how many times it restarts
 max_r_count = 20
 
+# Setting a start time
+time_start = time.time()
 while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
 
     # --> Reading in the input file
@@ -82,8 +85,10 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
     copy_input_deck(dest_dir,path_to_source,my_file_name)
 
     # Running the code
+    t0 = time.time()
     print("running -> ", my_file_name)
     running_code(path_to_source, input_deck)
+    print("\t elapsed time ---> ", time.time() - t0)
 
     # --> Performing options enacted by the outer shell
     # This checks the output to see if it is steady state
@@ -125,6 +130,7 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
 
 # exit()
 
+print("total time = ", time.time() - time_start)
 
 
 # write_file("./runFiles/tst_file.txt", my_filetxt)

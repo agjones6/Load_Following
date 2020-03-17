@@ -1,4 +1,4 @@
- Case File                .\runFiles\r19.txt      
+ Case File                .\runFiles\r200.txt     
  Geometry File            ./NuScale/NuScaleGeometr
  Core Data File           ./NuScale/NuScaleCore01.
  Component Data File      ./NuScale/NuScaleCompone
@@ -7,11 +7,11 @@
  Valve Data File          ./NuScale/NuScaleValves0
  BOP Geometry File        ./NuScale/NuScaleBOPGeom
  Trip Set Point File      ./NuScale/NuScaleTripsST
- Initial Conditions File  ./Results/ramp_dist/Case
+ Initial Conditions File  ./Restart.dat           
  TES Data File            ./NuScale/TESMode0.dat  
  Initialization mode      0
   
- Daily Load File          ./Load_Profiles/ramp_dis
+ Step Change in Load to   73.29 %    .00 seconds into the simulation
 
  No Upsets                               
 
@@ -21,7 +21,7 @@
  Upset Parameter 4   .0000E+00
 
  Control Rods in Automatic
- Simulation time  86400.00 seconds
+ Simulation time   3000.00 seconds
  Output File Write Interval   1 seconds
  Restart File Write Interval 100000 seconds
   
