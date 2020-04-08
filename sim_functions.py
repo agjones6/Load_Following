@@ -81,6 +81,8 @@ def comp_plot(df_list, ystring , **kwargs):
     norm_source = kwargs.get('norm_source',"default")
     ylabel = kwargs.get("ylabel",ystring)
     create_fig = kwargs.get("create_fig",True)
+    colors = kwargs.get('colors',None)
+    lw = kwargs.get("linewidth",3)
 
     # Pulling Nominal Operation values if they are desired
     if normalized:
@@ -110,18 +112,22 @@ def comp_plot(df_list, ystring , **kwargs):
         else:
             yvals = df[ystring]
 
-        if i != 0:
-            plt.plot(xvals,yvals,"-.",linewidth=2)
+        if case_names != "" and len(case_names) == len(df_list) and not colors is None:
+            if "N" in case_names[i]:
+                plt.plot(xvals,yvals,"-.",linewidth=lw,color=pull_color(colors[0]))
+            else:
+                plt.plot(xvals,yvals,linewidth=lw,color=pull_color(colors[1]))
         else:
-            plt.plot(xvals,yvals,linewidth=3)
+            plt.plot(xvals,yvals,linewidth=lw)
 
         plt.xlabel(xstring + " (s)")
         plt.ylabel(ylabel)
 
         i += 1
 
-    if case_names != "" and len(case_names) == len(df_list):
-        plt.legend(case_names)
+    # Making a legend with the case names
+    # if case_names != "" and len(case_names) == len(df_list):
+    #     plt.legend(case_names)
 
     # --> Future functionality for saving output directly
     # if file_name != "":
@@ -131,6 +137,26 @@ def comp_plot(df_list, ystring , **kwargs):
     # Closing the figure if it is not desired to keep it
     if not keep_fig:
         plt.close(dum_fig)
+
+def pull_color(color_count):
+
+    col_tup = ( '#1f77b4',
+                '#ff7f0e',
+                '#2ca02c',
+                '#d62728',
+                '#9467bd',
+                '#8c564b',
+                '#e377c2',
+                '#7f7f7f',
+                '#bcbd22',
+                '#17becf',
+                (0.3 , 0.5 , 0.2),
+                (0.2 , 0.4 , 0.6),
+                (0.2 , 0.2 , 0.5) )
+
+    col_val = col_tup[color_count%len(col_tup)]
+
+    return col_val
 
 def check_steady_state(data_filename, **kwargs):
 # This function is made to check if the current run has reached steady state
