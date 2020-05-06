@@ -853,6 +853,7 @@ class load_profile:
 
         # This calculates the discrete hourly derivative for each day
         self.diff_data = self.norm_data[:,1:] - self.norm_data[:,0:-1]
+        self.diff_data = take_deriv(self.hr_obs,self.norm_data)
 
         # Calculating distributions for each of the hourly differences
         # self.diff_mean_list = []

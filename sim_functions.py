@@ -82,7 +82,7 @@ def comp_plot(df_list, ystring , **kwargs):
     ylabel = kwargs.get("ylabel",ystring)
     create_fig = kwargs.get("create_fig",True)
     colors = kwargs.get('colors',None)
-    lw = kwargs.get("linewidth",3)
+    linewidth = kwargs.get("linewidth",3)
 
     # Pulling Nominal Operation values if they are desired
     if normalized:
@@ -112,6 +112,14 @@ def comp_plot(df_list, ystring , **kwargs):
         else:
             yvals = df[ystring]
 
+
+        if case_names != "" and len(case_names) == len(df_list) and isinstance(linewidth,list):
+            if "N" in case_names[i]:
+                lw = linewidth[0]
+            else:
+                lw = linewidth[1]
+        else:
+            lw = linewidth
         if case_names != "" and len(case_names) == len(df_list) and not colors is None:
             if "N" in case_names[i]:
                 plt.plot(xvals,yvals,"-.",linewidth=lw,color=pull_color(colors[0]))

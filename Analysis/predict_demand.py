@@ -31,7 +31,7 @@ from scipy.stats import norm
 #                           DEFINING CONTROL VARIABLES
 # ==============================================================================
 save_load_name = "default" # "" prevents
-key_name = "wCENT"
+key_name = "sCAR"
 save_dir_name = "Load_Profiles/" + key_name
 
 # Defining how many days to predict out to
@@ -41,10 +41,10 @@ normalize_load = "day"
 prediction_scale = 1
 
 # Defining the date range of data to pull in
-date_range = ["01-01-2019","03-30-2019"]
+date_range = ["05-01-2019","08-30-2019"]
 
 # Desired Region Name
-region_name = ["CENT"]
+region_name = ["CAR"]
 
 # The type of data (should always be demand for the time being )
 data_type = "Demand"
@@ -69,6 +69,32 @@ load_obj.calc_diff_info(diff_fit_type="norm")
     #              ** for each hour **
 # print(load_obj.diff_stats)
 # exit()
+
+# Checking an existing profile's Z Score
+load_file_num_list = [0,1,2,3]
+Z_test_list = []
+for load_file_num in load_file_num_list:
+    exist_load_array = np.array(pd.read_csv("./Load_Profiles/load_file" + str(load_file_num) + ".txt",index_col=False,header=None,skiprows=1))
+    exist_time = exist_load_array[:,0]
+    exist_pwr = exist_load_array[:,1]/100
+    disc_der = rd.take_deriv(exist_time,exist_pwr)
+    Z_test  = rd.check_Z(exist_time,disc_der,load_obj.diff_stats)
+
+    Z_test_list.append(Z_test)
+
+# Flipping the axis and turning into a numpy array
+Z_test_array = np.array(Z_test_list).T
+
+# Averaging the columns
+mean_vals = np.array([np.mean(np.abs(Z_test_array),axis=0)])
+Z_test_array = np.append(Z_test_array,mean_vals,axis=0)
+
+Z_df = pd.DataFrame(Z_test_array)
+
+# Writing the dataframe to a csv File
+Z_df.to_csv("./Load_Profiles/Case_Zscores_" + key_name + ".csv")
+
+exit()
 
 
 # --> Getting all of the hourly ramp rates from each hourly distribution

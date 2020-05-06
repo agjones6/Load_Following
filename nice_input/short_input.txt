@@ -6,6 +6,7 @@
 	DESTINATION_FOLDER 						./Results
 
 	INITIAL_CONDITIONS_FILE    default
+	TES_PARAMETER_FILES				 default
 
 >> RUN OPTIONS
 	INIT_MODE 									0  # Initial Conditions File

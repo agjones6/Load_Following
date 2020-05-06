@@ -22,8 +22,8 @@ if not analysis_path in sys.path:
 
 # %%
 # This reads my base input file to make all of the combinations of options
-myFile_name = "full_day_input.txt"
-read_my_input(myFile_name) # Actually makes the files
+myFile_name = "FD_input2.txt"
+read_my_input(myFile_name) # Actually makes the files from './nice_input/short_input.txt'
 
 # %% This moves files and runs the code from the runfiles in the run folders
 run_location = "./runFiles"
@@ -69,18 +69,33 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
     # Making a folder and copying the input deck into a folder
     dest_dir = find_val(input_deck,"DESTINATION_FOLDER")
 
-    # Changing the step change of the power level
+    # Changing the step change of the power level.
+    #   Note: if IDEMAND is 0 (step change), it just uses the first line.
+    #         if IDEMAND is 2 (load follow), a new load file is made and placed
+    #           in a folder in the output
     power_level = find_val(input_deck, "DEMAND_PARAMETER")
     if power_level.split("-")[0] == "first_line":
         power_level_options = power_level.split("-")
         if len(power_level_options) >= 2:
             new_demand = get_line_value(power_level_options[1], 1)
             new_demand = new_demand.strip("\n").split(",")[1].strip(" ")
-            input_deck = replace_text(input_deck, "DEMAND_PARAMETER", new_demand)
 
-    # TESTING for combining files
-    # combine_output_files(dest_dir)
-    # exit()
+            if find_val(input_deck,"IDEMAND") == "0":
+                input_deck = replace_text(input_deck, "DEMAND_PARAMETER", new_demand)
+            elif find_val(input_deck,"IDEMAND") == "2":
+                if not os.path.isdir(dest_dir):
+                    os.mkdir(dest_dir)
+                temp_load_folder = dest_dir + "/load_profiles"#os.path.join(dest_dir,"load_profiles")
+                if not os.path.isdir(temp_load_folder):
+                    os.mkdir(temp_load_folder)
+                temp_ld_file_name = temp_load_folder + "/" +my_file_name+".txt"#os.path.join(temp_load_folder,my_file_name+".txt")
+                temp_ld_file_obj = open(temp_ld_file_name,"w")
+                temp_ld_file_obj.write("3\n")
+                temp_ld_file_obj.write(find_val(input_deck,"START_TIME") + ",100 \n")
+                temp_ld_file_obj.write("0.1," + str(new_demand) + "\n")
+                temp_ld_file_obj.write(str(float(find_val(input_deck,"SIMULATION_TIME"))/3600) +"," + str(new_demand) + "\n")
+                temp_ld_file_obj.close()
+                input_deck = replace_text(input_deck, "DEMAND_PARAMETER", '"' + temp_ld_file_name + '"')
 
     copy_input_deck(dest_dir,path_to_source,my_file_name)
 
@@ -125,10 +140,6 @@ while (c < len(run_dir_list) or len(ss_restart_deck) > 0) and c < 1e6:
     # Moving the code output
     # curr_file = open(os.path.join(dest_dir,my_file_name),"w")
 
-    # exit()
-#
-
-# exit()
 
 print("total time = ", time.time() - time_start)
 

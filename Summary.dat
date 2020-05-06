@@ -1,4 +1,4 @@
- Case File                .\runFiles\r13.txt      
+ Case File                .\runFiles\r15.txt      
  Geometry File            ./MPower/MPowerGeometrym
  Core Data File           ./MPower/MPowerCorek.dat
  Component Data File      ./MPower/MPowerComponent
@@ -7,11 +7,11 @@
  Valve Data File          ./MPower/MPowerValvesm1.
  BOP Geometry File        ./MPower/MPowerBOPGeomet
  Trip Set Point File      ./MPower/MPowerTripsSTPT
- Initial Conditions File  ./MPower/MPowerInit100m0
- TES Data File            ./MPower/TESMode0.dat   
+ Initial Conditions File  ./Results/TES_extreme/Ca
+ TES Data File            ./MPower/TES_Mode1.dat  
  Initialization mode      0
   
- Step Change in Load to   69.82 %    .00 seconds into the simulation
+ Daily Load File          ./Load_Profiles/load_fil
 
  No Upsets                               
 
@@ -21,7 +21,7 @@
  Upset Parameter 4   .0000E+00
 
  Control Rods in Automatic
- Simulation time   3000.00 seconds
+ Simulation time  86400.00 seconds
  Output File Write Interval   1 seconds
  Restart File Write Interval 100000 seconds
   
@@ -759,7 +759,7 @@
  *            *
  **************
   
- TES Mode                                       0
+ TES Mode                                       1
  Number of TES ByPass Valves                    4
  Reference TES Flow                     450000.000000
  TES Turbine Exhaust Loss Coefficient       23.000000

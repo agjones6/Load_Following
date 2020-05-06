@@ -7,14 +7,20 @@ import re
 import shutil
 import subprocess
 
-src_dir = "./Results/wCENT"
+my_ylim = None #[0.55,1.05]
+run_name = "TES_extreme"
+src_dir = "./Results/" + run_name
 src_sub_dir = ["Case0","Case1","Case2","Case3","Case4","Case5"]
+src_sub_dir = ["Case1","Case2","Case3"]
+# src_sub_dir = ["Case3"]
 # src_dir = "./Results/extreme_cases/Case0"
 
 all_rawData = []
 all_runNames = []
 for s in src_sub_dir:
     c_src = src_dir + "/" + s
+    if not os.path.isdir(c_src):
+        continue
     print(c_src)
 
     # Pulling all of the ".dat" files in a directory
@@ -44,25 +50,60 @@ for s in src_sub_dir:
 norm = True
 
 # List of thinks to plot
-data_list = ["Qrx","MDNBR"]
-ylabel_list = [""
+data_list = ["Wload","Wturb","Steam Flow - norm","Steam Flow - raw","Qrx","MDNBR - raw","TCL Hot - raw"]
+# data_list = ["Wload"]
+# data_list = ["MDNBR - raw","Steam Flow"]
+
+ylabel_list = ["Normalized Turbine Load", "Normalized Turbine Output",
+               "Normalized Steam Flow Rate", "Steam Flow Rate (lbm/hr)",
+               "Normalized Reactor Power", "MDNBR", "Peak Fuel Centerline Temperature (degrees F)"
                ]
-figure_names = [""
-                ]
-plt.figure()
+save_figures = True
+
+# Making a folder for pictures
+pic_dest = "./pictures/" + run_name
+
+if not os.path.isdir(pic_dest):
+    os.mkdir(pic_dest)
+
+print(all_runNames)
+# plt.figure()
 for i in range(len(data_list)):
     data_name = data_list[i]
+
+    # Normalizing if desired
+    opt = data_name.split("-")
+
+    # If an option is given
+    if len(opt) > 1:
+        data_name = opt[0].strip()
+        opt = opt[-1].strip()
+    else:
+        opt = "norm"
+        data_name = data_name.strip()
+
+    if opt == "norm":
+        norm = True
+        pic_name = data_name + "_" + opt
+    else:
+        norm = False
+        pic_name = data_name
+
     comp_plot(all_rawData, data_name ,
                keep_fig=True,
                case_names=all_runNames,
                normalized=norm,
-               create_fig=False,
+               create_fig=True,
                colors=[0,1],
-               linewidth=1
-               # ylabel=ylabel_list[i]
+               linewidth=[1.6,2.5], # [n,m]
+               ylabel=ylabel_list[i]
                )
-    if figure_names[0] != "":
-        plt.savefig("./pictures/" + "winter_" +  figure_names[i])
+    plt.legend(["mPower","NuScale"])
+    # plt.ylim(my_ylim)
+    # plt.xlim([15000,16000])
+    if save_figures:
+        # plt.savefig("./pictures/realizations/" + run_name + "_" + data_name.replace(" ","-"))
+        plt.savefig(pic_dest + "/" + pic_name)
 plt.show()
 exit()
 # %% Checking output
